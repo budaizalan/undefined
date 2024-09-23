@@ -12,6 +12,13 @@ body,
 }
 
 /* Navbar */
+
+.navbar {
+  border-bottom: solid black 2px;
+  background-color: #14121c;
+  overflow: hidden;
+}
+
 .navbar p {
     font-size: 20px;
 }
