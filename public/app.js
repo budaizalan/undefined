@@ -1,17 +1,18 @@
-// let sections = document.querySelectorAll("section");
-// let navLinks = document.querySelectorAll("header nav a");
-// let navBar = document.querySelector(".navbar")
-// function onClick() {
-//     console.log('h');
-    
-//     sections.forEach((sec) => {
-//         let id = sec.getAttribute("id");
-//             navLinks.forEach((links) => {
-//                 links.classList.remove("active");
-//                 document.querySelector("header nav a[href*=" + id + "]").classList.add("active");
-//             });
-//     });
-// };
+const fizetett = document.getElementById("fizetett");
+const datum = new Date(document.getElementById("inputDate").value);
+var slider = document.getElementById("Beza");
+var output = document.getElementById("display");
+output.innerHTML = slider.value;
 
-// navBar.addEventListener("click", onClick)
-// // onClick();
+slider.oninput = function() {
+    Zsa();
+  output.innerHTML = this.value;
+}
+
+fizetett.oninput = function() {
+    let fizetetts = fizetett.value
+    
+    if (fizetetts.length < 3) {
+        fizetett.value = fizetett.value * 1000;
+    }
+}
