@@ -310,7 +310,7 @@ body{
   padding: 1rem;
   border: solid transparent 2px;
   border-radius: 20px;
-  background-color: #25232e;
+  /* background-color: #25232e; */
 }
 
 .slidecontainer {

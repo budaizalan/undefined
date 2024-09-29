@@ -47,9 +47,11 @@
     </div>
   </section>
   <div class="container">
-    <div class="col-6 holder mt-3">
+    <div class="row">
+
+      <div class="col-6 holder mt-3">
         <form class="row g-3">
-            <div class="col-md-6">
+          <div class="col-md-6">
               <label for="fizetett" class="form-label">Fizetett:</label>
               <input type="text" class="form-control" id="fizetett">
             </div>
@@ -66,10 +68,16 @@
               <input type="text" class="form-control" id="kilometerAllas">
             </div>
             <div class="col-12 content-justify-center text-center">
-              <button type="submit" class="btn">Hozzáadás</button>
+              <button type="submit" onclick="return false" id="hozzaad" class="btn">Hozzáadás</button>
             </div>
           </form>
     </div>
+    <div class="col-6 holder mt-3">
+      <h4>Összes tankolás:</h4>
+      <div class="sumRec"></div>
+  </div>
+</div>
+
   </div>
   <div class="container-fluid mt-5">
         <div class="col-6 mx-auto">
