@@ -41,13 +41,3 @@ if (output && slider) {
     }
   };
 }
-
-// if (fizetett) {
-//     fizetett.oninput = function() {
-//         let fizetetts = fizetett.value;
-
-//         if (fizetetts.length < 3) {
-//             fizetett.value = (parseInt(fizetett.value) * 1000).toString();
-//         }
-//     }
-// }

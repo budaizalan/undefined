@@ -334,12 +334,12 @@ body{
 }
 
 .slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
   width: 23px;
+  background: red;
+  color: red;
   height: 24px;
   border: 0;
-  /* background: url('contrasticon.png'); */
+  background: url('./img/avatar.jpg');
   cursor: pointer;
 }
 
@@ -347,7 +347,7 @@ body{
   width: 23px;
   height: 24px;
   border: 0;
-  /* background: url('contrasticon.png'); */
+  background: url('./img/avatar.jpg');
   cursor: pointer;
 }
 
