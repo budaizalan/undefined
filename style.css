@@ -474,3 +474,7 @@ body{
   border-radius: 50%;
   margin-top: -70px;
 }
+
+.table-responsive {
+  max-height:300px;
+}
