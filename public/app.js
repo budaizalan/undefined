@@ -7,6 +7,8 @@ var output = document.getElementById("display");
 const kmMeterStatus = document.getElementById("kilometerAllas");
 const selectMonths = document.querySelector('#selectMonths');
 const fuelTotal = document.querySelector('#fuelTotal');
+const startDay = document.querySelector('#startDay');
+const endDay = document.querySelector('#endDay');
 let TANKAGES = [];
 if (output && slider) {
     output.innerHTML = slider.value;
@@ -48,6 +50,11 @@ function generateMonthsForSelect() {
 }
 function filterTankages() {
     let filteredTankages = TANKAGES.filter(t => t.month.toString().includes(selectMonths?.value != "-1" ? selectMonths?.value : ""));
+    if (startDay?.value != "" && endDay?.value != "") {
+        filteredTankages = filteredTankages.filter(t => t.day <= +endDay?.value && t.day >= +startDay?.value);
+    }
+    else
+        correctDayPicker();
     generateTableContent(filteredTankages);
 }
 function generateTableContent(tankages) {
@@ -61,6 +68,7 @@ function generateTableContent(tankages) {
             <td>${t.fuel_amount}</td>
             <td>${getFormattedDate(t.date_full)}</td>
             <td>${t.cost}</td>
+            <td>${kmMeterStatus?.value}</td>
         `;
         table.append(tr);
     });
@@ -72,8 +80,16 @@ function getFormattedDate(date) {
     let day = date.getDate().toString().padStart(2, '0');
     return month + '/' + day + '/' + year;
 }
+function correctDayPicker() {
+    if (+startDay?.value < 1 || +startDay?.value > 31)
+        startDay.value = "";
+    if (+endDay?.value < 1 || +endDay?.value > 31)
+        endDay.value = "";
+}
 window.onload = () => {
     generateMonthsForSelect();
 };
 document.getElementById("addTankage")?.addEventListener('click', Add_new_tankage);
 selectMonths?.addEventListener('change', filterTankages);
+startDay?.addEventListener('change', filterTankages);
+endDay?.addEventListener('change', filterTankages);

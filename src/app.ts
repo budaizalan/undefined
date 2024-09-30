@@ -7,6 +7,8 @@ var output = document.getElementById("display") as HTMLElement | null;
 const kmMeterStatus = document.getElementById("kilometerAllas") as HTMLInputElement |null;
 const selectMonths = document.querySelector('#selectMonths') as HTMLSelectElement | null;
 const fuelTotal = document.querySelector('#fuelTotal') as HTMLSpanElement | null;
+const startDay = document.querySelector('#startDay') as HTMLInputElement | null;
+const endDay = document.querySelector('#endDay') as HTMLInputElement | null;
 
 let TANKAGES: Tankage[] = [];
 
@@ -57,6 +59,9 @@ function generateMonthsForSelect() : void {
 
 function filterTankages(): void{
     let filteredTankages: Tankage[] = TANKAGES.filter(t => t.month.toString().includes(selectMonths?.value! != "-1" ? selectMonths?.value! : ""))
+    if (startDay?.value != "" && endDay?.value != "") {
+        filteredTankages = filteredTankages.filter(t => t.day <= +endDay?.value! && t.day >= +startDay?.value!);
+    } else correctDayPicker();
     generateTableContent(filteredTankages);
 }
 
@@ -71,6 +76,7 @@ function generateTableContent(tankages: Tankage[]): void {
             <td>${t.fuel_amount}</td>
             <td>${getFormattedDate(t.date_full)}</td>
             <td>${t.cost}</td>
+            <td>${kmMeterStatus?.value}</td>
         `
         table.append(tr);
     });
@@ -85,6 +91,11 @@ function getFormattedDate(date: Date) {
     return month + '/' + day + '/' + year;
 }
 
+function correctDayPicker(): void{
+    if (+startDay?.value! < 1 || +startDay?.value! > 31) startDay!.value = "";
+    if (+endDay?.value! < 1 || +endDay?.value! > 31) endDay!.value = "";
+}
+
 window.onload = () => {
     generateMonthsForSelect();
 }
@@ -92,3 +103,5 @@ window.onload = () => {
 
 (document.getElementById("addTankage") as HTMLElement | null)?.addEventListener('click', Add_new_tankage);
 selectMonths?.addEventListener('change', filterTankages);
+startDay?.addEventListener('change', filterTankages);
+endDay?.addEventListener('change', filterTankages);
