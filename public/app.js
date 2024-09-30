@@ -2,11 +2,11 @@
 import Tankage from "./Tankage.js";
 const cost = document.getElementById("fizetett");
 const inputDateElement = document.getElementById("inputDate");
-// const date = inputDateElement ? new Date(inputDateElement.value) : new Date();
 var slider = document.getElementById("Beza");
 var output = document.getElementById("display");
 const kmMeterStatus = document.getElementById("kilometerAllas");
 const selectMonths = document.querySelector('#selectMonths');
+const fuelTotal = document.querySelector('#fuelTotal');
 let TANKAGES = [];
 if (output && slider) {
     output.innerHTML = slider.value;
@@ -28,6 +28,10 @@ if (cost) {
 }
 function Add_new_tankage(e) {
     e.preventDefault();
+    if (isNaN(+cost?.value) || inputDateElement?.valueAsDate == null || isNaN(+kmMeterStatus?.value)) {
+        alert("Az űrlap mezői nem megfelelőek!");
+        return;
+    }
     TANKAGES.push(new Tankage(slider.value, inputDateElement?.valueAsDate, cost.value, kmMeterStatus.value));
     console.log(inputDateElement?.valueAsDate);
     console.log(TANKAGES);
@@ -47,9 +51,11 @@ function filterTankages() {
     generateTableContent(filteredTankages);
 }
 function generateTableContent(tankages) {
+    let totalFuel = 0;
     let table = document.querySelector('tbody');
     table.innerHTML = "";
     tankages.forEach(t => {
+        totalFuel += t.fuel_amount;
         let tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${t.fuel_amount}</td>
@@ -58,6 +64,7 @@ function generateTableContent(tankages) {
         `;
         table.append(tr);
     });
+    fuelTotal.innerHTML = `Össztankolás${totalFuel} l`;
 }
 function getFormattedDate(date) {
     let year = date.getFullYear();

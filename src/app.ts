@@ -2,11 +2,11 @@ import Tankage from "./Tankage";
 
 const cost = document.getElementById("fizetett") as HTMLInputElement | null;
 const inputDateElement = document.getElementById("inputDate") as HTMLInputElement | null;
-// const date = inputDateElement ? new Date(inputDateElement.value) : new Date();
 var slider = document.getElementById("Beza") as HTMLInputElement | null;
 var output = document.getElementById("display") as HTMLElement | null;
 const kmMeterStatus = document.getElementById("kilometerAllas") as HTMLInputElement |null;
 const selectMonths = document.querySelector('#selectMonths') as HTMLSelectElement | null;
+const fuelTotal = document.querySelector('#fuelTotal') as HTMLSpanElement | null;
 
 let TANKAGES: Tankage[] = [];
 
@@ -33,8 +33,12 @@ if (cost) {
     }
 }
 
-function Add_new_tankage(e: Event){
+function Add_new_tankage(e: Event): void{
     e.preventDefault();
+    if(isNaN(+cost?.value!) || inputDateElement?.valueAsDate! == null || isNaN(+kmMeterStatus?.value!)) {
+        alert("Az űrlap mezői nem megfelelőek!");
+        return;
+    }
     TANKAGES.push(new Tankage(slider!.value, inputDateElement?.valueAsDate!, cost!.value, kmMeterStatus!.value))
     console.log(inputDateElement?.valueAsDate!);
     console.log(TANKAGES); 
@@ -57,9 +61,11 @@ function filterTankages(): void{
 }
 
 function generateTableContent(tankages: Tankage[]): void {
+    let totalFuel: number = 0;
     let table: HTMLElement = document.querySelector('tbody') as HTMLElement;
     table.innerHTML = "";
     tankages.forEach(t => {
+        totalFuel += t.fuel_amount;
         let tr: HTMLTableRowElement = document.createElement('tr') as HTMLTableRowElement;
         tr.innerHTML = `
             <td>${t.fuel_amount}</td>
@@ -68,6 +74,7 @@ function generateTableContent(tankages: Tankage[]): void {
         `
         table.append(tr);
     });
+    fuelTotal!.innerHTML = `Össztankolás${totalFuel} l`;
 }
 
 function getFormattedDate(date: Date) {

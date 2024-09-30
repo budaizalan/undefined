@@ -475,6 +475,19 @@ body{
   margin-top: -70px;
 }
 
-.table-responsive {
-  max-height:300px;
+
+
+thead, tbody {
+  display: block;
+}
+
+tbody {
+  height: 200px;
+  overflow: auto;
+}
+
+td,th{
+  width: 200px;
+  background-color: transparent !important;
+  color: white !important;
 }
