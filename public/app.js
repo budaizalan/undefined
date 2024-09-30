@@ -10,7 +10,7 @@ let TANKAGES = [];
 if (output && slider) {
     output.innerHTML = slider.value;
     slider.oninput = function () {
-        // Zsa();
+        console.log("fasz");
         if (output) {
             output.innerHTML = this.value;
             console.log(output);
