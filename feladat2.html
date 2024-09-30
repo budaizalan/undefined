@@ -73,8 +73,42 @@
           </form>
     </div>
     <div class="col-6 holder mt-3">
-      <h4>Összes tankolás:</h4>
-      <div class="sumRec"></div>
+      <div class="row">
+        <div class="col-12 col-md-4">
+          <h4>Összes tankolás:</h4>
+        </div>
+        <div class="col-12 col-md-4">
+          <select id="selectMonths">
+            <!-- options -->
+          </select>
+        </div>
+        <div- class="col-12 col-md-4">
+          <span id="fuelTotal">Össztankolás: 0 l</span>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <label for="startDay">Kezdeti dátum:</label>
+            <input type="number" min="1" max="31" id="startDay">
+          </div>
+          <div class="col-6">
+            <label for="endDay">Végzeti dátum:</label>
+            <input type="number" min="1" max="31" id="endDay">
+          </div>
+        </div>
+        <div class="sumRec">
+          <table class="table table-responsive">
+            <thead>
+              <th>Tankolt</th>
+              <th>Dátum</th>
+              <th>Fizetett</th>
+              <th>Km óra állás</th>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      
+            
   </div>
 </div>
 
