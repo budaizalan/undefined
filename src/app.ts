@@ -74,7 +74,7 @@ function generateTableContent(tankages: Tankage[]): void {
         `
         table.append(tr);
     });
-    fuelTotal!.innerHTML = `Össztankolás${totalFuel} l`;
+    fuelTotal!.innerHTML = `Össztankolás: ${totalFuel} l`;
 }
 
 function getFormattedDate(date: Date) {

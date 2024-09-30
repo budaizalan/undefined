@@ -64,7 +64,7 @@ function generateTableContent(tankages) {
         `;
         table.append(tr);
     });
-    fuelTotal.innerHTML = `Össztankolás${totalFuel} l`;
+    fuelTotal.innerHTML = `Össztankolás: ${totalFuel} l`;
 }
 function getFormattedDate(date) {
     let year = date.getFullYear();
