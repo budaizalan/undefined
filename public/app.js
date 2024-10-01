@@ -71,10 +71,11 @@ function generateTableContent() {
         totalFuel += t.fuel_amount;
         let tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${t.fuel_amount}</td>
+            <td>${t.fuel_amount} l</td>
             <td>${getFormattedDate(t.date_full)}</td>
-            <td>${t.cost}</td>
-            <td>${t.km_meter_status}</td>
+            <td>${t.cost} Ft</td>
+            <td>${t.km_meter_status} km</td>
+            <td>${TANKAGES.indexOf(t) != 0 ? t.km_meter_status - TANKAGES[TANKAGES.indexOf(t) - 1].km_meter_status : "--"} km</td>
         `;
         table.append(tr);
     });
