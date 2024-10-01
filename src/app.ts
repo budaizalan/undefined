@@ -9,8 +9,11 @@ const fuelTotal = document.querySelector('#fuelTotal') as HTMLSpanElement | null
 const startDate = document.querySelector('#startDate') as HTMLInputElement | null;
 const endDate = document.querySelector('#endDate') as HTMLInputElement | null;
 
-let TANKAGES: Tankage[] = [];
+let TANKAGES: Tankage[] = [new Tankage("20", new Date(Date.now()), "13000", "125000"), new Tankage("40", new Date(Date.now()), "26000", "126000")];
 
+
+
+generateTableContent();
 
 if (output && slider) {
     output.innerHTML = slider.value;
@@ -77,16 +80,16 @@ function generateTableContent(): void {
     let totalFuel: number = 0;
     let table: HTMLElement = document.querySelector('tbody') as HTMLElement;
     table.innerHTML = "";
-
+    
     tankages?.forEach(t => {
         totalFuel += t.fuel_amount;
         let tr: HTMLTableRowElement = document.createElement('tr') as HTMLTableRowElement;
         tr.innerHTML = `
-            <td>${t.fuel_amount} l</td>
-            <td>${getFormattedDate(t.date_full)}</td>
-            <td>${t.cost} Ft</td>
-            <td>${t.km_meter_status} km</td>
-            <td>${TANKAGES.indexOf(t) != 0 ? t.km_meter_status-TANKAGES[TANKAGES.indexOf(t) - 1].km_meter_status : "--"} km</td>
+        <td>${t.fuel_amount} l</td>
+        <td>${getFormattedDate(t.date_full)}</td>
+        <td>${t.cost} Ft</td>
+        <td>${t.km_meter_status} km</td>
+        <td>${TANKAGES.indexOf(t) != 0 ? t.km_meter_status-TANKAGES[TANKAGES.indexOf(t) - 1].km_meter_status : "--"} km</td>
         `
         table.append(tr);
     });
@@ -98,7 +101,7 @@ function getFormattedDate(date: Date) {
     let month: string = (1 + date.getMonth()).toString().padStart(2, '0');
     let day: string = date.getDate().toString().padStart(2, '0');
   
-    return month + '/' + day + '/' + year;
+    return year + '/' + month + '/' + day;
 }
 
 function fillDatePicker(){
