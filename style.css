@@ -22,7 +22,6 @@ body{
   justify-content: center;
   margin-top: 10vh;
   height: 90vh;
-  overflow: hidden;
 }
 
 /* Navbar */
@@ -54,6 +53,7 @@ body{
 
 .maintitle {
   flex: 1;
+  margin-top: 80px;
 }
 
 /* ---- */
@@ -67,10 +67,18 @@ body{
   flex-wrap: wrap;
 }
 
+/* .solution_card{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+} */
+
 .our_solution_category .solution_cards_box {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .solution_cards_box .solution_card {
@@ -79,7 +87,7 @@ body{
   box-shadow: 0 2px 4px 0 rgba(136, 144, 195, 0.2),
     0 5px 15px 0 rgba(37, 44, 97, 0.15);
   border-radius: 15px;
-  margin: 8px;
+  margin: 20px;
   padding: 10px 15px;
   position: relative;
   z-index: 1;
@@ -204,7 +212,7 @@ body{
   }
 
   .our_solution_category {
-    width: 50%;
+    width: 100%;
     margin: 0 auto;
   }
 }
@@ -216,7 +224,7 @@ body{
   rotate: 270deg;
   width: 60px;
   height: 72px;
-  position: absolute;
+  position: relative;
   left: 50%;
   margin-left: -25px;
   bottom: 20px;
