@@ -24,6 +24,10 @@ body{
   height: 90vh;
 }
 
+.row{
+  margin: 0;
+}
+
 /* Navbar */
 
 .navbar {
@@ -53,7 +57,6 @@ body{
 
 .maintitle {
   flex: 1;
-  margin-top: 80px;
 }
 
 /* ---- */
@@ -373,11 +376,17 @@ body{
 
 /* Clock */
 
+.clock-section{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5vh;
+}
+
 .clock-container {
+  position: relative;
   height: 80px;
   width: 350px;
-  margin-left: 150px;
-  position: relative;
 }
 
 .clock-container::before{
