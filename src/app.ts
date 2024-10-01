@@ -1,4 +1,4 @@
-import Tankage from "./Tankage";
+import Tankage from "./Tankage.js";
 
 const cost = document.getElementById("fizetett") as HTMLInputElement | null;
 const inputDateElement = document.getElementById("inputDate") as HTMLInputElement | null;

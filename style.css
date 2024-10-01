@@ -535,3 +535,9 @@ td,th{
   border-radius: 20px;
   object-fit: cover;
 }
+
+.tank-row{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}

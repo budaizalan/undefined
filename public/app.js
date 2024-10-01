@@ -1,4 +1,3 @@
-"use strict";
 import Tankage from "./Tankage.js";
 const cost = document.getElementById("fizetett");
 const inputDateElement = document.getElementById("inputDate");

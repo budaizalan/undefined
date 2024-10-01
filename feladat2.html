@@ -46,9 +46,8 @@
       <h1 class="text-center" style="font-size: calc(2rem + 2.7vw)">Tankolás vezetése</h1>
     </div>
     <div class="container">
-      <div class="row">
-
-        <div class="col-6 holder mt-3">
+      <div class="row tank-row">
+        <div class="col-lg-12 col-xl-6 holder mt-3">
           <form class="row g-3">
             <div class="col-md-6">
               <label for="fizetett" class="form-label">Fizetett:</label>
@@ -56,7 +55,7 @@
             </div>
             <div class="col-md-6">
               <label for="inputDate" class="form-label">Dátum:</label>
-              <input type="date" class="form-control" id="inputDate" >
+              <input type="date" class="form-control" id="inputDate">
             </div>
             <div class="col-md-4 slidecontainer mt-5">
               <input type="range" min="1" max="70" value="50" class="slider" id="Beza">
@@ -71,43 +70,39 @@
             </div>
           </form>
 
-    </div>
-    <div class="col-6 holder mt-3">
-      <div class="row">
-        <div class="col-12 col-md-6">
-          <h4>Tankolások:</h4>
-        </div>        
-        <div class="col-2"></div>
-        <div- class="col-12 col-md-4">
-          <span id="fuelTotal">Össztankolás: 0 l</span>
         </div>
-        <div class="row my-3">
-          <div class="col-6">
-            <label for="startDate">Kezdeti dátum:</label>
-            <input type="date" min="1" max="31" id="startDate" class="form-control">
+        <div class="col-lg-12 col-xl-6 holder mt-3">
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <h4>Tankolások:</h4>
+            </div>
+            <div class="col-2"></div>
+            <div- class="col-12 col-md-4">
+              <span id="fuelTotal">Össztankolás: 0 l</span>
           </div>
-          <div class="col-6">
-            <label for="endDate">Végzeti dátum:</label>
-            <input type="date" min="1" max="31" id="endDate" class="form-control">
+          <div class="row my-3">
+            <div class="col-6">
+              <label for="startDate">Kezdeti dátum:</label>
+              <input type="date" min="1" max="31" id="startDate" class="form-control">
+            </div>
+            <div class="col-6">
+              <label for="endDate">Végzeti dátum:</label>
+              <input type="date" min="1" max="31" id="endDate" class="form-control">
+            </div>
           </div>
+          <table class="table table-responsive">
+            <thead>
+              <th>Tankolt</th>
+              <th>Dátum</th>
+              <th>Fizetett</th>
+              <th>Km óra állás</th>
+            </thead>
+            <tbody></tbody>
+          </table>
         </div>
-        <table class="table table-responsive">
-          <thead>
-            <th>Tankolt</th>
-            <th>Dátum</th>
-            <th>Fizetett</th>
-            <th>Km óra állás</th>
-          </thead>
-          <tbody></tbody>
-        </table>
       </div>
-      </div>                  
-  </div>
-</div>
-
-
     </div>
-    <div class="container-fluid mt-5">
+    <!-- <div class="container-fluid mt-5">
       <div class="col-6 mx-auto">
         <div class="card l-bg-blue-dark">
           <div class="card-statistic-3 p-4">
@@ -127,7 +122,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </section>
 
 
