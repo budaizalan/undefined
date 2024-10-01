@@ -35,23 +35,22 @@
             </li>
           </ul>
         </div>
-        
+
       </div>
     </nav>
   </header>
-  
-  <section class="home-section"></section>
+
+  <section class="home-section">
     <div class="maintitle">
       <h1 class="display-6 text-center mb-0">undefined:</h1>
       <h1 class="text-center" style="font-size: calc(2rem + 2.7vw)">Tankolás vezetése</h1>
     </div>
-  </section>
-  <div class="container">
-    <div class="row">
+    <div class="container">
+      <div class="row">
 
-      <div class="col-6 holder mt-3">
-        <form class="row g-3">
-          <div class="col-md-6">
+        <div class="col-6 holder mt-3">
+          <form class="row g-3">
+            <div class="col-md-6">
               <label for="fizetett" class="form-label">Fizetett:</label>
               <input type="text" class="form-control" id="fizetett">
             </div>
@@ -60,8 +59,8 @@
               <input type="date" class="form-control" id="inputDate">
             </div>
             <div class="col-md-4 slidecontainer mt-5">
-                <input type="range" min="1" max="70" value="50" class="slider" id="Beza">
-                <p><span id="display"></span> liter</p>
+              <input type="range" min="1" max="70" value="50" class="slider" id="Beza">
+              <p><span id="display"></span> liter</p>
             </div>
             <div class="col-md-4 mt-2">
               <label for="kilometerAllas" class="form-label">Kilométer állás</label>
@@ -71,74 +70,74 @@
               <button type="submit" class="btn" id="addTankage">Hozzáadás</button>
             </div>
           </form>
-    </div>
-    <div class="col-6 holder mt-3">
-      <div class="row">
-        <div class="col-12 col-md-4">
-          <h4>Összes tankolás:</h4>
         </div>
-        <div class="col-12 col-md-4">
-          <select id="selectMonths">
-            <!-- options -->
-          </select>
-        </div>
-        <div- class="col-12 col-md-4">
-          <span id="fuelTotal">Össztankolás: 0 l</span>
-        </div>
-        <div class="row">
-          <div class="col-6">
-            <label for="startDay">Kezdeti dátum:</label>
-            <input type="number" min="1" max="31" id="startDay">
+        <div class="col-6 holder mt-3">
+          <div class="row">
+            <div class="col-12 col-md-4">
+              <h4>Összes tankolás:</h4>
+            </div>
+            <div class="col-12 col-md-4">
+              <select id="selectMonths">
+                <!-- options -->
+              </select>
+            </div>
+            <div- class="col-12 col-md-4">
+              <span id="fuelTotal">Össztankolás: 0 l</span>
           </div>
-          <div class="col-6">
-            <label for="endDay">Végzeti dátum:</label>
-            <input type="number" min="1" max="31" id="endDay">
+          <div class="row">
+            <div class="col-6">
+              <label for="startDay">Kezdeti dátum:</label>
+              <input type="number" min="1" max="31" id="startDay">
+            </div>
+            <div class="col-6">
+              <label for="endDay">Végzeti dátum:</label>
+              <input type="number" min="1" max="31" id="endDay">
+            </div>
           </div>
-        </div>
-        <div class="sumRec">
-          <table class="table table-responsive">
-            <thead>
-              <th>Tankolt</th>
-              <th>Dátum</th>
-              <th>Fizetett</th>
-              <th>Km óra állás</th>
-            </thead>
-            <tbody></tbody>
-          </table>
+          <div class="sumRec">
+            <table class="table table-responsive">
+              <thead>
+                <th>Tankolt</th>
+                <th>Dátum</th>
+                <th>Fizetett</th>
+                <th>Km óra állás</th>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
       </div>
-      
-            
-  </div>
-</div>
+    </div>
 
-  </div>
-  <div class="container-fluid mt-5">
-        <div class="col-6 mx-auto">
-            <div class="card l-bg-blue-dark">
-                <div class="card-statistic-3 p-4">
-                    <div class="mb-4">
-                        <h5 class="card-title mb-0">Statisztika</h5>
-                    </div>
-                    <div class="row align-items-center mb-2 d-flex">
-                        <div class="col-8">
-                            <h2 class="d-flex align-items-center mb-0">
-                                15 km
-                            </h2>
-                        </div>
-                        <div class="col-4 text-right">
-                            <span>6.6l / 100km <i class="fa fa-arrow-up"></i></span>
-                        </div>
-                    </div>
-                </div>
+    </div>
+    <div class="container-fluid mt-5">
+      <div class="col-6 mx-auto">
+        <div class="card l-bg-blue-dark">
+          <div class="card-statistic-3 p-4">
+            <div class="mb-4">
+              <h5 class="card-title mb-0">Statisztika</h5>
             </div>
+            <div class="row align-items-center mb-2 d-flex">
+              <div class="col-8">
+                <h2 class="d-flex align-items-center mb-0">
+                  15 km
+                </h2>
+              </div>
+              <div class="col-4 text-right">
+                <span>6.6l / 100km <i class="fa fa-arrow-up"></i></span>
+              </div>
+            </div>
+          </div>
         </div>
-</div>
+      </div>
+    </div>
+  </section>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
     crossorigin="anonymous"></script>
-    <script src="./public/app.js" type="module"></script>
+  <script src="./public/app.js" type="module"></script>
 </body>
 
 </html>
