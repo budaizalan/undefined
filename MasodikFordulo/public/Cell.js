@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class Cell {
+export default class Cell {
     _position;
     _fruits;
     _fruitType;
@@ -36,4 +34,3 @@ class Cell {
         this._special = special;
     }
 }
-exports.default = Cell;

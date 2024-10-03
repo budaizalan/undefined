@@ -1,5 +1,7 @@
-const gameDiv = document.getElementsByClassName('.game');
+import Game from "./Game.js";
+
 const mapSize = 10;
+let game = new Game(mapSize);
 
 const root = document.documentElement;
 root.style.setProperty('--map-size', mapSize.toString());
@@ -12,6 +14,10 @@ function Generator(size: number) {
             div.className = 'cell';
             div.setAttribute('x', i.toString());
             div.setAttribute('y', j.toString());
+            let span = document.createElement('span');
+            span.className = 'fruits';
+            span.textContent = game.map[i][j].fruits.toString();
+            div.append(span);
             gameDiv!.append(div);
         }
     }
