@@ -1,16 +1,18 @@
 "use strict";
 const gameDiv = document.getElementsByClassName('.game');
+const mapSize = 10;
+const root = document.documentElement;
+root.style.setProperty('--map-size', mapSize.toString());
 function Generator(size) {
     const gameDiv = document.querySelector('.game');
     for (let i = 0; i < size; i++) {
-        for (let j = 1; j < size; j++) {
+        for (let j = 0; j < size; j++) {
             let div = document.createElement('div');
-            div.className = 'block';
-            div.id = `${i}${j}`;
-            if (j == size - 1) {
-            }
+            div.className = 'cell';
+            div.setAttribute('x', i.toString());
+            div.setAttribute('y', j.toString());
             gameDiv.append(div);
         }
     }
 }
-Generator(10);
+Generator(mapSize);

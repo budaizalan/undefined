@@ -1,3 +1,7 @@
+:root {
+  --map-size: 1;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -15,11 +19,6 @@ body{
 .container {
   background-color: #14121c;
   color: white;
-}
-
-
-.row{
-  margin: 0;
 }
 
 /* Navbar */
@@ -55,7 +54,7 @@ body{
   position: relative;
   top: 13vh;
   max-width: 600vh;
-  width: 190vh;
+  width: 90vw;
   background-color: #14121c;
   border-radius: 10px;
   box-shadow: 0 2px 4px 0 rgba(255, 255, 255, 0.2),
@@ -65,14 +64,21 @@ body{
 
 .game {
   overflow: hidden;
-   width: 520px; /*Lehet inkább calc függvény kéne de ehhez fáradt vagyok  */
+  width: fit-content; /* ez meg van oldva pookie */
+  margin: auto; 
+  position: relative;
+  top: 5vh;
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(var(--map-size), 1fr);
   gap: 1px;
+  background-color: #14121c;
+  border-radius: 5px; /* ezt döntsétek el hogy kell-e */
 }
 
-.block {
-  width: 50px;
-  height: 50px;
+.cell {
+  width: calc(80vw / var(--map-size));
+  height: calc(80vw / var(--map-size));
+  max-width: calc(65vh / var(--map-size));
+  max-height: calc(65vh / var(--map-size));
   background-color: #42c3ca;
 }
