@@ -1,0 +1,78 @@
+* {
+  margin: 0;
+  padding: 0;
+  /* box-sizing: border-box; */
+}
+
+body{
+  background: linear-gradient(45deg, #05012b, #200d5e);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: white;
+}
+
+.nav-link,
+.container {
+  background-color: #14121c;
+  color: white;
+}
+
+
+.row{
+  margin: 0;
+}
+
+/* Navbar */
+
+.navbar {
+  border-bottom: solid black 2px;
+  background-color: #14121c;
+  overflow: hidden;
+  font-size: 20px;
+}
+
+
+.navbar a {
+  font-size: 20px;
+  margin-right: 30px;
+  background-color: transparent;
+}
+
+.active {
+  color: white !important;
+}
+
+.nav-link:hover {
+  color: #42c3ca !important;
+}
+
+/* Game */
+
+.container {
+  /* margin-top: 300px; */
+  text-align: center;
+  margin: auto;
+  position: relative;
+  top: 13vh;
+  max-width: 600vh;
+  width: 190vh;
+  background-color: #14121c;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px 0 rgba(255, 255, 255, 0.2),
+    0 5px 15px 0 rgba(255, 255, 255, 0.15);
+  height: 80vh;
+}
+
+.game {
+  overflow: hidden;
+   width: 520px; /*Lehet inkább calc függvény kéne de ehhez fáradt vagyok  */
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 1px;
+}
+
+.block {
+  width: 50px;
+  height: 50px;
+  background-color: #42c3ca;
+}
