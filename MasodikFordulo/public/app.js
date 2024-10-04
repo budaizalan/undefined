@@ -16,9 +16,11 @@ function Generator(size) {
             span.className = 'fruits';
             span.textContent = game.map[i][j].fruits.toString();
             if (game.map[i][j].fruits == 0) {
-                var img = document.createElement("img");
-                img.src = './hunor.jpg';
-                div.append(img);
+                // var img = document.createElement("img");
+                span.className = 'field';
+                // img.src = './hunor.jpg';
+                div.append(span);
+                // div!.append(img)
             }
             div.append(span);
             gameDiv.append(div);

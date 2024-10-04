@@ -70,7 +70,6 @@ body{
   top: 5vh;
   display: grid;
   grid-template-columns: repeat(var(--map-size), 1fr);
-  gap: 1px;
   background-color: #14121c;
   border-radius: 5px; /* Ezt döntsétek el hogy kell-e */
 }
@@ -87,10 +86,20 @@ body{
   width: 100%;
   height: 100%;
   font-size: 1.8vmax; /*Állíthatod az értéket, de a vmax-ot hagyd benne!*/
-  color: white;
+  color: white; /* Igazából csak át kell rakni a textet egy kurva almafára aztán kész*/
   display: flex;
   justify-content: center;
   align-items: center;
   margin: auto;
 }
 
+.cell .field {
+  width: 100%;
+  height: 100%;
+  font-size: 1.8vmax; /*Állíthatod az értéket, de a vmax-ot hagyd benne!*/
+  background-image: url(./hunor.jpg); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
