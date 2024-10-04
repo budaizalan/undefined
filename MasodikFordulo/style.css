@@ -47,6 +47,11 @@ body{
 
 /* Game */
 
+main{
+  height: 100vh;
+  overflow: hidden;
+}
+
 .container {
   /* margin-top: 300px; */
   text-align: center;
@@ -62,12 +67,27 @@ body{
   height: 80vh;
 }
 
-.game {
+.game{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.game-scoreboard {
+  width: 20%;
+  height: 90%;
+  background-color: #14121c;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px 0 rgba(255, 255, 255, 0.2),
+    0 5px 15px 0 rgba(255, 255, 255, 0.15);
+}
+
+.game-table {
   overflow: hidden;
   width: fit-content; /* ez meg van oldva pookie */
-  margin: auto; 
+  height: fit-content;
   position: relative;
-  top: 5vh;
   display: grid;
   grid-template-columns: repeat(var(--map-size), 1fr);
   background-color: #14121c;
@@ -75,8 +95,8 @@ body{
 }
 
 .cell {
-  width: calc(80vw / var(--map-size));
-  height: calc(52vw / var(--map-size));
+  width: calc(50vw / var(--map-size));
+  height: calc(32.5vw / var(--map-size));
   max-width: calc(100vh / var(--map-size));
   max-height: calc(65vh / var(--map-size));
   background-color: #42c3ca;
@@ -102,4 +122,31 @@ body{
   justify-content: center;
   align-items: center;
   margin: auto;
+}
+
+@media screen and (max-width: 1100px) {
+  .game {
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+    flex-wrap: wrap;
+  }
+  .game-table {
+    order: -1;
+    margin-top: 2vh;
+  }
+  .game-scoreboard {
+    width: 48%;
+    height: calc(100% - 65vw);
+    min-height: calc(100% - 47vh);
+    margin-top: 2vh;
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
+  }
+  .cell {
+    width: calc(80vw / var(--map-size));
+    height: calc(52vw / var(--map-size));
+    max-width: calc(60vh / var(--map-size));
+    max-height: calc(39vh / var(--map-size));
+  }
 }
