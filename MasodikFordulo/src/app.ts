@@ -12,11 +12,17 @@ function Generator(size: number) {
         for (let j = 0; j < size; j++) {
             let div = document.createElement('div');
             div.className = 'cell';
+            div.id = `${i},${j}`;
             div.setAttribute('x', i.toString());
             div.setAttribute('y', j.toString());
             let span = document.createElement('span');
             span.className = 'fruits';
             span.textContent = game.map[i][j].fruits.toString();
+            if (game.map[i][j].fruits == 0) {
+                var img = document.createElement("img");
+                img.src = './hunor.jpg';     
+                div!.append(img)
+            }
             div.append(span);
             gameDiv!.append(div);
         }
