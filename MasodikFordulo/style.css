@@ -75,9 +75,9 @@ body{
 }
 
 .cell {
-  width: calc(100vw / var(--map-size));
-  height: calc(80vw / var(--map-size));
-  max-width: calc(140vh / var(--map-size));
+  width: calc(80vw / var(--map-size));
+  height: calc(52vw / var(--map-size));
+  max-width: calc(100vh / var(--map-size));
   max-height: calc(65vh / var(--map-size));
   background-color: #42c3ca;
 }
@@ -97,7 +97,7 @@ body{
   width: 100%;
   height: 100%;
   font-size: 1.8vmax; /*Állíthatod az értéket, de a vmax-ot hagyd benne!*/
-  background-image: url(./hunor.jpg); 
+  background-image: url(./hunor.jpg);
   display: flex;
   justify-content: center;
   align-items: center;
