@@ -76,9 +76,9 @@ body{
 }
 
 .cell {
-  width: calc(80vw / var(--map-size));
+  width: calc(100vw / var(--map-size));
   height: calc(80vw / var(--map-size));
-  max-width: calc(65vh / var(--map-size));
+  max-width: calc(140vh / var(--map-size));
   max-height: calc(65vh / var(--map-size));
   background-color: #42c3ca;
 }
