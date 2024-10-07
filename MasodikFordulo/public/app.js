@@ -18,6 +18,7 @@ function Generator(size) {
             if (game.map[i][j].fruits == 0) {
                 // var img = document.createElement("img");
                 span.className = 'field';
+                span.textContent = null;
                 // img.src = './hunor.jpg';
                 div.append(span);
                 // div!.append(img)

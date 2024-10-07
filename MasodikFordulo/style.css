@@ -99,7 +99,7 @@ main{
   height: calc(32.5vw / var(--map-size));
   max-width: calc(100vh / var(--map-size));
   max-height: calc(65vh / var(--map-size));
-  background-color: #42c3ca;
+  /* background-color: #42c3ca; */
 }
 
 .cell .fruits{
@@ -108,6 +108,11 @@ main{
   font-size: 1.8vmax; /*Állíthatod az értéket, de a vmax-ot hagyd benne!*/
   color: white; /* Igazából csak át kell rakni a textet egy kurva almafára aztán kész*/
   display: flex;
+  background-color: white;
+  background-image: url(./images/tree.png);
+  background-size:contain;
+  background-repeat: no-repeat;
+  background-position: center;
   justify-content: center;
   align-items: center;
   margin: auto;
@@ -117,7 +122,11 @@ main{
   width: 100%;
   height: 100%;
   font-size: 1.8vmax; /*Állíthatod az értéket, de a vmax-ot hagyd benne!*/
-  background-image: url(./hunor.jpg);
+  background-color: white;
+  background-image: url(./images/stone.webp );
+  background-size:contain;
+  background-repeat: no-repeat;
+  background-position: center;
   display: flex;
   justify-content: center;
   align-items: center;
