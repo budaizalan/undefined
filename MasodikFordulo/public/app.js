@@ -5,8 +5,8 @@ const root = document.documentElement;
 root.style.setProperty('--map-size', mapSize.toString());
 function Generator(size) {
     const gameDiv = document.querySelector('.game-table');
-    for (let i = 0; i < size; i++) {
-        for (let j = 0; j < size; j++) {
+    for (let i = 1; i < size + 1; i++) {
+        for (let j = 1; j < size + 1; j++) {
             let div = document.createElement('div');
             div.className = 'cell';
             div.id = `${i},${j}`;
