@@ -1,6 +1,21 @@
-export default class Cell {
+export class ProtoCell{
+    protected _fruits: number;
+
+    get fruits() {
+        return this._fruits;
+    }
+
+    set fruits(value: number) {
+        this._fruits = -1;
+    }
+
+    constructor(fruits:number){
+        this._fruits = fruits
+    }
+}
+
+export default class Cell extends ProtoCell {
     private _position: { x: number, y: number };
-    private _fruits: number;
     private _fruitType: string;
     private _special: null | string;
 
@@ -36,6 +51,7 @@ export default class Cell {
     }
 
     constructor(x: number, y: number, fruits: number, fruitType: string, special: null | string) {
+        super(fruits)
         this._position = { x, y };
         this._fruits = fruits;
         this._fruitType = fruitType;
