@@ -1,4 +1,4 @@
-import Cell from "./Cell.js";
+import Cell, { ProtoCell } from "./Cell.js";
 export default class Game {
     _map = new Array();
     _mapSize;
@@ -20,6 +20,9 @@ export default class Game {
     get gameOver() {
         return this._gameOver;
     }
+    get randomValue() {
+        return Math.floor((Math.random() * 11) / 2);
+    }
     constructor(mapSize) {
         this._mapSize = mapSize;
         this._score = 0;
@@ -29,14 +32,53 @@ export default class Game {
     }
     generateMap() {
         let map = new Array();
-        for (let i = 0; i < this._mapSize; i++) {
+        map.map(r => r.fill(new Cell(0, 0, 1, "none", null)));
+        for (let i = 0; i < this._mapSize + 2; i++) {
             map[i] = new Array();
-            for (let j = 0; j < this._mapSize; j++) {
-                let random_value = Math.floor((Math.random() * 11) / 2);
-                let result = random_value == 5 || random_value == 4 ? 0 : random_value;
-                map[i][j] = new Cell(i, j, result, 'none', null);
+            for (let j = 0; j < this._mapSize + 2; j++) {
+                if (i == 0 || j == 0 || i == this._mapSize + 1 || j == this.mapSize + 1)
+                    map[i][j] = new ProtoCell(-1);
+                else {
+                    let random_value = Math.floor((Math.random() * 11) / 2);
+                    let result = random_value == 5 || random_value == 4 ? 0 : random_value;
+                    map[i][j] = new Cell(i, j, result, "none", null);
+                }
             }
         }
+        map = this.CorrectMapLayout(map);
+        console.log(map);
         return map;
+    }
+    CorrectMapLayout(_map) {
+        for (let i = 1; i < this.mapSize + 1; i++) {
+            for (let j = 1; j < this.mapSize + 1; j++) {
+                if (_map[i][j].fruits > 0) {
+                    if (_map[i - 1][j].fruits <= 0 && _map[i][j - 1].fruits <= 0) {
+                        _map[i][j - 1].fruits = 44;
+                        _map[i - 1][j].fruits = 44;
+                    }
+                    if (_map[i + 1][j].fruits <= 0 && _map[i][j + 1].fruits <= 0) {
+                        _map[i][j + 1].fruits = 44;
+                        _map[i + 1][j].fruits = 44;
+                    }
+                }
+            }
+        }
+        for (let i = 1; i < this.mapSize + 1; i++) {
+            for (let j = 1; j < this.mapSize + 1; j++) {
+                if (_map[i][j].fruits > 0) {
+                    if (_map[i - 1][j - 1].fruits > 0 &&
+                        _map[i - 1][j].fruits > 0 &&
+                        _map[i - 1][j + 1].fruits > 0 &&
+                        _map[i][j - 1].fruits > 0 &&
+                        _map[i][j + 1].fruits > 0 &&
+                        _map[i + 1][j - 1].fruits > 0 &&
+                        _map[i + 1][j].fruits > 0 &&
+                        _map[i + 1][j + 1].fruits > 0)
+                        _map[i][j].fruits = 0;
+                }
+            }
+        }
+        return _map;
     }
 }
