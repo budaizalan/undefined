@@ -29,12 +29,23 @@ function Generator(size) {
         }
     }
 }
+export { PlayerLocation as playloc } from "./app.js";
+export class PlayerLocation {
+    x;
+    y;
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    Mul() {
+        console.log("mul:" + (this.x * this.y));
+    }
+}
 function PlayerParam(id) {
     if (firstClick) {
-        console.log(id);
         let loc = id.split(',');
         let p = new Player(parseInt(loc[0]), parseInt(loc[1]));
-        console.log(p);
+        console.log(p._position);
         firstClick = false;
     }
 }

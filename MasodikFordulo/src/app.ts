@@ -32,14 +32,30 @@ function Generator(size: number) {
     }
 }
 
+export {PlayerLocation as playloc} from "./app.js";
+
+export class PlayerLocation
+{
+    constructor(private x: number, private y: number)
+    {
+        
+    }
+    
+    Mul()
+    {
+        console.log("mul:" +(this.x * this.y));
+    }
+}
+
 function PlayerParam(id: string){
     if (firstClick) {
-        console.log(id);
         let loc = id.split(',');
         let p = new Player(parseInt(loc[0]),parseInt(loc[1]));
-        console.log(p);
+        
+        console.log(p._position);
         firstClick = false;
     }
+    
 }
 
 Generator(mapSize);
