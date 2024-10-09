@@ -54,12 +54,12 @@ export default class Game {
             for (let j = 1; j < this.mapSize + 1; j++) {
                 if (_map[i][j].fruits > 0) {
                     if (_map[i - 1][j].fruits <= 0 && _map[i][j - 1].fruits <= 0) {
-                        _map[i][j - 1].fruits = 44;
-                        _map[i - 1][j].fruits = 44;
+                        _map[i][j - 1].fruits = this.randomValue;
+                        _map[i - 1][j].fruits = this.randomValue;
                     }
                     if (_map[i + 1][j].fruits <= 0 && _map[i][j + 1].fruits <= 0) {
-                        _map[i][j + 1].fruits = 44;
-                        _map[i + 1][j].fruits = 44;
+                        _map[i][j + 1].fruits = this.randomValue;
+                        _map[i + 1][j].fruits = this.randomValue;
                     }
                 }
             }

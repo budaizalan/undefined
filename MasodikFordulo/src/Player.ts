@@ -1,5 +1,5 @@
 export default class Player {
-    private _position: { x: number, y: number };
+    public _position: { x: number, y: number };
 
     get position() {
         return this._position;

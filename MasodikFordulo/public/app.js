@@ -1,5 +1,7 @@
 import Game from "./Game.js";
+import Player from "./Player.js";
 const mapSize = 10;
+let firstClick = true;
 let game = new Game(mapSize);
 const root = document.documentElement;
 root.style.setProperty('--map-size', mapSize.toString());
@@ -16,16 +18,24 @@ function Generator(size) {
             span.className = 'fruits';
             span.textContent = game.map[i][j].fruits.toString();
             if (game.map[i][j].fruits == 0) {
-                // var img = document.createElement("img");
                 span.className = 'field';
                 span.textContent = null;
-                // img.src = './hunor.jpg';
-                div.append(span);
-                // div!.append(img)
+            }
+            else {
+                span.addEventListener("click", function () { PlayerParam(div.id); }, false);
             }
             div.append(span);
             gameDiv.append(div);
         }
+    }
+}
+function PlayerParam(id) {
+    if (firstClick) {
+        console.log(id);
+        let loc = id.split(',');
+        let p = new Player(parseInt(loc[0]), parseInt(loc[1]));
+        console.log(p);
+        firstClick = false;
     }
 }
 Generator(mapSize);
