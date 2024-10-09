@@ -3,6 +3,8 @@ import Player from "./Player.js";
 const mapSize = 10;
 let firstClick = true;
 let game = new Game(mapSize);
+let ploc = new Player(0, 0);
+// console.log(ploc);
 const root = document.documentElement;
 root.style.setProperty('--map-size', mapSize.toString());
 function Generator(size) {
@@ -29,24 +31,33 @@ function Generator(size) {
         }
     }
 }
-export { PlayerLocation as playloc } from "./app.js";
-export class PlayerLocation {
-    x;
-    y;
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-    Mul() {
-        console.log("mul:" + (this.x * this.y));
-    }
-}
 function PlayerParam(id) {
     if (firstClick) {
         let loc = id.split(',');
-        let p = new Player(parseInt(loc[0]), parseInt(loc[1]));
-        console.log(p._position);
+        ploc = new Player(parseInt(loc[1]), parseInt(loc[0]));
+        console.log(ploc);
         firstClick = false;
     }
 }
+const body = document.querySelector('.body');
+body.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+        console.log('Left');
+        ploc.moveLeft();
+        console.log(ploc);
+    }
+    else if (e.key === 'ArrowRight') {
+        console.log('Right');
+        ploc.moveRight();
+    }
+    else if (e.key === 'ArrowUp') {
+        console.log('Up');
+        ploc.moveUp();
+    }
+    else if (e.key === 'ArrowDown') {
+        console.log('Down');
+        ploc.moveDown();
+    }
+});
+console.log(ploc);
 Generator(mapSize);

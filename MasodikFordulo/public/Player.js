@@ -4,10 +4,10 @@ export default class Player {
         return this._position;
     }
     constructor(x, y) {
-        this._position = { x, y };
+        this._position = { y, x };
     }
     teleport(x, y) {
-        this._position = { x, y };
+        this._position = { y, x };
     }
     moveUp() {
         this._position.y--;
