@@ -94,6 +94,10 @@ main{
   border-radius: 5px; /* Ezt döntsétek el hogy kell-e */
 }
 
+.disabled {
+  display: none;
+}
+
 .cell {
   width: calc(50vw / var(--map-size));
   height: calc(32.5vw / var(--map-size));

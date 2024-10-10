@@ -55,7 +55,6 @@ export default class Game {
       }
     }   
     map = this.CorrectMapLayout(map);
-    console.log(map);
     return map;
   }
 

@@ -4,10 +4,19 @@ import Player from "./Player.js";
 const mapSize = 10;
 let firstClick = true;
 let game = new Game(mapSize);
-let ploc = new Player(0,0);
-// console.log(ploc);
+console.log(game);
 
+let ploc = new Player(0,0);
+let steps = 10;
+let collectedFruits = 0;
 const gameDiv = document.querySelector('.game-table');
+const stepsText = document.querySelector('#game-steps');
+const fruitsText = document.querySelector('#game-fruits');
+let tryAgainBtn = document.querySelector('#try-again');
+tryAgainBtn!.addEventListener('click', Restart)
+tryAgainBtn!.className = 'disabled';
+const body = document.querySelector('.body');
+stepsText!.textContent = steps.toString();
 const root = document.documentElement;
 root.style.setProperty('--map-size', mapSize.toString());
 
@@ -40,32 +49,56 @@ function Generator(size: number, player_x: number, player_y: number) {
     }
 }
 
+function fruitGathering(player_x: number, player_y: number) {
+    let alreadyGathered = Array<Number>;
+    if (alreadyGathered!.includes(game.map[player_x][player_y])) {        
+    }
+    alreadyGathered.(game.map[player_x][player_y])
+    collectedFruits += game.map[player_x][player_y].fruits;
+    fruitsText!.textContent = collectedFruits.toString();
+}
+
 function PlayerParam(id: string){
     if (firstClick) {
         let loc = id.split(',');
-        ploc = new Player(parseInt(loc[0]),parseInt(loc[1]));
-        Generator(mapSize, parseInt(loc[0]),parseInt(loc[1]));
+        let x = parseInt(loc[0]);
+        let y = parseInt(loc[1]);
+        ploc = new Player(x,y);
+        Generator(mapSize, x,y);
+        fruitGathering(x, y)
         firstClick = false;
     }
 }
 
-const body = document.querySelector('.body');
+function Restart(){
+    console.log('kk');
+    
+}
 
-        body!.addEventListener('keydown', (e) => {
-            if ((e as KeyboardEvent).key === 'ArrowLeft' && game.map[ploc._position.x][ploc._position.y-1].fruits != 0 ) {
-                ploc.moveLeft();
-                Generator(mapSize, ploc._position.x, ploc._position.y)
-            } else if ((e as KeyboardEvent).key === 'ArrowRight' && game.map[ploc._position.x][ploc._position.y+1].fruits != 0 ) {
-                ploc.moveRight();    
-                Generator(mapSize, ploc._position.x, ploc._position.y)
+body!.addEventListener('keydown', (e) => {
+    let sensibleStep = true;
+    if (steps != 0) {
+        if ((e as KeyboardEvent).key === 'ArrowLeft' && game.map[ploc._position.x][ploc._position.y-1].fruits != 0 ) {
+            ploc.moveLeft();
+        } else if ((e as KeyboardEvent).key === 'ArrowRight' && game.map[ploc._position.x][ploc._position.y+1].fruits != 0 ) {
+            ploc.moveRight();
+        } else if ((e as KeyboardEvent).key === 'ArrowUp' && game.map[ploc._position.x-1][ploc._position.y].fruits != 0 ) {
+            ploc.moveUp();
+        } else if ((e as KeyboardEvent).key === 'ArrowDown' && game.map[ploc._position.x+1][ploc._position.y].fruits != 0 ) {
+            ploc.moveDown();
+        } else {
+            sensibleStep = false;
+        }
+        Generator(mapSize, ploc._position.x, ploc._position.y)
+        if (sensibleStep) {
+            steps--;
+            stepsText!.textContent = steps.toString();
+            fruitGathering(ploc._position.x, ploc._position.y)
+        }
+    } else {
+        tryAgainBtn!.className = '';
+    }
+}); 
 
-            } else if ((e as KeyboardEvent).key === 'ArrowUp' && game.map[ploc._position.x-1][ploc._position.y].fruits != 0 ) {
-                ploc.moveUp();
-                Generator(mapSize, ploc._position.x, ploc._position.y)
 
-            } else if ((e as KeyboardEvent).key === 'ArrowDown' && game.map[ploc._position.x+1][ploc._position.y].fruits != 0 ) {
-                ploc.moveDown();
-                Generator(mapSize, ploc._position.x, ploc._position.y)
-            }
-        }); 
 Generator(mapSize, 0, 0);
