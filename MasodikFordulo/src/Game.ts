@@ -51,7 +51,7 @@ export default class Game {
           let random_value = Math.floor((Math.random() * 11) / 2);        
           let result = random_value == 5 || random_value == 4 ? 0 : random_value;
           map[i][j] = new Cell(i, j, result, "none", null);
-        }        
+        }
       }
     }   
     map = this.CorrectMapLayout(map);

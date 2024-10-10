@@ -1,5 +1,5 @@
 export default class Player {
-    private _position: { x: number, y: number };
+    public _position: { x: number, y: number };
 
     get position() {
         return this._position;
@@ -14,19 +14,19 @@ export default class Player {
     }
 
     moveUp() {
-        this._position.y--;
+        if (this.position.x > 1) {this._position.x--;}
     }
 
     moveDown() {
-        this._position.y++;
+        if (this.position.x < 10) {this._position.x++;}
     }
 
     moveLeft() {
-        this._position.x--;
+        if (this.position.y > 1) {this._position.y--;}
     }
 
     moveRight() {
-        this._position.x++;
+        if (this.position.y < 10) {this._position.y++;}
     }
 
 }
