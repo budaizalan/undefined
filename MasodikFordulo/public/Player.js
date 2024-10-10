@@ -4,21 +4,29 @@ export default class Player {
         return this._position;
     }
     constructor(x, y) {
-        this._position = { y, x };
+        this._position = { x, y };
     }
     teleport(x, y) {
-        this._position = { y, x };
+        this._position = { x, y };
     }
     moveUp() {
-        this._position.y--;
+        if (this.position.x > 1) {
+            this._position.x--;
+        }
     }
     moveDown() {
-        this._position.y++;
+        if (this.position.x < 10) {
+            this._position.x++;
+        }
     }
     moveLeft() {
-        this._position.x--;
+        if (this.position.y > 1) {
+            this._position.y--;
+        }
     }
     moveRight() {
-        this._position.x++;
+        if (this.position.y < 10) {
+            this._position.y++;
+        }
     }
 }
