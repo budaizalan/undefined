@@ -28,7 +28,9 @@ export default class Game {
   }
 
   get randomValue(){
-    return Math.floor((Math.random() * 11) / 2);
+    let random_value = Math.floor((Math.random() * 11) / 2);        
+    let result = random_value == 5 || random_value == 4 ? 0 : random_value;
+    return result;
   }
 
   constructor(mapSize: number) {
@@ -41,7 +43,7 @@ export default class Game {
 
   private generateMap(): Array<Array<ProtoCell>> {    
     let map = new Array<Array<ProtoCell>>();
-    map.map(r => r.fill(new Cell(0, 0, 1, "none", null)));
+    map.map(r => r.fill(new Cell(0, 0, 1, "none", false, null)));
     
     for (let i = 0; i < this._mapSize+2; i++) {      
       map[i] = new Array<Cell>();
@@ -50,12 +52,11 @@ export default class Game {
         else{
           let random_value = Math.floor((Math.random() * 11) / 2);        
           let result = random_value == 5 || random_value == 4 ? 0 : random_value;
-          map[i][j] = new Cell(i, j, result, "none", null);
+          map[i][j] = new Cell(i, j, result, "none", false, null);
         }
       }
     }   
     map = this.CorrectMapLayout(map);
-    console.log(map);
     return map;
   }
 

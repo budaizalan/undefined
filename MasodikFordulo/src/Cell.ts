@@ -1,8 +1,13 @@
 export class ProtoCell{
     protected _fruits: number;
+    protected _position: { x: number, y: number };
 
     get fruits() {
         return this._fruits;
+    }
+
+    get position() {
+        return this._position;
     }
 
     set fruits(value: number) {
@@ -10,13 +15,14 @@ export class ProtoCell{
     }
 
     constructor(fruits:number){
-        this._fruits = fruits
+        this._fruits = fruits,
+        this._position = this.position
     }
 }
 
 export default class Cell extends ProtoCell {
-    private _position: { x: number, y: number };
     private _fruitType: string;
+    private _harvested: boolean = false;
     private _special: null | string;
 
     get position() {
@@ -42,6 +48,10 @@ export default class Cell extends ProtoCell {
         this._fruitType = value;
     }
 
+    get harvested() {
+        return this._harvested;
+    }
+
     get special() {
         return this._special;
     }
@@ -50,11 +60,12 @@ export default class Cell extends ProtoCell {
         this._special = value;
     }
 
-    constructor(x: number, y: number, fruits: number, fruitType: string, special: null | string) {
+    constructor(x: number, y: number, fruits: number, fruitType: string, harvested: boolean, special: null | string) {
         super(fruits)
         this._position = { x, y };
         this._fruits = fruits;
         this._fruitType = fruitType;
+        this._harvested = harvested;
         this._special = special;
     }
 }
