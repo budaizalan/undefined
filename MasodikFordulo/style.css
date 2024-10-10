@@ -98,6 +98,50 @@ main{
   display: none;
 }
 
+.afterscreen {
+  position: absolute;
+  text-align: center;
+  background-color: rgb(20, 18, 28 , 0.7);
+  opacity: 100%;
+  color: white;
+  font-size: 6rem;
+  height: 100%;
+  width: 100%;
+}
+
+.afterscreentext {
+  position: absolute;
+  text-align: center;
+  /* background-color: rgb(20, 18, 28 , 0.3); */
+  opacity: 100%;
+  color: white;
+  font-size: 3rem;
+  height: 100%;
+  width: 100%;
+}
+
+.afterscreenbuttondiv {
+  position: relative;
+  text-align: center;
+  margin: auto;
+  margin-top: 10%;
+  /* background-color: rgb(20, 18, 28 , 0.3); */
+  opacity: 100%;
+  color: white;
+  background-color: rgb(20, 18, 28 , 0.7);
+  font-size: 2rem;
+  height: 10%;
+  width: 40%;
+}
+
+.afterscreenbutton{
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  border: 0px;
+  color: white;
+}
+
 .cell {
   width: calc(50vw / var(--map-size));
   height: calc(32.5vw / var(--map-size));
