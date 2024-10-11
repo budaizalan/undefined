@@ -10,9 +10,11 @@ let steps = 10;
 let numberOfTries = 1;
 let collectedFruits = 0;
 let onAfterScreen = false;
-const gameDiv = document.querySelector('.game-table');
+const records = [];
 const stepsText = document.querySelector('#game-steps');
 const fruitsText = document.querySelector('#game-fruits');
+const bestTryText = document.querySelector('#besttry');
+const gameDiv = document.querySelector('.game-table');
 const scoreboardText = document.querySelector('.game-scoreboard');
 const body = document.querySelector('.body');
 stepsText.textContent = steps.toString();
@@ -36,6 +38,9 @@ function Generator(size, player_x, player_y) {
             }
             else {
                 span.addEventListener("click", function () { PlayerParam(div.id); }, false);
+            }
+            if (harvested.includes(`${game.map[i][j].position.x},${game.map[i][j].position.y}`)) {
+                span.textContent = '';
             }
             if (i == player_x && j == player_y) {
                 div.className = 'Player';
@@ -69,7 +74,6 @@ function PlayerParam(id) {
 }
 function Restart() {
     console.log('oki');
-    Generator(mapSize, 0, 0);
     firstClick = true;
     steps = 10;
     AddRecord();
@@ -79,11 +83,17 @@ function Restart() {
     numberOfTries++;
     onAfterScreen = false;
     harvested = [];
+    Generator(mapSize, 0, 0);
 }
 function AddRecord() {
     let record = document.createElement('div');
     record.textContent = ` Az ${numberOfTries}. fordulóban elért pontszám: ${collectedFruits}`;
-    scoreboardText?.appendChild(record);
+    let bestRecord = document.createElement('div');
+    records.push(collectedFruits);
+    bestTryText.textContent = '';
+    bestRecord.textContent = `Eddigi legjobb eredmény: ${records.reduce((a, b) => Math.max(a, b))}`; //nem tudom miért ír errort, faszán müködik
+    bestTryText.appendChild(bestRecord);
+    scoreboardText.appendChild(record);
 }
 body.addEventListener('keydown', (e) => {
     let sensibleStep = true;
