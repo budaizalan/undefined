@@ -11,7 +11,7 @@ let steps = 10;
 let numberOfTries = 1;
 let collectedFruits = 0;
 let onAfterScreen = false;
-const records: Number[] = [];
+const records: number[] = [];
 const stepsText = document.querySelector('#game-steps');
 const fruitsText = document.querySelector('#game-fruits');
 const bestTryText = document.querySelector('#besttry');
@@ -97,7 +97,7 @@ function AddRecord(){
     let bestRecord = document.createElement('div')
     records.push(collectedFruits);
     bestTryText!.textContent = '';
-    bestRecord.textContent = `Eddigi legjobb eredmény: ${records.reduce((a, b) => Math.max(a, b))}`; //nem tudom miért ír errort, faszán müködik
+    bestRecord.textContent = `Eddigi legjobb eredmény: ${records.reduce((a, b) => Math.max(a, b))}`;
     bestTryText!.appendChild(bestRecord);
     scoreboardText!.appendChild(record);
 }
