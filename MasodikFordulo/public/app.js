@@ -1,11 +1,11 @@
+import Cell from "./Cell.js";
 import Game from "./Game.js";
 import Player from "./Player.js";
 const mapSize = 10;
 let firstClick = true;
 let game = new Game(mapSize);
 // console.log(game);
-let harvested = [];
-let ploc = new Player(0, 0);
+let ploc;
 let steps = 10;
 let numberOfTries = 1;
 let collectedFruits = 0;
@@ -33,17 +33,22 @@ function Generator(size, player_x, player_y) {
             span.className = 'fruits';
             span.textContent = game.map[i][j].fruits.toString();
             if (game.map[i][j].fruits == 0) {
-                span.className = 'field';
+                span.classList.add('field');
                 span.textContent = null;
             }
             else {
                 span.addEventListener("click", function () { PlayerParam(div.id); }, false);
             }
-            if (harvested.includes(`${game.map[i][j].position.x},${game.map[i][j].position.y}`)) {
+            if (game.map[i][j] instanceof Cell) {
+                if (game.map[i][j].ability != null) {
+                    span.classList.add('ability');
+                }
+            }
+            if (game.map[i][j].harvested) {
                 span.textContent = '';
             }
             if (i == player_x && j == player_y) {
-                div.className = 'Player';
+                span.classList.add('Player');
                 div.textContent = '';
                 span.textContent = '';
             }
@@ -53,12 +58,16 @@ function Generator(size, player_x, player_y) {
     }
 }
 function fruitGathering(player_x, player_y) {
-    let currentLine = `${game.map[player_x][player_y].position.x},${game.map[player_x][player_y].position.y}`;
-    if (!harvested.includes(currentLine)) {
-        harvested.push(currentLine);
+    if (!game.map[player_x][player_y].harvested) {
         collectedFruits += game.map[player_x][player_y].fruits;
     }
+    if (game.map[player_x][player_y].ability != null) {
+        game.AddCollectedAbilities(game.map[player_x][player_y].ability);
+        game.map[player_x][player_y].ability = null;
+        console.log(game.collectedAbilities);
+    }
     // game.map[player_x][player_y].fruits = 0; //   Ezt visszakommentezve kavicsokat húz maga után ahogy lépked (pretty fun ngl)
+    game.map[player_x][player_y].harvested = true;
     fruitsText.textContent = collectedFruits.toString();
 }
 function PlayerParam(id) {
@@ -73,7 +82,6 @@ function PlayerParam(id) {
     }
 }
 function Restart() {
-    console.log('oki');
     firstClick = true;
     steps = 10;
     AddRecord();
@@ -81,8 +89,12 @@ function Restart() {
     fruitsText.textContent = '0';
     stepsText.textContent = steps.toString();
     numberOfTries++;
+    game.map.forEach((row) => {
+        row.forEach((cell) => {
+            cell.harvested = false;
+        });
+    });
     onAfterScreen = false;
-    harvested = [];
     Generator(mapSize, 0, 0);
 }
 function AddRecord() {
@@ -91,7 +103,7 @@ function AddRecord() {
     let bestRecord = document.createElement('div');
     records.push(collectedFruits);
     bestTryText.textContent = '';
-    bestRecord.textContent = `Eddigi legjobb eredmény: ${records.reduce((a, b) => Math.max(a, b))}`; //nem tudom miért ír errort, faszán müködik
+    bestRecord.textContent = `Eddigi legjobb eredmény: ${records.reduce((a, b) => Math.max(a, b))}`;
     bestTryText.appendChild(bestRecord);
     scoreboardText.appendChild(record);
 }

@@ -4,6 +4,8 @@ export default class Game {
     _mapSize;
     _score;
     _moves;
+    _abilities = ['teleport', 'dash'];
+    _collectedAbilities = [];
     _gameOver;
     get map() {
         return this._map;
@@ -16,6 +18,9 @@ export default class Game {
     }
     get moves() {
         return this._moves;
+    }
+    get collectedAbilities() {
+        return this._collectedAbilities;
     }
     get gameOver() {
         return this._gameOver;
@@ -48,7 +53,16 @@ export default class Game {
             }
         }
         map = this.CorrectMapLayout(map);
+        map.filter(r => r.filter(c => c.fruits > 0).length > 0).forEach(r => r.filter(c => c.fruits > 0).forEach(c => c.ability = this.getRandomAbility()));
         return map;
+    }
+    getRandomAbility() {
+        const chance = Math.random();
+        if (chance < 0.1) {
+            const randomIndex = Math.floor(Math.random() * this._abilities.length);
+            return this._abilities[randomIndex];
+        }
+        return null;
     }
     CorrectMapLayout(_map) {
         for (let i = 1; i < this.mapSize + 1; i++) {
@@ -81,5 +95,11 @@ export default class Game {
             }
         }
         return _map;
+    }
+    AddCollectedAbilities(value) {
+        this._collectedAbilities.push(value);
+    }
+    resetAbilities() {
+        this._collectedAbilities = [];
     }
 }

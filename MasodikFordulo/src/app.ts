@@ -1,3 +1,4 @@
+import Cell, { ProtoCell } from "./Cell.js";
 import Game from "./Game.js";
 import Player from "./Player.js";
 
@@ -5,8 +6,7 @@ const mapSize = 10;
 let firstClick = true;
 let game = new Game(mapSize);
 // console.log(game);
-let harvested: String[] = [];
-let ploc = new Player(0,0);
+let ploc: Player;
 let steps = 10;
 let numberOfTries = 1;
 let collectedFruits = 0;
@@ -35,16 +35,21 @@ function Generator(size: number, player_x: number, player_y: number) {
             span.className = 'fruits';
             span.textContent = game.map[i][j].fruits.toString();
             if (game.map[i][j].fruits == 0) {
-                span.className = 'field'
+                span.classList.add('field');
                 span.textContent = null;
             } else {
                 span.addEventListener("click", function(){PlayerParam(div.id);}, false);
             }
-            if (harvested.includes(`${game.map[i][j].position.x},${game.map[i][j].position.y}`)){
+            if(game.map[i][j] instanceof Cell){
+                if((game.map[i][j] as Cell).ability != null){
+                    span.classList.add('ability');
+                }
+            }
+            if ((game.map[i][j] as Cell).harvested){
                 span.textContent = '';
             }
             if (i == player_x && j == player_y) {
-                div.className = 'Player';
+                span.classList.add('Player');
                 div.textContent = '';
                 span.textContent = '';
             }
@@ -55,12 +60,16 @@ function Generator(size: number, player_x: number, player_y: number) {
 }
 
 function fruitGathering(player_x: number, player_y: number) {
-    let currentLine = `${game.map[player_x][player_y].position.x},${game.map[player_x][player_y].position.y}`
-    if (!harvested.includes(currentLine)) {
-        harvested.push(currentLine)
+    if(!(game.map[player_x][player_y] as Cell).harvested){
         collectedFruits += game.map[player_x][player_y].fruits;
     }
+    if((game.map[player_x][player_y] as Cell).ability != null){
+        game.AddCollectedAbilities((game.map[player_x][player_y] as Cell).ability as string);
+        (game.map[player_x][player_y] as Cell).ability = null;
+        console.log(game.collectedAbilities);
+    }
     // game.map[player_x][player_y].fruits = 0; //   Ezt visszakommentezve kavicsokat húz maga után ahogy lépked (pretty fun ngl)
+    (game.map[player_x][player_y] as Cell).harvested = true;
     fruitsText!.textContent = collectedFruits.toString();
 }
 
@@ -78,7 +87,6 @@ function PlayerParam(id: string){
 
 
 function Restart(){
-    console.log('oki');
     firstClick = true;
     steps = 10;
     AddRecord();
@@ -86,8 +94,12 @@ function Restart(){
     fruitsText!.textContent = '0';
     stepsText!.textContent = steps.toString();
     numberOfTries++;
+    game.map.forEach((row) => {
+        row.forEach((cell) => {
+            (cell as Cell).harvested = false;
+        });
+    });
     onAfterScreen = false;
-    harvested = [];
     Generator(mapSize, 0, 0);
 }
 

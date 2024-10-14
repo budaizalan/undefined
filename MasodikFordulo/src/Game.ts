@@ -5,6 +5,8 @@ export default class Game {
   private _mapSize: number;
   private _score: number;
   private _moves: number;
+  private _abilities: string[] = ['teleport', 'dash'];
+  private _collectedAbilities: string[] = [];
   private _gameOver: boolean;
 
   get map() {
@@ -23,11 +25,17 @@ export default class Game {
     return this._moves;
   }
 
+  get collectedAbilities() {
+    return this._collectedAbilities;
+  }
+
+
+
   get gameOver() {
     return this._gameOver;
   }
 
-  get randomValue(){
+  get randomValue() {
     let random_value = Math.floor((Math.random() * 11) / 2);        
     let result = random_value == 5 || random_value == 4 ? 0 : random_value;
     return result;
@@ -57,10 +65,20 @@ export default class Game {
       }
     }   
     map = this.CorrectMapLayout(map);
+    map.filter(r => r.filter(c => c.fruits > 0).length > 0).forEach(r => r.filter(c => c.fruits > 0).forEach(c => (c as Cell).ability = this.getRandomAbility()));
     return map;
   }
 
-  private CorrectMapLayout(_map: ProtoCell[][]): any{   
+  private getRandomAbility(): string | null {
+    const chance = Math.random();
+    if (chance < 0.1) {
+      const randomIndex = Math.floor(Math.random() * this._abilities.length);
+      return this._abilities[randomIndex];
+    }
+    return null;
+  }
+
+  private CorrectMapLayout(_map: ProtoCell[][]): any{
     for (let i = 1; i < this.mapSize+1; i++) {
       for (let j = 1; j < this.mapSize+1; j++) {
         if(_map[i][j].fruits > 0){
@@ -72,7 +90,7 @@ export default class Game {
             _map[i][j+1].fruits = this.randomValue;
             _map[i+1][j].fruits = this.randomValue;
           }
-        }        
+        }
       }
     }
     for (let i = 1; i < this.mapSize+1; i++) {
@@ -93,4 +111,13 @@ export default class Game {
     }
     return _map
   }
+
+  AddCollectedAbilities(value: string) {
+    this._collectedAbilities.push(value);
+  }
+
+  resetAbilities() {
+    this._collectedAbilities = [];
+  }
+
 }

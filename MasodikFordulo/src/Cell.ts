@@ -23,7 +23,7 @@ export class ProtoCell{
 export default class Cell extends ProtoCell {
     private _fruitType: string;
     private _harvested: boolean = false;
-    private _special: null | string;
+    private _ability: null | string;
 
     get position() {
         return this._position;
@@ -52,20 +52,24 @@ export default class Cell extends ProtoCell {
         return this._harvested;
     }
 
-    get special() {
-        return this._special;
+    set harvested(value: boolean) {
+        this._harvested = value;
     }
 
-    set special(value: string | null) {
-        this._special = value;
+    get ability() {
+        return this._ability;
     }
 
-    constructor(x: number, y: number, fruits: number, fruitType: string, harvested: boolean, special: null | string) {
+    set ability(value: string | null) {
+        this._ability = value;
+    }
+
+    constructor(x: number, y: number, fruits: number, fruitType: string, harvested: boolean, ability: null | string) {
         super(fruits)
         this._position = { x, y };
         this._fruits = fruits;
         this._fruitType = fruitType;
         this._harvested = harvested;
-        this._special = special;
+        this._ability = ability;
     }
 }
