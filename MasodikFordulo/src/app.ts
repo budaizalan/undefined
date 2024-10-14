@@ -6,7 +6,7 @@ const mapSize = 10;
 let firstClick = true;
 let game = new Game(mapSize);
 // console.log(game);
-let ploc: Player;
+let ploc: Player = new Player(0,0);
 let steps = 10;
 let numberOfTries = 1;
 let collectedFruits = 0;
@@ -70,21 +70,21 @@ function Generator(size: number, player_x: number, player_y: number) {
     }
 }
 
-function fruitGathering(player_x: number, player_y: number) {
-    if(!(game.map[player_y][player_x] as Cell).harvested){
-        collectedFruits += game.map[player_y][player_x].fruits;
+function fruitGathering(x: number, y: number) {
+    if(!(game.map[y][x] as Cell).harvested){
+        collectedFruits += game.map[y][x].fruits;
     }
-    if((game.map[player_y][player_x] as Cell).ability != null){
-        let ability = (game.map[player_y][player_x] as Cell).ability as string;
+    if((game.map[y][x] as Cell).ability != null){
+        let ability = (game.map[y][x] as Cell).ability as string;
         game.AddCollectedAbilities(ability);
         let abilityCount = document.querySelector(`#${ability}`);
         if(abilityCount != null){
             abilityCount!.textContent = game.collectedAbilities[ability].toString();
         }
-        (game.map[player_y][player_x] as Cell).ability = null;
+        (game.map[y][x] as Cell).ability = null;
     }
     // game.map[player_y][player_x].fruits = 0; //   Ezt visszakommentezve kavicsokat húz maga után ahogy lépked (pretty fun ngl)
-    (game.map[player_y][player_x] as Cell).harvested = true;
+    (game.map[y][x] as Cell).harvested = true;
     fruitsText!.textContent = collectedFruits.toString();
 }
 
@@ -115,6 +115,20 @@ function teleportPlayer(x: number, y: number){
     Generator(mapSize, ploc._position.x, ploc._position.y);
     fruitGathering(ploc._position.x, ploc._position.y);
     resetAbility('teleport');
+}
+
+function harvestAround(x: number, y: number){
+    for (let i = y-1; i <= y+1; i++) {
+        for (let j = x-1; j <= x+1; j++) {
+            if(game.map[i][j].fruits != 0){
+                fruitGathering(j, i);
+            }
+        }
+    }
+    // wait 1 sec
+    setTimeout(() => {
+        resetAbility('harvest');
+    }, 250);
 }
 
 function resetAbility(ability: string){
@@ -198,6 +212,16 @@ body!.addEventListener('keydown', (e) => {
                     IsAbilityActivated = true;
                     activatedAbility = 'dash';
                 }
+            }
+            sensibleStep = false;
+        }
+        else if((e as KeyboardEvent).key === 'e' && game.collectedAbilities['harvest'] > 0){
+            let button = document.querySelector('#button-harvest');
+            if(!IsAbilityActivated){
+                button?.classList.add('activated');
+                IsAbilityActivated = true;
+                activatedAbility = 'harvest';
+                harvestAround(ploc._position.x, ploc._position.y);
             }
             sensibleStep = false;
         }

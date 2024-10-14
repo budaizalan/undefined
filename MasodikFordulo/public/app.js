@@ -5,7 +5,7 @@ const mapSize = 10;
 let firstClick = true;
 let game = new Game(mapSize);
 // console.log(game);
-let ploc;
+let ploc = new Player(0, 0);
 let steps = 10;
 let numberOfTries = 1;
 let collectedFruits = 0;
@@ -68,21 +68,21 @@ function Generator(size, player_x, player_y) {
         }
     }
 }
-function fruitGathering(player_x, player_y) {
-    if (!game.map[player_y][player_x].harvested) {
-        collectedFruits += game.map[player_y][player_x].fruits;
+function fruitGathering(x, y) {
+    if (!game.map[y][x].harvested) {
+        collectedFruits += game.map[y][x].fruits;
     }
-    if (game.map[player_y][player_x].ability != null) {
-        let ability = game.map[player_y][player_x].ability;
+    if (game.map[y][x].ability != null) {
+        let ability = game.map[y][x].ability;
         game.AddCollectedAbilities(ability);
         let abilityCount = document.querySelector(`#${ability}`);
         if (abilityCount != null) {
             abilityCount.textContent = game.collectedAbilities[ability].toString();
         }
-        game.map[player_y][player_x].ability = null;
+        game.map[y][x].ability = null;
     }
     // game.map[player_y][player_x].fruits = 0; //   Ezt visszakommentezve kavicsokat húz maga után ahogy lépked (pretty fun ngl)
-    game.map[player_y][player_x].harvested = true;
+    game.map[y][x].harvested = true;
     fruitsText.textContent = collectedFruits.toString();
 }
 function dashFruitGathering(dashCoordinates) {
@@ -113,6 +113,19 @@ function teleportPlayer(x, y) {
     Generator(mapSize, ploc._position.x, ploc._position.y);
     fruitGathering(ploc._position.x, ploc._position.y);
     resetAbility('teleport');
+}
+function harvestAround(x, y) {
+    for (let i = y - 1; i <= y + 1; i++) {
+        for (let j = x - 1; j <= x + 1; j++) {
+            if (game.map[i][j].fruits != 0) {
+                fruitGathering(j, i);
+            }
+        }
+    }
+    // wait 1 sec
+    setTimeout(() => {
+        resetAbility('harvest');
+    }, 250);
 }
 function resetAbility(ability) {
     let button = document.querySelector('.activated');
@@ -192,6 +205,16 @@ body.addEventListener('keydown', (e) => {
                     IsAbilityActivated = true;
                     activatedAbility = 'dash';
                 }
+            }
+            sensibleStep = false;
+        }
+        else if (e.key === 'e' && game.collectedAbilities['harvest'] > 0) {
+            let button = document.querySelector('#button-harvest');
+            if (!IsAbilityActivated) {
+                button?.classList.add('activated');
+                IsAbilityActivated = true;
+                activatedAbility = 'harvest';
+                harvestAround(ploc._position.x, ploc._position.y);
             }
             sensibleStep = false;
         }

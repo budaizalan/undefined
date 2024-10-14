@@ -5,7 +5,7 @@ export default class Game {
   private _mapSize: number;
   private _score: number;
   private _moves: number;
-  private _abilities: string[] = ['teleport', 'dash'];
+  private _abilities: string[] = ['teleport', 'dash', 'harvest'];
   private _collectedAbilities: {[abiltity: string]: number} = {};
   private _gameOver: boolean;
 

@@ -4,7 +4,7 @@ export default class Game {
     _mapSize;
     _score;
     _moves;
-    _abilities = ['teleport', 'dash'];
+    _abilities = ['teleport', 'dash', 'harvest'];
     _collectedAbilities = {};
     _gameOver;
     get map() {
