@@ -225,6 +225,15 @@ body!.addEventListener('keydown', (e) => {
             }
             sensibleStep = false;
         }
+        else if((e as KeyboardEvent).key === 'r' && game.collectedAbilities['duplicate'] > 0){
+            let button = document.querySelector('#button-duplicate');
+            if(!IsAbilityActivated){
+                button?.classList.add('activated');
+                IsAbilityActivated = true;
+                activatedAbility = 'duplicate';
+            }
+            sensibleStep = false;
+        }
         else if ((e as KeyboardEvent).key === 'ArrowLeft' && game.map[ploc._position.y][ploc._position.x-1].fruits != 0 ) {
             if(IsAbilityActivated && activatedAbility == 'dash'){
                 dashFruitGathering(ploc.dashLeft(game.map));
