@@ -5,7 +5,7 @@ export default class Game {
     _score;
     _moves;
     _abilities = ['teleport', 'dash'];
-    _collectedAbilities = [];
+    _collectedAbilities = {};
     _gameOver;
     get map() {
         return this._map;
@@ -97,9 +97,15 @@ export default class Game {
         return _map;
     }
     AddCollectedAbilities(value) {
-        this._collectedAbilities.push(value);
+        if (!this._collectedAbilities[value]) {
+            this._collectedAbilities[value] = 1;
+            return;
+        }
+        else {
+            this._collectedAbilities[value]++;
+        }
     }
     resetAbilities() {
-        this._collectedAbilities = [];
+        this._collectedAbilities = {};
     }
 }

@@ -6,7 +6,7 @@ export default class Game {
   private _score: number;
   private _moves: number;
   private _abilities: string[] = ['teleport', 'dash'];
-  private _collectedAbilities: string[] = [];
+  private _collectedAbilities: {[abiltity: string]: number} = {};
   private _gameOver: boolean;
 
   get map() {
@@ -113,11 +113,16 @@ export default class Game {
   }
 
   AddCollectedAbilities(value: string) {
-    this._collectedAbilities.push(value);
+    if (!this._collectedAbilities[value]) {
+      this._collectedAbilities[value] = 1;
+      return;
+    } else{
+      this._collectedAbilities[value]++;
+    }
   }
 
   resetAbilities() {
-    this._collectedAbilities = [];
+    this._collectedAbilities = {};
   }
 
 }

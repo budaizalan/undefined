@@ -64,9 +64,11 @@ function fruitGathering(player_x: number, player_y: number) {
         collectedFruits += game.map[player_x][player_y].fruits;
     }
     if((game.map[player_x][player_y] as Cell).ability != null){
-        game.AddCollectedAbilities((game.map[player_x][player_y] as Cell).ability as string);
+        let ability = (game.map[player_x][player_y] as Cell).ability as string;
+        game.AddCollectedAbilities(ability);
+        let abilityCount = document.querySelector(`#${ability}`);
+        abilityCount!.textContent = game.collectedAbilities[ability].toString();
         (game.map[player_x][player_y] as Cell).ability = null;
-        console.log(game.collectedAbilities);
     }
     // game.map[player_x][player_y].fruits = 0; //   Ezt visszakommentezve kavicsokat húz maga után ahogy lépked (pretty fun ngl)
     (game.map[player_x][player_y] as Cell).harvested = true;
@@ -117,19 +119,31 @@ function AddRecord(){
 body!.addEventListener('keydown', (e) => {
     let sensibleStep = true;
     if (steps != 0) {
-        if ((e as KeyboardEvent).key === 'ArrowLeft' && game.map[ploc._position.x][ploc._position.y-1].fruits != 0 ) {
-            ploc.moveLeft();
-        } else if ((e as KeyboardEvent).key === 'ArrowRight' && game.map[ploc._position.x][ploc._position.y+1].fruits != 0 ) {
-            ploc.moveRight();
-        } else if ((e as KeyboardEvent).key === 'ArrowUp' && game.map[ploc._position.x-1][ploc._position.y].fruits != 0 ) {
-            ploc.moveUp();
-        } else if ((e as KeyboardEvent).key === 'ArrowDown' && game.map[ploc._position.x+1][ploc._position.y].fruits != 0 ) {
-            ploc.moveDown();
-        } else {
-            sensibleStep = false;
+        if((e as KeyboardEvent).key === 'q' || (e as KeyboardEvent).key === 'w' || (e as KeyboardEvent).key === 'e' || (e as KeyboardEvent).key === 'r'){
+            if((e as KeyboardEvent).key === 'q' && game.collectedAbilities['teleport'] > 0){
+                let button = document.querySelector('.ability-button');
+                if(button?.classList.contains('activated')){
+                    button?.classList.remove('activated');
+                } else{
+                    button?.classList.add('activated');
+                }
+            }
         }
-        Generator(mapSize, ploc._position.x, ploc._position.y)
+        if((e as KeyboardEvent).key === 'ArrowLeft' || (e as KeyboardEvent).key === 'ArrowRight' || (e as KeyboardEvent).key === 'ArrowUp' || (e as KeyboardEvent).key === 'ArrowDown'){
+            if ((e as KeyboardEvent).key === 'ArrowLeft' && game.map[ploc._position.x][ploc._position.y-1].fruits != 0 ) {
+                ploc.moveLeft();
+            } else if ((e as KeyboardEvent).key === 'ArrowRight' && game.map[ploc._position.x][ploc._position.y+1].fruits != 0 ) {
+                ploc.moveRight();
+            } else if ((e as KeyboardEvent).key === 'ArrowUp' && game.map[ploc._position.x-1][ploc._position.y].fruits != 0 ) {
+                ploc.moveUp();
+            } else if ((e as KeyboardEvent).key === 'ArrowDown' && game.map[ploc._position.x+1][ploc._position.y].fruits != 0 ) {
+                ploc.moveDown();
+            } else {
+                sensibleStep = false;
+            }
+        }
         if (sensibleStep) {
+            Generator(mapSize, ploc._position.x, ploc._position.y)
             steps--;
             stepsText!.textContent = steps.toString();
             fruitGathering(ploc._position.x, ploc._position.y)

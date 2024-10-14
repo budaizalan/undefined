@@ -83,6 +83,44 @@ main{
     0 5px 15px 0 rgba(255, 255, 255, 0.15);
 }
 
+.ability{
+  display: flex;
+  width: 90%;
+  position: relative;
+  justify-content: space-around;
+  align-items: center;
+  margin: 10px;
+}
+
+.ability img{
+  width: 80px;
+  height: auto;
+  border-radius: 30%;
+}
+
+.ability-count{
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+}
+
+.ability-button{
+  display: flex;
+  color: white;
+  border: 1px solid white;
+  box-shadow: 0 0 8px rgb(207, 207, 207);
+  height: 50px;
+  width: 50px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.ability .activated{
+  background-color: #14a143;
+}
+
 .game-table {
   overflow: hidden;
   width: fit-content; /* ez meg van oldva pookie */
@@ -150,7 +188,8 @@ main{
   /* background-color: #42c3ca; */
 }
 
-.cell span{
+.cell span,
+.ability{
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -174,7 +213,7 @@ main{
 }
 
 .cell .ability{
-  /* background-image: url(./images/teleport.png); */
+  background-image: url(./images/teleport.png);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
