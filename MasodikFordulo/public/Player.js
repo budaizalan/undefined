@@ -10,31 +10,79 @@ export default class Player {
         this._position = { x, y };
     }
     moveUp() {
-        if (this.position.x > 1) {
-            this._position.x--;
-        }
-    }
-    moveDown() {
-        if (this.position.x < 10) {
-            this._position.x++;
-        }
-    }
-    moveLeft() {
         if (this.position.y > 1) {
             this._position.y--;
         }
     }
-    moveRight() {
+    moveDown() {
         if (this.position.y < 10) {
             this._position.y++;
         }
     }
-    dashUp() {
+    moveLeft() {
+        if (this.position.x > 1) {
+            this._position.x--;
+        }
     }
-    dashDown() {
+    moveRight() {
+        if (this.position.x < 10) {
+            this._position.x++;
+        }
     }
-    dashLeft() {
+    dashUp(map) {
+        let dashCoordinates = [[this._position.x, this.position.y], [this._position.x, this.position.y]];
+        let maxDash = this._position.y - 1;
+        for (let i = 1; i <= maxDash; i++) {
+            if (map[this._position.y - 1][this._position.x].fruits != 0) {
+                this._position.y -= 1;
+            }
+            else {
+                break;
+            }
+        }
+        dashCoordinates[0][1] = this._position.y;
+        return dashCoordinates;
     }
-    dashRight() {
+    dashDown(map) {
+        let dashCoordinates = [[this._position.x, this.position.y], [this._position.x, this.position.y]];
+        let maxDash = (map.length - 2) - this._position.y;
+        for (let i = 1; i <= maxDash; i++) {
+            if (map[this._position.y + 1][this._position.x].fruits != 0) {
+                this._position.y += 1;
+            }
+            else {
+                break;
+            }
+        }
+        dashCoordinates[1][1] = this._position.y;
+        return dashCoordinates;
+    }
+    dashLeft(map) {
+        let dashCoordinates = [[this._position.x, this.position.y], [this._position.x, this.position.y]];
+        let maxDash = this._position.x - 1;
+        for (let i = 1; i <= maxDash; i++) {
+            if (map[this._position.y][this._position.x - 1].fruits != 0) {
+                this._position.x -= 1;
+            }
+            else {
+                break;
+            }
+        }
+        dashCoordinates[0][0] = this._position.x;
+        return dashCoordinates;
+    }
+    dashRight(map) {
+        let dashCoordinates = [[this._position.x, this.position.y], [this._position.x, this.position.y]];
+        let maxDash = (map.length - 2) - this._position.x;
+        for (let i = 1; i <= maxDash; i++) {
+            if (map[this._position.y][this._position.x + 1].fruits != 0) {
+                this._position.x += 1;
+            }
+            else {
+                break;
+            }
+        }
+        dashCoordinates[1][0] = this._position.x;
+        return dashCoordinates;
     }
 }
