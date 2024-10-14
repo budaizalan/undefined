@@ -38,7 +38,14 @@ function Generator(size: number, player_x: number, player_y: number) {
                 span.classList.add('field');
                 span.textContent = null;
             } else {
-                span.addEventListener("click", function(){PlayerParam(div.id);}, false);
+                span.addEventListener("click", () => 
+                    {
+                        if(firstClick){
+                            PlayerParam(div.id);
+                        } else{
+                            
+                        }
+                    }, false);
             }
             if(game.map[i][j] instanceof Cell){
                 if((game.map[i][j] as Cell).ability != null){
@@ -64,15 +71,23 @@ function fruitGathering(player_x: number, player_y: number) {
         collectedFruits += game.map[player_x][player_y].fruits;
     }
     if((game.map[player_x][player_y] as Cell).ability != null){
+        console.log('oki')
         let ability = (game.map[player_x][player_y] as Cell).ability as string;
         game.AddCollectedAbilities(ability);
         let abilityCount = document.querySelector(`#${ability}`);
-        abilityCount!.textContent = game.collectedAbilities[ability].toString();
+        if(abilityCount != null){
+            abilityCount!.textContent = game.collectedAbilities[ability].toString();
+        }
         (game.map[player_x][player_y] as Cell).ability = null;
     }
     // game.map[player_x][player_y].fruits = 0; //   Ezt visszakommentezve kavicsokat húz maga után ahogy lépked (pretty fun ngl)
     (game.map[player_x][player_y] as Cell).harvested = true;
     fruitsText!.textContent = collectedFruits.toString();
+}
+
+function StartGame(){
+    ploc = new Player(0,0);
+    Generator(mapSize, 0,0);
 }
 
 function PlayerParam(id: string){
@@ -126,6 +141,7 @@ body!.addEventListener('keydown', (e) => {
                     button?.classList.remove('activated');
                 } else{
                     button?.classList.add('activated');
+
                 }
             }
         }
@@ -141,13 +157,14 @@ body!.addEventListener('keydown', (e) => {
             } else {
                 sensibleStep = false;
             }
-        }
-        if (sensibleStep) {
             Generator(mapSize, ploc._position.x, ploc._position.y)
-            steps--;
-            stepsText!.textContent = steps.toString();
-            fruitGathering(ploc._position.x, ploc._position.y)
+            if (sensibleStep) {
+                steps--;
+                stepsText!.textContent = steps.toString();
+                fruitGathering(ploc._position.x, ploc._position.y)
+            }
         }
+        
     } else if (!onAfterScreen){
         let afterScreen = document.createElement('div');
         let afterScreenText = document.createElement('div');

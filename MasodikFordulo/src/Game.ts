@@ -66,6 +66,7 @@ export default class Game {
     }   
     map = this.CorrectMapLayout(map);
     map.filter(r => r.filter(c => c.fruits > 0).length > 0).forEach(r => r.filter(c => c.fruits > 0).forEach(c => (c as Cell).ability = this.getRandomAbility()));
+    console.log(map);
     return map;
   }
 

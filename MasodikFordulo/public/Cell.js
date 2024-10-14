@@ -11,8 +11,7 @@ export class ProtoCell {
         this._fruits = -1;
     }
     constructor(fruits) {
-        this._fruits = fruits,
-            this._position = this.position;
+        (this._fruits = fruits), (this._position = this.position);
     }
 }
 export default class Cell extends ProtoCell {
@@ -27,7 +26,7 @@ export default class Cell extends ProtoCell {
     }
     set fruits(value) {
         if (value < 0) {
-            throw new Error('Fruits cannot be negative');
+            throw new Error("Fruits cannot be negative");
         }
         this._fruits = value;
     }

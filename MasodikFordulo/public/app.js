@@ -37,7 +37,13 @@ function Generator(size, player_x, player_y) {
                 span.textContent = null;
             }
             else {
-                span.addEventListener("click", function () { PlayerParam(div.id); }, false);
+                span.addEventListener("click", () => {
+                    if (firstClick) {
+                        PlayerParam(div.id);
+                    }
+                    else {
+                    }
+                }, false);
             }
             if (game.map[i][j] instanceof Cell) {
                 if (game.map[i][j].ability != null) {
@@ -62,15 +68,22 @@ function fruitGathering(player_x, player_y) {
         collectedFruits += game.map[player_x][player_y].fruits;
     }
     if (game.map[player_x][player_y].ability != null) {
+        console.log('oki');
         let ability = game.map[player_x][player_y].ability;
         game.AddCollectedAbilities(ability);
         let abilityCount = document.querySelector(`#${ability}`);
-        abilityCount.textContent = game.collectedAbilities[ability].toString();
+        if (abilityCount != null) {
+            abilityCount.textContent = game.collectedAbilities[ability].toString();
+        }
         game.map[player_x][player_y].ability = null;
     }
     // game.map[player_x][player_y].fruits = 0; //   Ezt visszakommentezve kavicsokat húz maga után ahogy lépked (pretty fun ngl)
     game.map[player_x][player_y].harvested = true;
     fruitsText.textContent = collectedFruits.toString();
+}
+function StartGame() {
+    ploc = new Player(0, 0);
+    Generator(mapSize, 0, 0);
 }
 function PlayerParam(id) {
     if (firstClick) {
@@ -139,12 +152,12 @@ body.addEventListener('keydown', (e) => {
             else {
                 sensibleStep = false;
             }
-        }
-        if (sensibleStep) {
             Generator(mapSize, ploc._position.x, ploc._position.y);
-            steps--;
-            stepsText.textContent = steps.toString();
-            fruitGathering(ploc._position.x, ploc._position.y);
+            if (sensibleStep) {
+                steps--;
+                stepsText.textContent = steps.toString();
+                fruitGathering(ploc._position.x, ploc._position.y);
+            }
         }
     }
     else if (!onAfterScreen) {
