@@ -29,4 +29,15 @@ export default class Player {
         if (this.position.y < 10) {this._position.y++;}
     }
 
+    dashUp() {
+    }
+
+    dashDown() {
+    }
+
+    dashLeft() {
+    }
+
+    dashRight() {
+    }
 }

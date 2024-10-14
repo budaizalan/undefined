@@ -10,6 +10,8 @@ let steps = 10;
 let numberOfTries = 1;
 let collectedFruits = 0;
 let onAfterScreen = false;
+let IsAbilityActivated = false;
+let activatedAbility = '';
 const records = [];
 const stepsText = document.querySelector('#game-steps');
 const fruitsText = document.querySelector('#game-fruits');
@@ -42,6 +44,9 @@ function Generator(size, player_x, player_y) {
                         PlayerParam(div.id);
                     }
                     else {
+                        if (IsAbilityActivated && activatedAbility == 'teleport') {
+                            teleportPlayer(parseInt(div.getAttribute('x')), parseInt(div.getAttribute('y')));
+                        }
                     }
                 }, false);
             }
@@ -81,20 +86,28 @@ function fruitGathering(player_x, player_y) {
     game.map[player_x][player_y].harvested = true;
     fruitsText.textContent = collectedFruits.toString();
 }
-function StartGame() {
-    ploc = new Player(0, 0);
-    Generator(mapSize, 0, 0);
+function teleportPlayer(x, y) {
+    ploc.teleport(x, y);
+    Generator(mapSize, ploc._position.x, ploc._position.y);
+    fruitGathering(ploc._position.x, ploc._position.y);
+    let button = document.querySelector('.activated');
+    button?.classList.remove('activated');
+    IsAbilityActivated = false;
+    activatedAbility = '';
+    game.collectedAbilities['teleport']--;
+    let abilityCount = document.querySelector('#teleport');
+    if (abilityCount != null) {
+        abilityCount.textContent = game.collectedAbilities['teleport'].toString();
+    }
 }
 function PlayerParam(id) {
-    if (firstClick) {
-        let loc = id.split(',');
-        let x = parseInt(loc[0]);
-        let y = parseInt(loc[1]);
-        ploc = new Player(x, y);
-        Generator(mapSize, x, y);
-        fruitGathering(x, y);
-        firstClick = false;
-    }
+    let loc = id.split(',');
+    let x = parseInt(loc[0]);
+    let y = parseInt(loc[1]);
+    ploc = new Player(x, y);
+    Generator(mapSize, x, y);
+    fruitGathering(x, y);
+    firstClick = false;
 }
 function Restart() {
     firstClick = true;
@@ -127,18 +140,43 @@ body.addEventListener('keydown', (e) => {
     if (steps != 0) {
         if (e.key === 'q' || e.key === 'w' || e.key === 'e' || e.key === 'r') {
             if (e.key === 'q' && game.collectedAbilities['teleport'] > 0) {
-                let button = document.querySelector('.ability-button');
+                let button = document.querySelector('#button-teleport');
                 if (button?.classList.contains('activated')) {
                     button?.classList.remove('activated');
+                    IsAbilityActivated = false;
+                    activatedAbility = '';
                 }
                 else {
-                    button?.classList.add('activated');
+                    if (!IsAbilityActivated) {
+                        button?.classList.add('activated');
+                        IsAbilityActivated = true;
+                        activatedAbility = 'teleport';
+                    }
+                }
+            }
+            else if (e.key === 'w' && game.collectedAbilities['dash'] > 0) {
+                let button = document.querySelector('#button-dash');
+                if (button?.classList.contains('activated')) {
+                    button?.classList.remove('activated');
+                    IsAbilityActivated = false;
+                    activatedAbility = '';
+                }
+                else {
+                    if (!IsAbilityActivated) {
+                        button?.classList.add('activated');
+                        IsAbilityActivated = true;
+                        activatedAbility = 'dash';
+                    }
                 }
             }
         }
         if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
             if (e.key === 'ArrowLeft' && game.map[ploc._position.x][ploc._position.y - 1].fruits != 0) {
-                ploc.moveLeft();
+                if (IsAbilityActivated && activatedAbility == 'dash') {
+                }
+                else {
+                    ploc.moveLeft();
+                }
             }
             else if (e.key === 'ArrowRight' && game.map[ploc._position.x][ploc._position.y + 1].fruits != 0) {
                 ploc.moveRight();

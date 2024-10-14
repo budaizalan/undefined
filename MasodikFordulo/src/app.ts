@@ -11,6 +11,8 @@ let steps = 10;
 let numberOfTries = 1;
 let collectedFruits = 0;
 let onAfterScreen = false;
+let IsAbilityActivated = false;
+let activatedAbility = '';
 const records: number[] = [];
 const stepsText = document.querySelector('#game-steps');
 const fruitsText = document.querySelector('#game-fruits');
@@ -43,7 +45,9 @@ function Generator(size: number, player_x: number, player_y: number) {
                         if(firstClick){
                             PlayerParam(div.id);
                         } else{
-                            
+                            if(IsAbilityActivated && activatedAbility == 'teleport'){
+                               teleportPlayer(parseInt(div.getAttribute('x')!), parseInt(div.getAttribute('y')!));
+                            }
                         }
                     }, false);
             }
@@ -85,21 +89,29 @@ function fruitGathering(player_x: number, player_y: number) {
     fruitsText!.textContent = collectedFruits.toString();
 }
 
-function StartGame(){
-    ploc = new Player(0,0);
-    Generator(mapSize, 0,0);
+function teleportPlayer(x: number, y: number){
+    ploc.teleport(x, y);
+    Generator(mapSize, ploc._position.x, ploc._position.y);
+    fruitGathering(ploc._position.x, ploc._position.y);
+    let button = document.querySelector('.activated');
+    button?.classList.remove('activated');
+    IsAbilityActivated = false;
+    activatedAbility = '';
+    game.collectedAbilities['teleport']--;
+    let abilityCount = document.querySelector('#teleport');
+    if(abilityCount != null){
+        abilityCount!.textContent = game.collectedAbilities['teleport'].toString();
+    }
 }
 
 function PlayerParam(id: string){
-    if (firstClick) {
-        let loc = id.split(',');
-        let x = parseInt(loc[0]);
-        let y = parseInt(loc[1]);
-        ploc = new Player(x,y);
-        Generator(mapSize, x,y);
-        fruitGathering(x, y)
-        firstClick = false;
-    }
+    let loc = id.split(',');
+    let x = parseInt(loc[0]);
+    let y = parseInt(loc[1]);
+    ploc = new Player(x,y);
+    Generator(mapSize, x,y);
+    fruitGathering(x, y)
+    firstClick = false;
 }
 
 
@@ -136,18 +148,41 @@ body!.addEventListener('keydown', (e) => {
     if (steps != 0) {
         if((e as KeyboardEvent).key === 'q' || (e as KeyboardEvent).key === 'w' || (e as KeyboardEvent).key === 'e' || (e as KeyboardEvent).key === 'r'){
             if((e as KeyboardEvent).key === 'q' && game.collectedAbilities['teleport'] > 0){
-                let button = document.querySelector('.ability-button');
+                let button = document.querySelector('#button-teleport');
                 if(button?.classList.contains('activated')){
                     button?.classList.remove('activated');
+                    IsAbilityActivated = false;
+                    activatedAbility = '';
                 } else{
-                    button?.classList.add('activated');
-
+                    if(!IsAbilityActivated){
+                        button?.classList.add('activated');
+                        IsAbilityActivated = true;
+                        activatedAbility = 'teleport';
+                    }
+                }
+            }
+            else if((e as KeyboardEvent).key === 'w' && game.collectedAbilities['dash'] > 0){
+                let button = document.querySelector('#button-dash');
+                if(button?.classList.contains('activated')){
+                    button?.classList.remove('activated');
+                    IsAbilityActivated = false;
+                    activatedAbility = '';
+                } else{
+                    if(!IsAbilityActivated){
+                        button?.classList.add('activated');
+                        IsAbilityActivated = true;
+                        activatedAbility = 'dash';
+                    }
                 }
             }
         }
         if((e as KeyboardEvent).key === 'ArrowLeft' || (e as KeyboardEvent).key === 'ArrowRight' || (e as KeyboardEvent).key === 'ArrowUp' || (e as KeyboardEvent).key === 'ArrowDown'){
             if ((e as KeyboardEvent).key === 'ArrowLeft' && game.map[ploc._position.x][ploc._position.y-1].fruits != 0 ) {
-                ploc.moveLeft();
+                if(IsAbilityActivated && activatedAbility == 'dash'){
+                    
+                } else { 
+                    ploc.moveLeft();
+                }
             } else if ((e as KeyboardEvent).key === 'ArrowRight' && game.map[ploc._position.x][ploc._position.y+1].fruits != 0 ) {
                 ploc.moveRight();
             } else if ((e as KeyboardEvent).key === 'ArrowUp' && game.map[ploc._position.x-1][ploc._position.y].fruits != 0 ) {

@@ -29,4 +29,12 @@ export default class Player {
             this._position.y++;
         }
     }
+    dashUp() {
+    }
+    dashDown() {
+    }
+    dashLeft() {
+    }
+    dashRight() {
+    }
 }
