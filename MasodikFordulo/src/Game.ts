@@ -3,10 +3,12 @@ import Cell, {ProtoCell} from "./Cell.js";
 export default class Game {
   private _map = new Array<Array<ProtoCell>>();
   private _mapSize: number;
-  private _score: number;
-  private _moves: number;
-  private _abilities: string[] = ['teleport', 'dash'];
-  private _collectedAbilities: string[] = [];
+  private _collectedFruits: number;
+  private _steps: number;
+  private _firstClick: boolean = true;
+  private _abilities: string[] = ['teleport', 'dash', 'harvest', 'duplicate'];
+  private _collectedAbilities: {[abiltity: string]: number} = {};
+  private _showAbilities: boolean = true;
   private _gameOver: boolean;
 
   get map() {
@@ -17,19 +19,45 @@ export default class Game {
     return this._mapSize;
   }
 
-  get score() {
-    return this._score;
+  get collectedFruits() {
+    return this._collectedFruits;
   }
 
-  get moves() {
-    return this._moves;
+  set collectedFruits(value: number) {
+    this._collectedFruits = value;
+  }
+
+  get steps() {
+    return this._steps;
+  }
+
+  set steps(value: number) {
+    this._steps = value;
+  }
+
+  get firstClick() {
+    return this._firstClick;
+  }
+
+  get abilities() {
+    return this._abilities;
+  }
+
+  set firstClick(value: boolean) {
+    this._firstClick = value;
   }
 
   get collectedAbilities() {
     return this._collectedAbilities;
   }
 
+  get showAbilities() {
+    return this._showAbilities;
+  }
 
+  set showAbilities(value: boolean) {
+    this._showAbilities = value;
+  }
 
   get gameOver() {
     return this._gameOver;
@@ -41,10 +69,10 @@ export default class Game {
     return result;
   }
 
-  constructor(mapSize: number) {
+  constructor(mapSize: number, steps: number) {
     this._mapSize = mapSize;
-    this._score = 0;
-    this._moves = 0;
+    this._collectedFruits = 0;
+    this._steps = steps;
     this._gameOver = false;
     this._map = this.generateMap();
   }
@@ -66,6 +94,7 @@ export default class Game {
     }   
     map = this.CorrectMapLayout(map);
     map.filter(r => r.filter(c => c.fruits > 0).length > 0).forEach(r => r.filter(c => c.fruits > 0).forEach(c => (c as Cell).ability = this.getRandomAbility()));
+    console.log(map);
     return map;
   }
 
@@ -113,11 +142,16 @@ export default class Game {
   }
 
   AddCollectedAbilities(value: string) {
-    this._collectedAbilities.push(value);
+    if (!this._collectedAbilities[value]) {
+      this._collectedAbilities[value] = 1;
+      return;
+    } else{
+      this._collectedAbilities[value]++;
+    }
   }
 
   resetAbilities() {
-    this._collectedAbilities = [];
+    this._collectedAbilities = {};
   }
 
 }
