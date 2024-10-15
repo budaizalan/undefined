@@ -44,40 +44,47 @@
                 <div class="game-scoreboard">
                     <p>Lépések: <span id="game-steps">0</span></p>
                     <p>Gyümölcsök: <span id="game-fruits">0</span></p>
-                    <div class="row">
-                        <div class="col-6">
-                            <span class="ability">
-                                <img src="./images/teleport.png" alt="">
-                                <img src="./images/help.png" class="ability-help" id="teleport-help" alt="?">
-                                <span class="ability-count" id="teleport">0</span>
-                                <span class="ability-button" id="button-teleport">Q</span>
-                            </span>
+                    <div class="row ability-row">
+                        <div class="col-6 ability">
+                            <img src="./images/teleport.png" alt="">
+                            <div class="ability-help">
+                                <img src="./images/help.png" id="teleport-help" alt="?">
+                                <div class="ability-help-tooltip" id="teleport-help-tooltip">
+                                    <p>Teleport</p>
+                                    <p>Áthelyezi a játékost egy másik mezőre.</p>
+                                    <p>Használat: Q</p>
+                                </div>
+                            </div>
+                            
+                            <span class="ability-count" id="teleport">0</span>
+                            <span class="ability-button" id="button-teleport">Q</span>
                         </div>
-                        <div class="col-6">
-                            <span class="ability">
-                                <img src="./images/dash.png" alt="">
-                                <img src="./images/help.png" class="ability-help" id="dash-help" alt="?">
-                                <span class="ability-count" id="dash">0</span>
-                                <span class="ability-button" id="button-dash">W</span>
-                            </span>
+                        <div class="col-6 ability">
+                            <img src="./images/dash.png" alt="">
+                            <div class="ability-help">
+                                <img src="./images/help.png" id="dash-help" alt="?">
+                            </div>
+                            <span class="ability-count" id="dash">0</span>
+                            <span class="ability-button" id="button-dash">W</span>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <span class="ability">
-                                <img src="./images/harvest.png" alt="">
+                    <div class="row ability-row">
+                        <div class="col-6 ability">
+                            <img src="./images/harvest.png" alt="">
+                            <div class="ability-help">
                                 <img src="./images/help.png" class="ability-help" id="harvest-help" alt="?">
-                                <span class="ability-count" id="harvest">0</span>
-                                <span class="ability-button" id="button-harvest">E</span>
-                            </span>
+
+                            </div>
+                            <span class="ability-count" id="harvest">0</span>
+                            <span class="ability-button" id="button-harvest">E</span>
                         </div>
-                        <div class="col-6">
-                            <span class="ability">
-                                <img src="./images/duplicate.png" alt="">
+                        <div class="col-6 ability">
+                            <img src="./images/duplicate.png" alt="">
+                            <div class="ability-help">
                                 <img src="./images/help.png" class="ability-help" id="duplivate-help" alt="?">
-                                <span class="ability-count" id="duplicate">0</span>
-                                <span class="ability-button" id="button-duplicate">R</span>
-                            </span>
+                            </div>
+                            <span class="ability-count" id="duplicate">0</span>
+                            <span class="ability-button" id="button-duplicate">R</span>
                         </div>
                     </div>
                 </div>
