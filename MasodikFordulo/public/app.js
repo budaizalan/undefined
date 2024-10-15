@@ -19,6 +19,8 @@ const body = document.querySelector('.body');
 stepsText.textContent = game.steps.toString();
 const root = document.documentElement;
 root.style.setProperty('--map-size', mapSize.toString());
+let duplicatedCells = [];
+let originalFruits = [];
 function Generator(size, player_x, player_y) {
     gameDiv.textContent = '';
     for (let i = 1; i < size + 1; i++) {
@@ -129,6 +131,9 @@ function duplicateFruits(x, y) {
     for (let i = y - 1; i <= y + 1; i++) {
         for (let j = x - 1; j <= x + 1; j++) {
             if (game.map[i][j].fruits != 0) {
+                if (!duplicatedCells.includes(game.map[i][j]))
+                    duplicatedCells.push(game.map[i][j]);
+                originalFruits.push(game.map[i][j].fruits);
                 game.map[i][j].fruits *= 2;
             }
         }
@@ -179,9 +184,13 @@ function Restart() {
         row.forEach((cell) => {
             cell.harvested = false;
             cell.abilityCollected = false;
+            if (duplicatedCells.includes(cell))
+                cell.fruits = originalFruits[duplicatedCells.indexOf(cell)];
         });
     });
     onAfterScreen = false;
+    duplicatedCells = [];
+    originalFruits = [];
     Generator(mapSize, 0, 0);
 }
 function NewGame() {
@@ -202,6 +211,8 @@ function NewGame() {
     bestTryText.textContent = '';
     game = new Game(mapSize, 10);
     onAfterScreen = false;
+    duplicatedCells = [];
+    originalFruits = [];
     Generator(mapSize, 0, 0);
 }
 function AddRecord() {

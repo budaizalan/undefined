@@ -21,6 +21,9 @@ stepsText!.textContent = game.steps.toString();
 const root = document.documentElement;
 root.style.setProperty('--map-size', mapSize.toString());
 
+let duplicatedCells: ProtoCell[] = [];
+let originalFruits: number[] = [];
+
 function Generator(size: number, player_x: number, player_y: number) {
     gameDiv!.textContent = '';
     for (let i = 1; i < size+1; i++) {
@@ -133,6 +136,7 @@ function duplicateFruits(x: number, y: number){
     for (let i = y-1; i <= y+1; i++) {
         for (let j = x-1; j <= x+1; j++) {
             if(game.map[i][j].fruits != 0){
+                if(!duplicatedCells.includes(game.map[i][j]))duplicatedCells.push(game.map[i][j]); originalFruits.push(game.map[i][j].fruits);
                 game.map[i][j].fruits *= 2;
             }
         }
@@ -188,9 +192,12 @@ function Restart(){
         row.forEach((cell) => {
             (cell as Cell).harvested = false;
             (cell as Cell).abilityCollected = false;
+            if(duplicatedCells.includes(cell)) cell.fruits = originalFruits[duplicatedCells.indexOf(cell)];
         });
     });
-    onAfterScreen = false;
+    onAfterScreen = false; 
+    duplicatedCells = [];
+    originalFruits = [];   
     Generator(mapSize, 0, 0);
 }
 
@@ -212,6 +219,8 @@ function NewGame(){
     bestTryText!.textContent = '';
     game = new Game(mapSize, 10);
     onAfterScreen = false;
+    duplicatedCells = [];
+    originalFruits = []; 
     Generator(mapSize, 0, 0);
 }
 
