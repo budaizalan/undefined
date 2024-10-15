@@ -2,9 +2,18 @@ import { ProtoCell } from "./Cell";
 
 export default class Player {
     public _position: { x: number, y: number };
+    private _freezed: boolean = false;
 
     get position() {
         return this._position;
+    }
+
+    get freezed() {
+        return this._freezed;
+    }
+
+    set freezed(value: boolean) {
+        this._freezed = value;
     }
 
     constructor(x: number, y: number) {

@@ -9,6 +9,7 @@ let numberOfGames = 0;
 let onAfterScreen = false;
 let IsAbilityActivated = false;
 let activatedAbility = '';
+let selectClicked = false;
 const records = [];
 const stepsText = document.querySelector('#game-steps');
 const fruitsText = document.querySelector('#game-fruits');
@@ -23,6 +24,9 @@ let duplicatedCells = [];
 let originalFruits = [];
 function Generator(size, player_x, player_y) {
     gameDiv.textContent = '';
+    let overlay = document.createElement('div');
+    overlay.className = 'game-table-overlay';
+    gameDiv.append(overlay);
     for (let i = 1; i < size + 1; i++) {
         for (let j = 1; j < size + 1; j++) {
             let div = document.createElement('div');
@@ -41,11 +45,6 @@ function Generator(size, player_x, player_y) {
                 span.addEventListener("click", () => {
                     if (game.firstClick) {
                         PlayerParam(div.id);
-                    }
-                    else {
-                        if (IsAbilityActivated && activatedAbility == 'teleport') {
-                            teleportPlayer(parseInt(div.getAttribute('x')), parseInt(div.getAttribute('y')));
-                        }
                     }
                 }, false);
             }
@@ -66,8 +65,14 @@ function Generator(size, player_x, player_y) {
                 span.textContent = '';
             }
             div.append(span);
+            if (game.map[i][j].fruits != 0) {
+                let selectOverlay = document.createElement('div');
+                selectOverlay.className = 'select-overlay';
+                div.append(selectOverlay);
+            }
             gameDiv.append(div);
         }
+        toggleSelectOverlay(IsAbilityActivated && activatedAbility === 'teleport');
     }
 }
 function fruitGathering(x, y) {
@@ -152,6 +157,10 @@ function resetAbility(ability) {
     if (abilityCount != null) {
         abilityCount.textContent = game.collectedAbilities[ability].toString();
     }
+    if (ability == 'teleport') {
+        toggleSelectOverlay(false);
+        ploc.freezed = false;
+    }
 }
 function resetAbilitiesCount() {
     game.abilities.forEach(ability => {
@@ -225,21 +234,63 @@ function AddRecord() {
     bestTryText.appendChild(bestRecord);
     scoreboardText.appendChild(record);
 }
+function toggleSelectOverlay(bool) {
+    const gameTableOverlay = document.querySelector('.game-table-overlay');
+    gameTableOverlay.style.display = bool ? 'block' : 'none';
+    const selectOverlays = document.querySelectorAll('.select-overlay');
+    selectOverlays.forEach((overlay) => {
+        if (parseInt(overlay.parentElement.getAttribute('x')) != ploc._position.x || parseInt(overlay.parentElement.getAttribute('y')) != ploc._position.y) {
+            overlay.style.display = bool ? 'block' : 'none';
+        }
+        const timeElapsed = (Date.now() % 2000) / 1000;
+        overlay.style.animation = 'none';
+        requestAnimationFrame(() => {
+            overlay.style.animation = `zoomInOut 2s infinite`;
+            overlay.style.animationDelay = `-${timeElapsed}s`;
+        });
+        overlay.addEventListener('mouseenter', () => {
+            overlay.classList.add('hovered');
+            overlay.style.animation = 'none';
+        });
+        overlay.addEventListener('mouseleave', () => {
+            const timeElapsed = (Date.now() % 2000) / 1000;
+            overlay.classList.remove('hovered');
+            overlay.style.animation = 'none';
+            requestAnimationFrame(() => {
+                overlay.style.animation = `zoomInOut 2s infinite`;
+                overlay.style.animationDelay = `-${timeElapsed}s`;
+            });
+        });
+        overlay.addEventListener('click', () => {
+            if (selectClicked)
+                return;
+            selectClicked = true;
+            teleportPlayer(parseInt(overlay.parentElement.getAttribute('x')), parseInt(overlay.parentElement.getAttribute('y')));
+            setTimeout(() => {
+                selectClicked = false;
+            }, 250);
+        });
+    });
+}
 body.addEventListener('keydown', (e) => {
     let sensibleStep = true;
     if (game.steps != 0) {
         if (e.key === 'q' && game.collectedAbilities['teleport'] > 0) {
             let button = document.querySelector('#button-teleport');
             if (button?.classList.contains('activated')) {
+                ploc.freezed = false;
                 button?.classList.remove('activated');
                 IsAbilityActivated = false;
                 activatedAbility = '';
+                toggleSelectOverlay(false);
             }
             else {
                 if (!IsAbilityActivated) {
+                    ploc.freezed = true;
                     button?.classList.add('activated');
                     IsAbilityActivated = true;
                     activatedAbility = 'teleport';
+                    toggleSelectOverlay(true);
                 }
             }
             sensibleStep = false;
@@ -260,66 +311,68 @@ body.addEventListener('keydown', (e) => {
             }
             sensibleStep = false;
         }
-        else if (e.key === 'e' && game.collectedAbilities['harvest'] > 0) {
-            let button = document.querySelector('#button-harvest');
-            if (!IsAbilityActivated) {
-                button?.classList.add('activated');
-                IsAbilityActivated = true;
-                activatedAbility = 'harvest';
-                harvestAround(ploc._position.x, ploc._position.y);
+        if (!ploc.freezed) {
+            if (e.key === 'e' && game.collectedAbilities['harvest'] > 0) {
+                let button = document.querySelector('#button-harvest');
+                if (!IsAbilityActivated) {
+                    button?.classList.add('activated');
+                    IsAbilityActivated = true;
+                    activatedAbility = 'harvest';
+                    harvestAround(ploc._position.x, ploc._position.y);
+                }
+                sensibleStep = false;
             }
-            sensibleStep = false;
-        }
-        else if (e.key === 'r' && game.collectedAbilities['duplicate'] > 0) {
-            let button = document.querySelector('#button-duplicate');
-            if (!IsAbilityActivated) {
-                button?.classList.add('activated');
-                IsAbilityActivated = true;
-                activatedAbility = 'duplicate';
-                duplicateFruits(ploc._position.x, ploc._position.y);
+            else if (e.key === 'r' && game.collectedAbilities['duplicate'] > 0) {
+                let button = document.querySelector('#button-duplicate');
+                if (!IsAbilityActivated) {
+                    button?.classList.add('activated');
+                    IsAbilityActivated = true;
+                    activatedAbility = 'duplicate';
+                    duplicateFruits(ploc._position.x, ploc._position.y);
+                }
+                sensibleStep = false;
             }
-            sensibleStep = false;
-        }
-        else if (e.key === 'ArrowLeft' && game.map[ploc._position.y][ploc._position.x - 1].fruits != 0) {
-            if (IsAbilityActivated && activatedAbility == 'dash') {
-                dashFruitGathering(ploc.dashLeft(game.map));
+            else if (e.key === 'ArrowLeft' && game.map[ploc._position.y][ploc._position.x - 1].fruits != 0) {
+                if (IsAbilityActivated && activatedAbility == 'dash') {
+                    dashFruitGathering(ploc.dashLeft(game.map));
+                }
+                else {
+                    ploc.moveLeft();
+                }
+            }
+            else if (e.key === 'ArrowRight' && game.map[ploc._position.y][ploc._position.x + 1].fruits != 0) {
+                if (IsAbilityActivated && activatedAbility == 'dash') {
+                    dashFruitGathering(ploc.dashRight(game.map));
+                }
+                else {
+                    ploc.moveRight();
+                }
+            }
+            else if (e.key === 'ArrowUp' && game.map[ploc._position.y - 1][ploc._position.x].fruits != 0) {
+                if (IsAbilityActivated && activatedAbility == 'dash') {
+                    dashFruitGathering(ploc.dashUp(game.map));
+                }
+                else {
+                    ploc.moveUp();
+                }
+            }
+            else if (e.key === 'ArrowDown' && game.map[ploc._position.y + 1][ploc._position.x].fruits != 0) {
+                if (IsAbilityActivated && activatedAbility == 'dash') {
+                    dashFruitGathering(ploc.dashDown(game.map));
+                }
+                else {
+                    ploc.moveDown();
+                }
             }
             else {
-                ploc.moveLeft();
+                sensibleStep = false;
             }
-        }
-        else if (e.key === 'ArrowRight' && game.map[ploc._position.y][ploc._position.x + 1].fruits != 0) {
-            if (IsAbilityActivated && activatedAbility == 'dash') {
-                dashFruitGathering(ploc.dashRight(game.map));
+            Generator(mapSize, ploc._position.x, ploc._position.y);
+            if (sensibleStep) {
+                game.steps--;
+                stepsText.textContent = game.steps.toString();
+                fruitGathering(ploc._position.x, ploc._position.y);
             }
-            else {
-                ploc.moveRight();
-            }
-        }
-        else if (e.key === 'ArrowUp' && game.map[ploc._position.y - 1][ploc._position.x].fruits != 0) {
-            if (IsAbilityActivated && activatedAbility == 'dash') {
-                dashFruitGathering(ploc.dashUp(game.map));
-            }
-            else {
-                ploc.moveUp();
-            }
-        }
-        else if (e.key === 'ArrowDown' && game.map[ploc._position.y + 1][ploc._position.x].fruits != 0) {
-            if (IsAbilityActivated && activatedAbility == 'dash') {
-                dashFruitGathering(ploc.dashDown(game.map));
-            }
-            else {
-                ploc.moveDown();
-            }
-        }
-        else {
-            sensibleStep = false;
-        }
-        Generator(mapSize, ploc._position.x, ploc._position.y);
-        if (sensibleStep) {
-            game.steps--;
-            stepsText.textContent = game.steps.toString();
-            fruitGathering(ploc._position.x, ploc._position.y);
         }
     }
     else if (!onAfterScreen) {

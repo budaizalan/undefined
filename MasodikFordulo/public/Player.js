@@ -1,7 +1,14 @@
 export default class Player {
     _position;
+    _freezed = false;
     get position() {
         return this._position;
+    }
+    get freezed() {
+        return this._freezed;
+    }
+    set freezed(value) {
+        this._freezed = value;
     }
     constructor(x, y) {
         this._position = { x, y };
