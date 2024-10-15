@@ -39,6 +39,7 @@ function Generator(size, player_x, player_y) {
             }
             else {
                 span.addEventListener("click", () => {
+                    console.log('click');
                     if (game.firstClick) {
                         PlayerParam(div.id);
                     }
@@ -177,6 +178,7 @@ function Restart() {
     game.collectedFruits = 0;
     resetAbilitiesCount();
     game.resetAbilities();
+    ploc = new Player(0, 0);
     fruitsText.textContent = '0';
     stepsText.textContent = game.steps.toString();
     numberOfTries++;
@@ -200,6 +202,7 @@ function NewGame() {
     game.collectedFruits = 0;
     resetAbilitiesCount();
     game.resetAbilities();
+    ploc = new Player(0, 0);
     numberOfGames++;
     numberOfTries = 1;
     fruitsText.textContent = '0';
