@@ -53,7 +53,6 @@ main{
 }
 
 .container {
-  /* margin-top: 300px; */
   text-align: center;
   margin: auto;
   position: relative;
@@ -85,12 +84,6 @@ main{
 
 .game-scoreboard {
   overflow-y: auto;
-}
-
-.title {
-  position: relative;
-  text-align: center;
-  color: red;
 }
 
 .holder{
@@ -137,7 +130,7 @@ main{
 }
 
 .game-table {
-  margin-top: 5vh;
+  /* margin-top: 5vh; */
   overflow: hidden;
   width: fit-content; /* ez meg van oldva pookie */
   height: fit-content;
