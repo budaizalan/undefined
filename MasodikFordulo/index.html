@@ -25,7 +25,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto me-5 mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="./index.html">Játék</a>
+                            <a class="nav-link active" aria-current="page" href="./index.html">Új játék</a>
                         </li>
                     </ul>
                 </div>
@@ -42,16 +42,14 @@
                     <p id="besttry"></p>
                 </div>
                 <div class="holder">
-                    <div class="title">
-                        <span>Harvesting game</span>
-                    </div>
+                    <h1>Bakonyi szüret</h1>
                     <div class="game-table"></div>
                 </div>
                 <div class="game-info">
                     <p>Lépések: <span id="game-steps">0</span></p>
                     <p>Gyümölcsök: <span id="game-fruits">0</span></p>
                     <div class="row ability-row">
-                        <div class="col-6 ability">
+                        <div class="col-12 col-xxl-6 ability">
                             <img src="./images/teleport.png" alt="">
                             <div class="ability-help">
                                 <div class="ability-help-tooltip">
@@ -65,12 +63,12 @@
                             <span class="ability-count" id="teleport">0</span>
                             <span class="ability-button" id="button-teleport">Q</span>
                         </div>
-                        <div class="col-6 ability">
+                        <div class="col-12 col-xxl-6 ability">
                             <img src="./images/dash.png" alt="">
                             <div class="ability-help">
                                 <div class="ability-help-tooltip">
-                                    <h5>Dash:</h5>
-                                    <p>Használd a <span style="font-weight: bold;">W</span> gombot a dasheléshez egy
+                                    <h5>Előretörés:</h5>
+                                    <p>Használd a <span style="font-weight: bold;">W</span> gombot az előretöréshez egy
                                         kiválasztott irányba a játéktáblán.</p>
                                 </div>
                                 <img src="./images/help.png" alt="?">
@@ -80,11 +78,11 @@
                         </div>
                     </div>
                     <div class="row ability-row">
-                        <div class="col-6 ability">
+                        <div class="col-12 col-xxl-6 ability">
                             <img src="./images/harvest.png" alt="">
                             <div class="ability-help">
                                 <div class="ability-help-tooltip">
-                                    <h5>Harvest:</h5>
+                                    <h5>Nagy szüret:</h5>
                                     <p>Használd az <span style="font-weight: bold;">E</span> gombot a körülötted lévő
                                         gyümölcsök begyűjtéséhez.</p>
                                 </div>
@@ -93,11 +91,11 @@
                             <span class="ability-count" id="harvest">0</span>
                             <span class="ability-button" id="button-harvest">E</span>
                         </div>
-                        <div class="col-6 ability">
+                        <div class="col-12 col-xxl-6 ability">
                             <img src="./images/duplicate.png" alt="">
                             <div class="ability-help">
                                 <div class="ability-help-tooltip">
-                                    <h5>Duplicate:</h5>
+                                    <h5>Duplikálás:</h5>
                                     <p>Használd az <span style="font-weight: bold;">R</span> gombot a körülötted lévő
                                         gyümölcsök duplikálásához.</p>
                                 </div>
@@ -106,7 +104,8 @@
                             <span class="ability-count" id="duplicate">0</span>
                             <span class="ability-button" id="button-duplicate">R</span>
                         </div>
-                        <div class="movementkeys">
+                    </div>
+                    <div class="movementkeys">
                             <div class="row upperrow">
                                 <span class="keys" id="key-upH">
                                     <div class="col-4">
@@ -134,7 +133,6 @@
                                     </span>
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </div>
             </div>
