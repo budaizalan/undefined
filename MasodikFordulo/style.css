@@ -5,7 +5,6 @@
 * {
   margin: 0;
   padding: 0;
-  /* box-sizing: border-box; */
 }
 
 body{
@@ -45,6 +44,16 @@ body{
   color: #42c3ca !important;
 }
 
+/* Title */
+
+.title{
+  position: absolute;
+  top: 0;
+  left: 43%;
+  text-align: center;
+  font-size: 4vh;
+}
+
 /* Game */
 
 main{
@@ -53,7 +62,6 @@ main{
 }
 
 .container {
-  /* margin-top: 300px; */
   text-align: center;
   margin: auto;
   position: relative;
@@ -67,20 +75,30 @@ main{
   height: 80vh;
 }
 
-.game{
-  display: flex;
+.game, .holder{
+  display: inline-flex;
   justify-content: space-between;
+  margin: auto;
   align-items: center;
   height: 100%;
 }
 
-.game-scoreboard {
+.game-scoreboard, .game-info {
   width: 20%;
   height: 90%;
   background-color: #14121c;
   border-radius: 10px;
   box-shadow: 0 2px 4px 0 rgba(255, 255, 255, 0.2),
     0 5px 15px 0 rgba(255, 255, 255, 0.15);
+}
+
+.game-scoreboard {
+  overflow-y: auto;
+}
+
+.holder{
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .ability-row{
@@ -181,7 +199,7 @@ main{
 
 .game-table {
   overflow: hidden;
-  width: fit-content; /* ez meg van oldva pookie */
+  width: fit-content;
   height: fit-content;
   position: relative;
   display: grid;
@@ -217,7 +235,6 @@ main{
 .afterscreentext {
   position: absolute;
   text-align: center;
-  /* background-color: rgb(20, 18, 28 , 0.3); */
   opacity: 100%;
   color: white;
   font-size: 3rem;
@@ -230,7 +247,6 @@ main{
   text-align: center;
   margin: auto;
   margin-top: 10%;
-  /* background-color: rgb(20, 18, 28 , 0.3); */
   opacity: 100%;
   color: white;
   background-color: rgb(20, 18, 28 , 0.7);
@@ -244,7 +260,6 @@ main{
   text-align: center;
   margin: auto;
   margin-top: 10%;
-  /* background-color: rgb(20, 18, 28 , 0.3); */
   opacity: 100%;
   color: white;
   background-color: rgb(20, 18, 28 , 0.7);
@@ -269,13 +284,52 @@ main{
   color: white;
 }
 
+.active {
+  background-color: #14a143;
+}
+
+.movementkeys{
+  text-align: center;
+}
+
+.keys {
+  display: flex;
+  color: white;
+  border: 1px solid white;
+  box-shadow: 0 0 8px rgb(207, 207, 207);
+  height: 70px;
+  width: 70px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  background-size: contain;
+}
+
+.key {
+  font-size: 2vh;
+}
+
+.upperrow {
+  margin-top: 15vh;
+  display: inline-block; 
+  text-align: center;
+}
+
+.underrow{
+  display: inline-flex;
+  text-align: center;
+}
+
 .cell {
   position: relative;
   width: calc(50vw / var(--map-size));
   height: calc(32.5vw / var(--map-size));
   max-width: calc(100vh / var(--map-size));
   max-height: calc(65vh / var(--map-size));
-  /* background-color: #42c3ca; */
 }
 
 .cell span,
@@ -289,8 +343,7 @@ main{
 .cell .fruits{
   width: 100%;
   height: 100%;
-  font-size: 1.8vmax; /*Állíthatod az értéket, de a vmax-ot hagyd benne!*/
-  /* color: white; Igazából csak át kell rakni a textet egy kurva almafára aztán kész */
+  font-size: 1.8vmax;
   text-shadow: 2px 2px 2px black;
   display: flex;
   background-color: white;

@@ -35,14 +35,19 @@
 
     <main>
         <div class="container">
+
             <div class="game">
                 <div class="game-scoreboard">
                     <p>Eredménytábla</p>
                     <p id="besttry"></p>
                 </div>
-                <div class="game-table">
+                <div class="holder">
+                    <div class="title">
+                        <span>Harvesting game</span>
+                    </div>
+                    <div class="game-table"></div>
                 </div>
-                <div class="game-scoreboard">
+                <div class="game-info">
                     <p>Lépések: <span id="game-steps">0</span></p>
                     <p>Gyümölcsök: <span id="game-fruits">0</span></p>
                     <div class="row ability-row">
@@ -51,11 +56,12 @@
                             <div class="ability-help">
                                 <div class="ability-help-tooltip">
                                     <h5>Teleportálás:</h5>
-                                    <p>Használd a <span style="font-weight: bold;">Q</span> gombot a teleportáláshoz egy kiválasztott helyre a játéktáblán.</p>
+                                    <p>Használd a <span style="font-weight: bold;">Q</span> gombot a teleportáláshoz egy
+                                        kiválasztott helyre a játéktáblán.</p>
                                 </div>
                                 <img src="./images/help.png" alt="?">
                             </div>
-                            
+
                             <span class="ability-count" id="teleport">0</span>
                             <span class="ability-button" id="button-teleport">Q</span>
                         </div>
@@ -64,7 +70,8 @@
                             <div class="ability-help">
                                 <div class="ability-help-tooltip">
                                     <h5>Dash:</h5>
-                                    <p>Használd a <span style="font-weight: bold;">W</span> gombot a dasheléshez egy kiválasztott irányba a játéktáblán.</p>
+                                    <p>Használd a <span style="font-weight: bold;">W</span> gombot a dasheléshez egy
+                                        kiválasztott irányba a játéktáblán.</p>
                                 </div>
                                 <img src="./images/help.png" alt="?">
                             </div>
@@ -78,7 +85,8 @@
                             <div class="ability-help">
                                 <div class="ability-help-tooltip">
                                     <h5>Harvest:</h5>
-                                    <p>Használd az <span style="font-weight: bold;">E</span> gombot a körülötted lévő gyümölcsök begyűjtéséhez.</p>
+                                    <p>Használd az <span style="font-weight: bold;">E</span> gombot a körülötted lévő
+                                        gyümölcsök begyűjtéséhez.</p>
                                 </div>
                                 <img src="./images/help.png" alt="?">
                             </div>
@@ -90,19 +98,48 @@
                             <div class="ability-help">
                                 <div class="ability-help-tooltip">
                                     <h5>Duplicate:</h5>
-                                    <p>Használd az <span style="font-weight: bold;">R</span> gombot a körülötted lévő gyümölcsök duplikálásához.</p>
+                                    <p>Használd az <span style="font-weight: bold;">R</span> gombot a körülötted lévő
+                                        gyümölcsök duplikálásához.</p>
                                 </div>
                                 <img src="./images/help.png" alt="?">
                             </div>
                             <span class="ability-count" id="duplicate">0</span>
                             <span class="ability-button" id="button-duplicate">R</span>
                         </div>
+                        <div class="movementkeys">
+                            <div class="row upperrow">
+                                <span class="keys" id="key-upH">
+                                    <div class="col-4">
+                                        <span class="key" id="key-up">↑</span>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="movementkeys">
+
+                                <div class="row underrow">
+                                    <span class="keys" id="key-leftH">
+                                        <div class="col-4">
+                                            <span class="key" id="key-left">←</span>
+                                        </div>
+                                    </span>
+                                    <span class="keys" id="key-downH">
+                                        <div class="col-4">
+                                            <span class="key" id="key-down">↓</span>
+                                        </div>
+                                    </span>
+                                    <span class="keys" id="key-rightH">
+                                        <div class="col-4">
+                                            <span class="key" id="key-right">→</span>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     </main>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>

@@ -17,6 +17,10 @@ const bestTryText = document.querySelector('#besttry');
 const gameDiv = document.querySelector('.game-table');
 const scoreboardText = document.querySelector('.game-scoreboard');
 const body = document.querySelector('.body');
+let keyLeft = document.querySelector('#key-leftH');
+let keyRight = document.querySelector('#key-rightH');
+let keyUP = document.querySelector('#key-upH');
+let keyDown = document.querySelector('#key-downH');
 stepsText.textContent = game.steps.toString();
 const root = document.documentElement;
 root.style.setProperty('--map-size', mapSize.toString());
@@ -43,6 +47,7 @@ function Generator(size, player_x, player_y) {
             }
             else {
                 span.addEventListener("click", () => {
+                    console.log('click');
                     if (game.firstClick) {
                         PlayerParam(div.id);
                     }
@@ -127,7 +132,6 @@ function harvestAround(x, y) {
             }
         }
     }
-    // wait 1 sec
     setTimeout(() => {
         resetAbility('harvest');
     }, 250);
@@ -186,6 +190,7 @@ function Restart() {
     game.collectedFruits = 0;
     resetAbilitiesCount();
     game.resetAbilities();
+    ploc = new Player(0, 0);
     fruitsText.textContent = '0';
     stepsText.textContent = game.steps.toString();
     numberOfTries++;
@@ -209,6 +214,7 @@ function NewGame() {
     game.collectedFruits = 0;
     resetAbilitiesCount();
     game.resetAbilities();
+    ploc = new Player(0, 0);
     numberOfGames++;
     numberOfTries = 1;
     fruitsText.textContent = '0';
@@ -311,71 +317,73 @@ body.addEventListener('keydown', (e) => {
             }
             sensibleStep = false;
         }
-        if (!ploc.freezed) {
-            if (e.key === 'e' && game.collectedAbilities['harvest'] > 0) {
-                let button = document.querySelector('#button-harvest');
-                if (!IsAbilityActivated) {
-                    button?.classList.add('activated');
-                    IsAbilityActivated = true;
-                    activatedAbility = 'harvest';
-                    harvestAround(ploc._position.x, ploc._position.y);
-                }
-                sensibleStep = false;
+        else if (e.key === 'e' && game.collectedAbilities['harvest'] > 0) {
+            let button = document.querySelector('#button-harvest');
+            if (!IsAbilityActivated) {
+                button?.classList.add('activated');
+                IsAbilityActivated = true;
+                activatedAbility = 'harvest';
+                harvestAround(ploc._position.x, ploc._position.y);
             }
-            else if (e.key === 'r' && game.collectedAbilities['duplicate'] > 0) {
-                let button = document.querySelector('#button-duplicate');
-                if (!IsAbilityActivated) {
-                    button?.classList.add('activated');
-                    IsAbilityActivated = true;
-                    activatedAbility = 'duplicate';
-                    duplicateFruits(ploc._position.x, ploc._position.y);
-                }
-                sensibleStep = false;
+            sensibleStep = false;
+        }
+        else if (e.key === 'r' && game.collectedAbilities['duplicate'] > 0) {
+            let button = document.querySelector('#button-duplicate');
+            if (!IsAbilityActivated) {
+                button?.classList.add('activated');
+                IsAbilityActivated = true;
+                activatedAbility = 'duplicate';
+                duplicateFruits(ploc._position.x, ploc._position.y);
             }
-            else if (e.key === 'ArrowLeft' && game.map[ploc._position.y][ploc._position.x - 1].fruits != 0) {
-                if (IsAbilityActivated && activatedAbility == 'dash') {
-                    dashFruitGathering(ploc.dashLeft(game.map));
-                }
-                else {
-                    ploc.moveLeft();
-                }
-            }
-            else if (e.key === 'ArrowRight' && game.map[ploc._position.y][ploc._position.x + 1].fruits != 0) {
-                if (IsAbilityActivated && activatedAbility == 'dash') {
-                    dashFruitGathering(ploc.dashRight(game.map));
-                }
-                else {
-                    ploc.moveRight();
-                }
-            }
-            else if (e.key === 'ArrowUp' && game.map[ploc._position.y - 1][ploc._position.x].fruits != 0) {
-                if (IsAbilityActivated && activatedAbility == 'dash') {
-                    dashFruitGathering(ploc.dashUp(game.map));
-                }
-                else {
-                    ploc.moveUp();
-                }
-            }
-            else if (e.key === 'ArrowDown' && game.map[ploc._position.y + 1][ploc._position.x].fruits != 0) {
-                if (IsAbilityActivated && activatedAbility == 'dash') {
-                    dashFruitGathering(ploc.dashDown(game.map));
-                }
-                else {
-                    ploc.moveDown();
-                }
+            sensibleStep = false;
+        }
+        else if (e.key === 'ArrowLeft' && game.map[ploc._position.y][ploc._position.x - 1].fruits != 0 && ploc._position.x > 1) {
+            keyLeft.classList.add('active');
+            if (IsAbilityActivated && activatedAbility == 'dash') {
+                dashFruitGathering(ploc.dashLeft(game.map));
             }
             else {
-                sensibleStep = false;
-            }
-            Generator(mapSize, ploc._position.x, ploc._position.y);
-            if (sensibleStep) {
-                game.steps--;
-                stepsText.textContent = game.steps.toString();
-                fruitGathering(ploc._position.x, ploc._position.y);
+                ploc.moveLeft();
             }
         }
+        else if (e.key === 'ArrowRight' && game.map[ploc._position.y][ploc._position.x + 1].fruits != 0 && ploc._position.x < 10) {
+            keyRight.classList.add('active');
+            if (IsAbilityActivated && activatedAbility == 'dash') {
+                dashFruitGathering(ploc.dashRight(game.map));
+            }
+            else {
+                ploc.moveRight();
+            }
+        }
+        else if (e.key === 'ArrowUp' && game.map[ploc._position.y - 1][ploc._position.x].fruits != 0 && ploc._position.y > 1) {
+            keyUP.classList.add('active');
+            if (IsAbilityActivated && activatedAbility == 'dash') {
+                dashFruitGathering(ploc.dashUp(game.map));
+            }
+            else {
+                ploc.moveUp();
+            }
+        }
+        else if (e.key === 'ArrowDown' && game.map[ploc._position.y + 1][ploc._position.x].fruits != 0 && ploc._position.y < 10) {
+            keyDown.classList.add('active');
+            if (IsAbilityActivated && activatedAbility == 'dash') {
+                dashFruitGathering(ploc.dashDown(game.map));
+            }
+            else {
+                ploc.moveDown();
+            }
+        }
+        else {
+            sensibleStep = false;
+        }
+        Generator(mapSize, ploc._position.x, ploc._position.y);
+        if (sensibleStep) {
+            game.steps--;
+            stepsText.textContent = game.steps.toString();
+            fruitGathering(ploc._position.x, ploc._position.y);
+        }
     }
-    else if (!onAfterScreen) {
+    if (!onAfterScreen && game.steps == 0) {
         let afterScreen = document.createElement('div');
         let afterScreenText = document.createElement('div');
         let afterScreenRestartButtonDiv = document.createElement('div');
@@ -399,9 +407,14 @@ body.addEventListener('keydown', (e) => {
         afterScreenText.appendChild(afterScreenNewGameButtonDiv);
         afterScreenText.appendChild(afterScreenRestartButtonDiv);
         afterScreen.appendChild(afterScreenText);
-        // gameDiv!.textContent = '';
         gameDiv.appendChild(afterScreen);
         onAfterScreen = true;
     }
+    setTimeout(() => {
+        keyDown.classList.remove('active');
+        keyLeft.classList.remove('active');
+        keyRight.classList.remove('active');
+        keyUP.classList.remove('active');
+    }, 150);
 });
 Generator(mapSize, 0, 0);
