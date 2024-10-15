@@ -23,6 +23,8 @@ let keyDown = document.querySelector('#key-downH');
 stepsText.textContent = game.steps.toString();
 const root = document.documentElement;
 root.style.setProperty('--map-size', mapSize.toString());
+let duplicatedCells = [];
+let originalFruits = [];
 function Generator(size, player_x, player_y) {
     gameDiv.textContent = '';
     for (let i = 1; i < size + 1; i++) {
@@ -41,6 +43,7 @@ function Generator(size, player_x, player_y) {
             }
             else {
                 span.addEventListener("click", () => {
+                    console.log('click');
                     if (game.firstClick) {
                         PlayerParam(div.id);
                     }
@@ -53,7 +56,7 @@ function Generator(size, player_x, player_y) {
             }
             if (game.showAbilities) {
                 if (game.map[i][j] instanceof Cell) {
-                    if (game.map[i][j].ability != null) {
+                    if (game.map[i][j].ability != null && !game.map[i][j].abilityCollected) {
                         span.classList.add('ability');
                         span.classList.add('ability-' + game.map[i][j].ability);
                     }
@@ -76,14 +79,14 @@ function fruitGathering(x, y) {
     if (!game.map[y][x].harvested) {
         game.collectedFruits += game.map[y][x].fruits;
     }
-    if (game.map[y][x].ability != null) {
+    if (game.map[y][x].ability != null && !game.map[y][x].abilityCollected) {
         let ability = game.map[y][x].ability;
         game.AddCollectedAbilities(ability);
         let abilityCount = document.querySelector(`#${ability}`);
         if (abilityCount != null) {
             abilityCount.textContent = game.collectedAbilities[ability].toString();
         }
-        game.map[y][x].ability = null;
+        game.map[y][x].abilityCollected = true;
     }
     // game.map[player_y][player_x].fruits = 0; //   Ezt visszakommentezve kavicsokat húz maga után ahogy lépked (pretty fun ngl)
     game.map[y][x].harvested = true;
@@ -132,6 +135,9 @@ function duplicateFruits(x, y) {
     for (let i = y - 1; i <= y + 1; i++) {
         for (let j = x - 1; j <= x + 1; j++) {
             if (game.map[i][j].fruits != 0) {
+                if (!duplicatedCells.includes(game.map[i][j]))
+                    duplicatedCells.push(game.map[i][j]);
+                originalFruits.push(game.map[i][j].fruits);
                 game.map[i][j].fruits *= 2;
             }
         }
@@ -175,15 +181,21 @@ function Restart() {
     game.collectedFruits = 0;
     resetAbilitiesCount();
     game.resetAbilities();
+    ploc = new Player(0, 0);
     fruitsText.textContent = '0';
     stepsText.textContent = game.steps.toString();
     numberOfTries++;
     game.map.forEach((row) => {
         row.forEach((cell) => {
             cell.harvested = false;
+            cell.abilityCollected = false;
+            if (duplicatedCells.includes(cell))
+                cell.fruits = originalFruits[duplicatedCells.indexOf(cell)];
         });
     });
     onAfterScreen = false;
+    duplicatedCells = [];
+    originalFruits = [];
     Generator(mapSize, 0, 0);
 }
 function NewGame() {
@@ -193,6 +205,7 @@ function NewGame() {
     game.collectedFruits = 0;
     resetAbilitiesCount();
     game.resetAbilities();
+    ploc = new Player(0, 0);
     numberOfGames++;
     numberOfTries = 1;
     fruitsText.textContent = '0';
@@ -204,6 +217,8 @@ function NewGame() {
     bestTryText.textContent = '';
     game = new Game(mapSize, 10);
     onAfterScreen = false;
+    duplicatedCells = [];
+    originalFruits = [];
     Generator(mapSize, 0, 0);
 }
 function AddRecord() {

@@ -18,6 +18,7 @@ export default class Cell extends ProtoCell {
     _fruitType;
     _harvested = false;
     _ability;
+    _abilityCollected = false;
     get position() {
         return this._position;
     }
@@ -47,6 +48,12 @@ export default class Cell extends ProtoCell {
     }
     set ability(value) {
         this._ability = value;
+    }
+    get abilityCollected() {
+        return this._abilityCollected;
+    }
+    set abilityCollected(value) {
+        this._abilityCollected = value;
     }
     constructor(x, y, fruits, fruitType, harvested, ability) {
         super(fruits);
