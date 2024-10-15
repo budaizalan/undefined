@@ -2,7 +2,7 @@ import { ProtoCell } from "./Cell";
 
 export default class Player {
     public _position: { x: number, y: number };
-    private _freezed: boolean = false;
+    private _freezed: boolean = true;
 
     get position() {
         return this._position;

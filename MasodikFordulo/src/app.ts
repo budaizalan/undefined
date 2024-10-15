@@ -81,7 +81,7 @@ function Generator(size: number, player_x: number, player_y: number) {
             }
             gameDiv!.append(div);
         }
-        toggleSelectOverlay(IsAbilityActivated && activatedAbility === 'teleport');
+        toggleSelectOverlay(IsAbilityActivated && activatedAbility === 'teleport' || game.firstClick);
     }
     
 }
@@ -128,7 +128,14 @@ function teleportPlayer(x: number, y: number){
     ploc.teleport(x, y);
     Generator(mapSize, ploc._position.x, ploc._position.y);
     fruitGathering(ploc._position.x, ploc._position.y);
-    resetAbility('teleport');
+    if(game.firstClick){
+        game.firstClick = false;
+        toggleSelectOverlay(false);
+        ploc.freezed = false;
+    } else{
+        resetAbility('teleport');
+    }
+    
 }
 
 function harvestAround(x: number, y: number){

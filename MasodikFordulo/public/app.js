@@ -77,7 +77,7 @@ function Generator(size, player_x, player_y) {
             }
             gameDiv.append(div);
         }
-        toggleSelectOverlay(IsAbilityActivated && activatedAbility === 'teleport');
+        toggleSelectOverlay(IsAbilityActivated && activatedAbility === 'teleport' || game.firstClick);
     }
 }
 function fruitGathering(x, y) {
@@ -122,7 +122,14 @@ function teleportPlayer(x, y) {
     ploc.teleport(x, y);
     Generator(mapSize, ploc._position.x, ploc._position.y);
     fruitGathering(ploc._position.x, ploc._position.y);
-    resetAbility('teleport');
+    if (game.firstClick) {
+        game.firstClick = false;
+        toggleSelectOverlay(false);
+        ploc.freezed = false;
+    }
+    else {
+        resetAbility('teleport');
+    }
 }
 function harvestAround(x, y) {
     for (let i = y - 1; i <= y + 1; i++) {
@@ -337,50 +344,52 @@ body.addEventListener('keydown', (e) => {
             }
             sensibleStep = false;
         }
-        else if (e.key === 'ArrowLeft' && game.map[ploc._position.y][ploc._position.x - 1].fruits != 0 && ploc._position.x > 1) {
-            keyLeft.classList.add('active');
-            if (IsAbilityActivated && activatedAbility == 'dash') {
-                dashFruitGathering(ploc.dashLeft(game.map));
+        if (!ploc.freezed) {
+            if (e.key === 'ArrowLeft' && game.map[ploc._position.y][ploc._position.x - 1].fruits != 0 && ploc._position.x > 1) {
+                keyLeft.classList.add('active');
+                if (IsAbilityActivated && activatedAbility == 'dash') {
+                    dashFruitGathering(ploc.dashLeft(game.map));
+                }
+                else {
+                    ploc.moveLeft();
+                }
+            }
+            else if (e.key === 'ArrowRight' && game.map[ploc._position.y][ploc._position.x + 1].fruits != 0 && ploc._position.x < 10) {
+                keyRight.classList.add('active');
+                if (IsAbilityActivated && activatedAbility == 'dash') {
+                    dashFruitGathering(ploc.dashRight(game.map));
+                }
+                else {
+                    ploc.moveRight();
+                }
+            }
+            else if (e.key === 'ArrowUp' && game.map[ploc._position.y - 1][ploc._position.x].fruits != 0 && ploc._position.y > 1) {
+                keyUP.classList.add('active');
+                if (IsAbilityActivated && activatedAbility == 'dash') {
+                    dashFruitGathering(ploc.dashUp(game.map));
+                }
+                else {
+                    ploc.moveUp();
+                }
+            }
+            else if (e.key === 'ArrowDown' && game.map[ploc._position.y + 1][ploc._position.x].fruits != 0 && ploc._position.y < 10) {
+                keyDown.classList.add('active');
+                if (IsAbilityActivated && activatedAbility == 'dash') {
+                    dashFruitGathering(ploc.dashDown(game.map));
+                }
+                else {
+                    ploc.moveDown();
+                }
             }
             else {
-                ploc.moveLeft();
+                sensibleStep = false;
             }
-        }
-        else if (e.key === 'ArrowRight' && game.map[ploc._position.y][ploc._position.x + 1].fruits != 0 && ploc._position.x < 10) {
-            keyRight.classList.add('active');
-            if (IsAbilityActivated && activatedAbility == 'dash') {
-                dashFruitGathering(ploc.dashRight(game.map));
+            Generator(mapSize, ploc._position.x, ploc._position.y);
+            if (sensibleStep) {
+                game.steps--;
+                stepsText.textContent = game.steps.toString();
+                fruitGathering(ploc._position.x, ploc._position.y);
             }
-            else {
-                ploc.moveRight();
-            }
-        }
-        else if (e.key === 'ArrowUp' && game.map[ploc._position.y - 1][ploc._position.x].fruits != 0 && ploc._position.y > 1) {
-            keyUP.classList.add('active');
-            if (IsAbilityActivated && activatedAbility == 'dash') {
-                dashFruitGathering(ploc.dashUp(game.map));
-            }
-            else {
-                ploc.moveUp();
-            }
-        }
-        else if (e.key === 'ArrowDown' && game.map[ploc._position.y + 1][ploc._position.x].fruits != 0 && ploc._position.y < 10) {
-            keyDown.classList.add('active');
-            if (IsAbilityActivated && activatedAbility == 'dash') {
-                dashFruitGathering(ploc.dashDown(game.map));
-            }
-            else {
-                ploc.moveDown();
-            }
-        }
-        else {
-            sensibleStep = false;
-        }
-        Generator(mapSize, ploc._position.x, ploc._position.y);
-        if (sensibleStep) {
-            game.steps--;
-            stepsText.textContent = game.steps.toString();
-            fruitGathering(ploc._position.x, ploc._position.y);
         }
     }
     if (!onAfterScreen && game.steps == 0) {

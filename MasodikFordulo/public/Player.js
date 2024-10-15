@@ -1,6 +1,6 @@
 export default class Player {
     _position;
-    _freezed = false;
+    _freezed = true;
     get position() {
         return this._position;
     }
