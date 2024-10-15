@@ -2,10 +2,12 @@ import Cell, { ProtoCell } from "./Cell.js";
 export default class Game {
     _map = new Array();
     _mapSize;
-    _score;
-    _moves;
-    _abilities = ['teleport', 'dash', 'harvest'];
+    _collectedFruits;
+    _steps;
+    _firstClick = true;
+    _abilities = ['teleport', 'dash', 'harvest', 'duplicate'];
     _collectedAbilities = {};
+    _showAbilities = true;
     _gameOver;
     get map() {
         return this._map;
@@ -13,14 +15,35 @@ export default class Game {
     get mapSize() {
         return this._mapSize;
     }
-    get score() {
-        return this._score;
+    get collectedFruits() {
+        return this._collectedFruits;
     }
-    get moves() {
-        return this._moves;
+    set collectedFruits(value) {
+        this._collectedFruits = value;
+    }
+    get steps() {
+        return this._steps;
+    }
+    set steps(value) {
+        this._steps = value;
+    }
+    get firstClick() {
+        return this._firstClick;
+    }
+    get abilities() {
+        return this._abilities;
+    }
+    set firstClick(value) {
+        this._firstClick = value;
     }
     get collectedAbilities() {
         return this._collectedAbilities;
+    }
+    get showAbilities() {
+        return this._showAbilities;
+    }
+    set showAbilities(value) {
+        this._showAbilities = value;
     }
     get gameOver() {
         return this._gameOver;
@@ -30,10 +53,10 @@ export default class Game {
         let result = random_value == 5 || random_value == 4 ? 0 : random_value;
         return result;
     }
-    constructor(mapSize) {
+    constructor(mapSize, steps) {
         this._mapSize = mapSize;
-        this._score = 0;
-        this._moves = 0;
+        this._collectedFruits = 0;
+        this._steps = steps;
         this._gameOver = false;
         this._map = this.generateMap();
     }

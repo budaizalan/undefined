@@ -200,7 +200,9 @@ main{
   width: 100%;
   height: 100%;
   font-size: 1.8vmax; /*Állíthatod az értéket, de a vmax-ot hagyd benne!*/
-  color: white; /* Igazából csak át kell rakni a textet egy kurva almafára aztán kész*/
+  /* color: white; Igazából csak át kell rakni a textet egy kurva almafára aztán kész */
+  color: linear-gradient(45deg, #05012b, #ff0000);
+  text-shadow: 2px 2px 2px black;
   display: flex;
   background-color: white;
   background-image: url(./images/tree.png);
@@ -212,11 +214,29 @@ main{
   margin: auto;
 }
 
-.cell .ability{
-  background-image: url(./images/teleport.png);
+.cell .ability-teleport,
+.cell .ability-dash,
+.cell .ability-harvest,
+.cell .ability-duplicate{
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.cell .ability-teleport{
+  background-image: url(./images/teleport.png);
+}
+
+.cell .ability-dash{
+  background-image: url(./images/dash.png);
+}
+
+.cell .ability-harvest{
+  background-image: url(./images/harvest.png);
+}
+
+.cell .ability-duplicate{
+  background-image: url(./images/duplicate.png);
 }
 
 .cell .field {

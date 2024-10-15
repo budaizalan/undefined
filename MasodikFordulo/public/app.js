@@ -2,13 +2,9 @@ import Cell from "./Cell.js";
 import Game from "./Game.js";
 import Player from "./Player.js";
 const mapSize = 10;
-let firstClick = true;
-let game = new Game(mapSize);
-// console.log(game);
+let game = new Game(mapSize, 10);
 let ploc = new Player(0, 0);
-let steps = 10;
 let numberOfTries = 1;
-let collectedFruits = 0;
 let onAfterScreen = false;
 let IsAbilityActivated = false;
 let activatedAbility = '';
@@ -19,7 +15,7 @@ const bestTryText = document.querySelector('#besttry');
 const gameDiv = document.querySelector('.game-table');
 const scoreboardText = document.querySelector('.game-scoreboard');
 const body = document.querySelector('.body');
-stepsText.textContent = steps.toString();
+stepsText.textContent = game.steps.toString();
 const root = document.documentElement;
 root.style.setProperty('--map-size', mapSize.toString());
 function Generator(size, player_x, player_y) {
@@ -40,7 +36,7 @@ function Generator(size, player_x, player_y) {
             }
             else {
                 span.addEventListener("click", () => {
-                    if (firstClick) {
+                    if (game.firstClick) {
                         PlayerParam(div.id);
                     }
                     else {
@@ -50,9 +46,12 @@ function Generator(size, player_x, player_y) {
                     }
                 }, false);
             }
-            if (game.map[i][j] instanceof Cell) {
-                if (game.map[i][j].ability != null) {
-                    span.classList.add('ability');
+            if (game.showAbilities) {
+                if (game.map[i][j] instanceof Cell) {
+                    if (game.map[i][j].ability != null) {
+                        span.classList.add('ability');
+                        span.classList.add('ability-' + game.map[i][j].ability);
+                    }
                 }
             }
             if (game.map[i][j].harvested) {
@@ -70,7 +69,7 @@ function Generator(size, player_x, player_y) {
 }
 function fruitGathering(x, y) {
     if (!game.map[y][x].harvested) {
-        collectedFruits += game.map[y][x].fruits;
+        game.collectedFruits += game.map[y][x].fruits;
     }
     if (game.map[y][x].ability != null) {
         let ability = game.map[y][x].ability;
@@ -83,7 +82,7 @@ function fruitGathering(x, y) {
     }
     // game.map[player_y][player_x].fruits = 0; //   Ezt visszakommentezve kavicsokat húz maga után ahogy lépked (pretty fun ngl)
     game.map[y][x].harvested = true;
-    fruitsText.textContent = collectedFruits.toString();
+    fruitsText.textContent = game.collectedFruits.toString();
 }
 function dashFruitGathering(dashCoordinates) {
     // playerStart: 10, 1
@@ -127,6 +126,18 @@ function harvestAround(x, y) {
         resetAbility('harvest');
     }, 250);
 }
+function duplicateFruits(x, y) {
+    for (let i = y - 1; i <= y + 1; i++) {
+        for (let j = x - 1; j <= x + 1; j++) {
+            if (game.map[i][j].fruits != 0) {
+                game.map[i][j].fruits *= 2;
+            }
+        }
+    }
+    setTimeout(() => {
+        resetAbility('duplicate');
+    }, 250);
+}
 function resetAbility(ability) {
     let button = document.querySelector('.activated');
     button?.classList.remove('activated');
@@ -138,6 +149,14 @@ function resetAbility(ability) {
         abilityCount.textContent = game.collectedAbilities[ability].toString();
     }
 }
+function resetAbilitiesCount() {
+    game.abilities.forEach(ability => {
+        let abilityCount = document.querySelector(`#${ability}`);
+        if (abilityCount != null) {
+            abilityCount.textContent = '0';
+        }
+    });
+}
 function PlayerParam(id) {
     let loc = id.split(',');
     let x = parseInt(loc[0]);
@@ -145,15 +164,17 @@ function PlayerParam(id) {
     ploc = new Player(x, y);
     Generator(mapSize, x, y);
     fruitGathering(x, y);
-    firstClick = false;
+    game.firstClick = false;
 }
 function Restart() {
-    firstClick = true;
-    steps = 10;
     AddRecord();
-    collectedFruits = 0;
+    game.firstClick = true;
+    game.steps = 10;
+    game.collectedFruits = 0;
+    resetAbilitiesCount();
+    game.resetAbilities();
     fruitsText.textContent = '0';
-    stepsText.textContent = steps.toString();
+    stepsText.textContent = game.steps.toString();
     numberOfTries++;
     game.map.forEach((row) => {
         row.forEach((cell) => {
@@ -165,9 +186,9 @@ function Restart() {
 }
 function AddRecord() {
     let record = document.createElement('div');
-    record.textContent = ` Az ${numberOfTries}. fordulóban elért pontszám: ${collectedFruits}`;
+    record.textContent = ` Az ${numberOfTries}. fordulóban elért pontszám: ${game.collectedFruits}`;
     let bestRecord = document.createElement('div');
-    records.push(collectedFruits);
+    records.push(game.collectedFruits);
     bestTryText.textContent = '';
     bestRecord.textContent = `Eddigi legjobb eredmény: ${records.reduce((a, b) => Math.max(a, b))}`;
     bestTryText.appendChild(bestRecord);
@@ -175,7 +196,7 @@ function AddRecord() {
 }
 body.addEventListener('keydown', (e) => {
     let sensibleStep = true;
-    if (steps != 0) {
+    if (game.steps != 0) {
         if (e.key === 'q' && game.collectedAbilities['teleport'] > 0) {
             let button = document.querySelector('#button-teleport');
             if (button?.classList.contains('activated')) {
@@ -224,6 +245,7 @@ body.addEventListener('keydown', (e) => {
                 button?.classList.add('activated');
                 IsAbilityActivated = true;
                 activatedAbility = 'duplicate';
+                duplicateFruits(ploc._position.x, ploc._position.y);
             }
             sensibleStep = false;
         }
@@ -264,8 +286,8 @@ body.addEventListener('keydown', (e) => {
         }
         Generator(mapSize, ploc._position.x, ploc._position.y);
         if (sensibleStep) {
-            steps--;
-            stepsText.textContent = steps.toString();
+            game.steps--;
+            stepsText.textContent = game.steps.toString();
             fruitGathering(ploc._position.x, ploc._position.y);
         }
     }
@@ -277,7 +299,7 @@ body.addEventListener('keydown', (e) => {
         afterScreen.className = 'afterscreen';
         afterScreen.textContent = 'A játéknak vége';
         afterScreenText.className = 'afterscreentext';
-        afterScreenText.textContent = `Gyüjtött gyümölcsök: ${collectedFruits.toString()}`;
+        afterScreenText.textContent = `Gyüjtött gyümölcsök: ${game.collectedFruits.toString()}`;
         afterScreenButtonDiv.className = 'afterscreenbuttondiv';
         afterScreenButton.textContent = 'Újrakezdés';
         afterScreenButton.className = 'afterscreenbutton';
