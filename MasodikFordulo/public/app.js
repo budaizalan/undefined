@@ -16,6 +16,10 @@ const bestTryText = document.querySelector('#besttry');
 const gameDiv = document.querySelector('.game-table');
 const scoreboardText = document.querySelector('.game-scoreboard');
 const body = document.querySelector('.body');
+let keyLeft = document.querySelector('#key-leftH');
+let keyRight = document.querySelector('#key-rightH');
+let keyUP = document.querySelector('#key-upH');
+let keyDown = document.querySelector('#key-downH');
 stepsText.textContent = game.steps.toString();
 const root = document.documentElement;
 root.style.setProperty('--map-size', mapSize.toString());
@@ -271,8 +275,7 @@ body.addEventListener('keydown', (e) => {
             sensibleStep = false;
         }
         else if (e.key === 'ArrowLeft' && game.map[ploc._position.y][ploc._position.x - 1].fruits != 0) {
-            let keyleft = document.getElementById('#key-left');
-            keyleft.classList.add('active');
+            keyLeft.classList.add('active');
             if (IsAbilityActivated && activatedAbility == 'dash') {
                 dashFruitGathering(ploc.dashLeft(game.map));
             }
@@ -281,6 +284,7 @@ body.addEventListener('keydown', (e) => {
             }
         }
         else if (e.key === 'ArrowRight' && game.map[ploc._position.y][ploc._position.x + 1].fruits != 0) {
+            keyRight.classList.add('active');
             if (IsAbilityActivated && activatedAbility == 'dash') {
                 dashFruitGathering(ploc.dashRight(game.map));
             }
@@ -289,6 +293,7 @@ body.addEventListener('keydown', (e) => {
             }
         }
         else if (e.key === 'ArrowUp' && game.map[ploc._position.y - 1][ploc._position.x].fruits != 0) {
+            keyUP.classList.add('active');
             if (IsAbilityActivated && activatedAbility == 'dash') {
                 dashFruitGathering(ploc.dashUp(game.map));
             }
@@ -297,6 +302,7 @@ body.addEventListener('keydown', (e) => {
             }
         }
         else if (e.key === 'ArrowDown' && game.map[ploc._position.y + 1][ploc._position.x].fruits != 0) {
+            keyDown.classList.add('active');
             if (IsAbilityActivated && activatedAbility == 'dash') {
                 dashFruitGathering(ploc.dashDown(game.map));
             }
@@ -342,5 +348,11 @@ body.addEventListener('keydown', (e) => {
         gameDiv.appendChild(afterScreen);
         onAfterScreen = true;
     }
+    setTimeout(() => {
+        keyDown.classList.remove('active');
+        keyLeft.classList.remove('active');
+        keyRight.classList.remove('active');
+        keyUP.classList.remove('active');
+    }, 150);
 });
 Generator(mapSize, 0, 0);
