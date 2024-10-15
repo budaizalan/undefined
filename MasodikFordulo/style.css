@@ -80,7 +80,8 @@ main{
   background-color: #14121c;
   border-radius: 10px;
   box-shadow: 0 2px 4px 0 rgba(255, 255, 255, 0.2),
-    0 5px 15px 0 rgba(255, 255, 255, 0.15);
+    0 5px 15px 0 rgba(255, 255, 255, 0.15);overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .ability{

@@ -90,8 +90,6 @@ function fruitGathering(x, y) {
     fruitsText.textContent = game.collectedFruits.toString();
 }
 function dashFruitGathering(dashCoordinates) {
-    // playerStart: 10, 1
-    // playerEnd: 10, 8
     let startIndex = 0;
     let endIndex = 0;
     if (dashCoordinates[0][0] == dashCoordinates[1][0]) {
@@ -126,7 +124,6 @@ function harvestAround(x, y) {
             }
         }
     }
-    // wait 1 sec
     setTimeout(() => {
         resetAbility('harvest');
     }, 250);
@@ -274,7 +271,7 @@ body.addEventListener('keydown', (e) => {
             }
             sensibleStep = false;
         }
-        else if (e.key === 'ArrowLeft' && game.map[ploc._position.y][ploc._position.x - 1].fruits != 0) {
+        else if (e.key === 'ArrowLeft' && game.map[ploc._position.y][ploc._position.x - 1].fruits != 0 && ploc._position.x > 1) {
             keyLeft.classList.add('active');
             if (IsAbilityActivated && activatedAbility == 'dash') {
                 dashFruitGathering(ploc.dashLeft(game.map));
@@ -283,7 +280,7 @@ body.addEventListener('keydown', (e) => {
                 ploc.moveLeft();
             }
         }
-        else if (e.key === 'ArrowRight' && game.map[ploc._position.y][ploc._position.x + 1].fruits != 0) {
+        else if (e.key === 'ArrowRight' && game.map[ploc._position.y][ploc._position.x + 1].fruits != 0 && ploc._position.x < 10) {
             keyRight.classList.add('active');
             if (IsAbilityActivated && activatedAbility == 'dash') {
                 dashFruitGathering(ploc.dashRight(game.map));
@@ -292,7 +289,7 @@ body.addEventListener('keydown', (e) => {
                 ploc.moveRight();
             }
         }
-        else if (e.key === 'ArrowUp' && game.map[ploc._position.y - 1][ploc._position.x].fruits != 0) {
+        else if (e.key === 'ArrowUp' && game.map[ploc._position.y - 1][ploc._position.x].fruits != 0 && ploc._position.y > 1) {
             keyUP.classList.add('active');
             if (IsAbilityActivated && activatedAbility == 'dash') {
                 dashFruitGathering(ploc.dashUp(game.map));
@@ -301,7 +298,7 @@ body.addEventListener('keydown', (e) => {
                 ploc.moveUp();
             }
         }
-        else if (e.key === 'ArrowDown' && game.map[ploc._position.y + 1][ploc._position.x].fruits != 0) {
+        else if (e.key === 'ArrowDown' && game.map[ploc._position.y + 1][ploc._position.x].fruits != 0 && ploc._position.y < 10) {
             keyDown.classList.add('active');
             if (IsAbilityActivated && activatedAbility == 'dash') {
                 dashFruitGathering(ploc.dashDown(game.map));
@@ -344,7 +341,6 @@ body.addEventListener('keydown', (e) => {
         afterScreenText.appendChild(afterScreenNewGameButtonDiv);
         afterScreenText.appendChild(afterScreenRestartButtonDiv);
         afterScreen.appendChild(afterScreenText);
-        // gameDiv!.textContent = '';
         gameDiv.appendChild(afterScreen);
         onAfterScreen = true;
     }
