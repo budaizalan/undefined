@@ -5,6 +5,7 @@ const mapSize = 10;
 let game = new Game(mapSize, 10);
 let ploc = new Player(0, 0);
 let numberOfTries = 1;
+let numberOfGames = 0;
 let onAfterScreen = false;
 let IsAbilityActivated = false;
 let activatedAbility = '';
@@ -184,9 +185,26 @@ function Restart() {
     onAfterScreen = false;
     Generator(mapSize, 0, 0);
 }
+function NewGame() {
+    firstClick = true;
+    steps = 10;
+    AddRecord();
+    collectedFruits = 0;
+    numberOfGames++;
+    fruitsText.textContent = '0';
+    stepsText.textContent = steps.toString();
+    scoreboardText.textContent = 'Eredménytábla';
+    let bestRecord = document.createElement('div');
+    bestRecord.textContent = `Játszott körök: ${numberOfGames}`;
+    scoreboardText.appendChild(bestRecord);
+    bestTryText.textContent = '';
+    game = new Game(10);
+    onAfterScreen = false;
+    Generator(mapSize, 0, 0);
+}
 function AddRecord() {
     let record = document.createElement('div');
-    record.textContent = ` Az ${numberOfTries}. fordulóban elért pontszám: ${game.collectedFruits}`;
+    record.textContent = `${numberOfTries}. fordulóban elért pontszám: ${game.collectedFruits}`
     let bestRecord = document.createElement('div');
     records.push(game.collectedFruits);
     bestTryText.textContent = '';
@@ -294,18 +312,26 @@ body.addEventListener('keydown', (e) => {
     else if (!onAfterScreen) {
         let afterScreen = document.createElement('div');
         let afterScreenText = document.createElement('div');
-        let afterScreenButtonDiv = document.createElement('div');
-        let afterScreenButton = document.createElement('button');
+        let afterScreenRestartButtonDiv = document.createElement('div');
+        let afterScreenNewGameButtonDiv = document.createElement('div');
+        let afterScreenRestartButton = document.createElement('button');
+        let afterScreenNewGameButton = document.createElement('button');
         afterScreen.className = 'afterscreen';
         afterScreen.textContent = 'A játéknak vége';
         afterScreenText.className = 'afterscreentext';
         afterScreenText.textContent = `Gyüjtött gyümölcsök: ${game.collectedFruits.toString()}`;
-        afterScreenButtonDiv.className = 'afterscreenbuttondiv';
-        afterScreenButton.textContent = 'Újrakezdés';
-        afterScreenButton.className = 'afterscreenbutton';
-        afterScreenButton.addEventListener('click', Restart);
-        afterScreenButtonDiv.appendChild(afterScreenButton);
-        afterScreenText.appendChild(afterScreenButtonDiv);
+        afterScreenRestartButtonDiv.className = 'aftercreenrestartbuttondiv';
+        afterScreenRestartButton.textContent = 'Újrakezdés';
+        afterScreenNewGameButtonDiv.className = 'aftercreennewgamebuttondiv';
+        afterScreenNewGameButton.textContent = 'Új játék';
+        afterScreenRestartButton.className = 'afterscreenrestartbutton';
+        afterScreenNewGameButton.className = 'afterscreennewgamebutton';
+        afterScreenRestartButton.addEventListener('click', Restart);
+        afterScreenNewGameButton.addEventListener('click', NewGame);
+        afterScreenRestartButtonDiv.appendChild(afterScreenRestartButton);
+        afterScreenNewGameButtonDiv.appendChild(afterScreenNewGameButton);
+        afterScreenText.appendChild(afterScreenNewGameButtonDiv);
+        afterScreenText.appendChild(afterScreenRestartButtonDiv);
         afterScreen.appendChild(afterScreenText);
         // gameDiv!.textContent = '';
         gameDiv.appendChild(afterScreen);
