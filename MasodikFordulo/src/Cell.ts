@@ -23,6 +23,7 @@ export default class Cell extends ProtoCell {
   private _fruitType: string;
   private _harvested: boolean = false;
   private _ability: null | string;
+  private _abilityCollected: boolean = false;
 
   get position() {
     return this._position;
@@ -61,6 +62,14 @@ export default class Cell extends ProtoCell {
 
   set ability(value: string | null) {
     this._ability = value;
+  }
+
+  get abilityCollected() {
+    return this._abilityCollected;
+  }
+
+  set abilityCollected(value: boolean) {
+    this._abilityCollected = value;
   }
 
   constructor(

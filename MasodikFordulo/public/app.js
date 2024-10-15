@@ -49,7 +49,7 @@ function Generator(size, player_x, player_y) {
             }
             if (game.showAbilities) {
                 if (game.map[i][j] instanceof Cell) {
-                    if (game.map[i][j].ability != null) {
+                    if (game.map[i][j].ability != null && !game.map[i][j].abilityCollected) {
                         span.classList.add('ability');
                         span.classList.add('ability-' + game.map[i][j].ability);
                     }
@@ -72,22 +72,20 @@ function fruitGathering(x, y) {
     if (!game.map[y][x].harvested) {
         game.collectedFruits += game.map[y][x].fruits;
     }
-    if (game.map[y][x].ability != null) {
+    if (game.map[y][x].ability != null && !game.map[y][x].abilityCollected) {
         let ability = game.map[y][x].ability;
         game.AddCollectedAbilities(ability);
         let abilityCount = document.querySelector(`#${ability}`);
         if (abilityCount != null) {
             abilityCount.textContent = game.collectedAbilities[ability].toString();
         }
-        game.map[y][x].ability = null;
+        game.map[y][x].abilityCollected = true;
     }
     // game.map[player_y][player_x].fruits = 0; //   Ezt visszakommentezve kavicsokat húz maga után ahogy lépked (pretty fun ngl)
     game.map[y][x].harvested = true;
     fruitsText.textContent = game.collectedFruits.toString();
 }
 function dashFruitGathering(dashCoordinates) {
-    // playerStart: 10, 1
-    // playerEnd: 10, 8
     let startIndex = 0;
     let endIndex = 0;
     if (dashCoordinates[0][0] == dashCoordinates[1][0]) {
@@ -180,6 +178,7 @@ function Restart() {
     game.map.forEach((row) => {
         row.forEach((cell) => {
             cell.harvested = false;
+            cell.abilityCollected = false;
         });
     });
     onAfterScreen = false;
