@@ -322,7 +322,7 @@ body.addEventListener('keydown', (e) => {
             fruitGathering(ploc._position.x, ploc._position.y);
         }
     }
-    else if (!onAfterScreen) {
+    if (!onAfterScreen && game.steps == 0) {
         let afterScreen = document.createElement('div');
         let afterScreenText = document.createElement('div');
         let afterScreenRestartButtonDiv = document.createElement('div');
