@@ -186,25 +186,28 @@ function Restart() {
     Generator(mapSize, 0, 0);
 }
 function NewGame() {
-    firstClick = true;
-    steps = 10;
     AddRecord();
-    collectedFruits = 0;
+    game.firstClick = true;
+    game.steps = 10;
+    game.collectedFruits = 0;
+    resetAbilitiesCount();
+    game.resetAbilities();
     numberOfGames++;
+    numberOfTries = 1;
     fruitsText.textContent = '0';
-    stepsText.textContent = steps.toString();
+    stepsText.textContent = game.steps.toString();
     scoreboardText.textContent = 'Eredménytábla';
     let bestRecord = document.createElement('div');
     bestRecord.textContent = `Játszott körök: ${numberOfGames}`;
     scoreboardText.appendChild(bestRecord);
     bestTryText.textContent = '';
-    game = new Game(10);
+    game = new Game(mapSize, 10);
     onAfterScreen = false;
     Generator(mapSize, 0, 0);
 }
 function AddRecord() {
     let record = document.createElement('div');
-    record.textContent = `${numberOfTries}. fordulóban elért pontszám: ${game.collectedFruits}`
+    record.textContent = `${numberOfTries}. fordulóban elért pontszám: ${game.collectedFruits}`;
     let bestRecord = document.createElement('div');
     records.push(game.collectedFruits);
     bestTryText.textContent = '';
