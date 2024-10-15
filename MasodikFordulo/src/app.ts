@@ -17,6 +17,10 @@ const bestTryText = document.querySelector('#besttry');
 const gameDiv = document.querySelector('.game-table');
 const scoreboardText = document.querySelector('.game-scoreboard');
 const body = document.querySelector('.body');
+let keyLeft = document.querySelector('#key-leftH')
+let keyRight = document.querySelector('#key-rightH')
+let keyUP = document.querySelector('#key-upH')
+let keyDown = document.querySelector('#key-downH')
 stepsText!.textContent = game.steps.toString();
 const root = document.documentElement;
 root.style.setProperty('--map-size', mapSize.toString());
@@ -127,7 +131,6 @@ function harvestAround(x: number, y: number){
             }
         }
     }
-    // wait 1 sec
     setTimeout(() => {
         resetAbility('harvest');
     }, 250);
@@ -291,25 +294,30 @@ body!.addEventListener('keydown', (e) => {
             }
             sensibleStep = false;
         }
-        else if ((e as KeyboardEvent).key === 'ArrowLeft' && game.map[ploc._position.y][ploc._position.x-1].fruits != 0 ) {
+
+        else if ((e as KeyboardEvent).key === 'ArrowLeft' && game.map[ploc._position.y][ploc._position.x-1].fruits != 0 && ploc._position.x !> 1) {
+            keyLeft!.classList.add('active');
             if(IsAbilityActivated && activatedAbility == 'dash'){
                 dashFruitGathering(ploc.dashLeft(game.map));
             } else { 
                 ploc.moveLeft();
             }
-        } else if ((e as KeyboardEvent).key === 'ArrowRight' && game.map[ploc._position.y][ploc._position.x+1].fruits != 0 ) {
+        } else if ((e as KeyboardEvent).key === 'ArrowRight' && game.map[ploc._position.y][ploc._position.x+1].fruits != 0 && ploc._position.x < 10) {
+            keyRight!.classList.add('active');
             if(IsAbilityActivated && activatedAbility == 'dash'){
                 dashFruitGathering(ploc.dashRight(game.map));
             } else { 
                 ploc.moveRight();
             }
-        } else if ((e as KeyboardEvent).key === 'ArrowUp' && game.map[ploc._position.y-1][ploc._position.x].fruits != 0 ) {
+        } else if ((e as KeyboardEvent).key === 'ArrowUp' && game.map[ploc._position.y-1][ploc._position.x].fruits != 0 && ploc._position.y !> 1) {
+            keyUP!.classList.add('active');
             if(IsAbilityActivated && activatedAbility == 'dash'){
                 dashFruitGathering(ploc.dashUp(game.map));
             } else{
                 ploc.moveUp();
             }
-        } else if ((e as KeyboardEvent).key === 'ArrowDown' && game.map[ploc._position.y+1][ploc._position.x].fruits != 0 ) {
+        } else if ((e as KeyboardEvent).key === 'ArrowDown' && game.map[ploc._position.y+1][ploc._position.x].fruits != 0 && ploc._position.y < 10) {
+            keyDown!.classList.add('active');
             if(IsAbilityActivated && activatedAbility == 'dash'){
                 dashFruitGathering(ploc.dashDown(game.map));
             } else{
@@ -348,10 +356,15 @@ body!.addEventListener('keydown', (e) => {
         afterScreenText.appendChild(afterScreenNewGameButtonDiv);
         afterScreenText.appendChild(afterScreenRestartButtonDiv);
         afterScreen.appendChild(afterScreenText);
-        // gameDiv!.textContent = '';
         gameDiv!.appendChild(afterScreen);
         onAfterScreen = true;
     }
+    setTimeout(() => {
+        keyDown!.classList.remove('active');
+        keyLeft!.classList.remove('active');
+        keyRight!.classList.remove('active');
+        keyUP!.classList.remove('active');
+    }, 150);
 }); 
 
 

@@ -53,7 +53,6 @@ main{
 }
 
 .container {
-  /* margin-top: 300px; */
   text-align: center;
   margin: auto;
   position: relative;
@@ -67,20 +66,29 @@ main{
   height: 80vh;
 }
 
-.game{
+.game, .holder{
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 100%;
 }
 
-.game-scoreboard {
+.game-scoreboard, .game-info {
   width: 20%;
   height: 90%;
   background-color: #14121c;
   border-radius: 10px;
   box-shadow: 0 2px 4px 0 rgba(255, 255, 255, 0.2),
-    0 5px 15px 0 rgba(255, 255, 255, 0.15);
+    0 5px 15px 0 rgba(255, 255, 255, 0.15);overflow-x: hidden;
+}
+
+.game-scoreboard {
+  overflow-y: auto;
+}
+
+.holder{
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .ability-row{
@@ -179,6 +187,7 @@ main{
 }
 
 .game-table {
+  /* margin-top: 5vh; */
   overflow: hidden;
   width: fit-content; /* ez meg van oldva pookie */
   height: fit-content;
@@ -257,6 +266,48 @@ main{
   background-color: transparent;
   border: 0px;
   color: white;
+}
+
+.active {
+  background-color: #14a143;
+}
+
+.movementkeys{
+  text-align: center;
+}
+
+.keys {
+  display: flex;
+  color: white;
+  border: 1px solid white;
+  box-shadow: 0 0 8px rgb(207, 207, 207);
+  height: 70px;
+  width: 70px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  background-size: contain;
+  /* background-repeat: no-repeat;
+  background-position: center; */
+}
+
+.key {
+  font-size: 2vh;
+}
+
+.upperrow {
+  margin-top: 15vh;
+  display: inline-block; 
+  text-align: center;
+}
+
+.underrow{
+  display: inline-flex;
+  text-align: center;
 }
 
 .cell {
