@@ -5,7 +5,6 @@
 * {
   margin: 0;
   padding: 0;
-  /* box-sizing: border-box; */
 }
 
 body{
@@ -45,6 +44,16 @@ body{
   color: #42c3ca !important;
 }
 
+/* Title */
+
+.title{
+  position: absolute;
+  top: 0;
+  left: 43%;
+  text-align: center;
+  font-size: 4vh;
+}
+
 /* Game */
 
 main{
@@ -67,8 +76,9 @@ main{
 }
 
 .game, .holder{
-  display: flex;
+  display: inline-flex;
   justify-content: space-between;
+  margin: auto;
   align-items: center;
   height: 100%;
 }
@@ -80,7 +90,6 @@ main{
   border-radius: 10px;
   box-shadow: 0 2px 4px 0 rgba(255, 255, 255, 0.2),
     0 5px 15px 0 rgba(255, 255, 255, 0.15);
-  /* overflow-x: hidden; */
 }
 
 .game-scoreboard {
@@ -188,9 +197,8 @@ main{
 }
 
 .game-table {
-  /* margin-top: 5vh; */
   overflow: hidden;
-  width: fit-content; /* ez meg van oldva pookie */
+  width: fit-content;
   height: fit-content;
   position: relative;
   display: grid;
@@ -217,7 +225,6 @@ main{
 .afterscreentext {
   position: absolute;
   text-align: center;
-  /* background-color: rgb(20, 18, 28 , 0.3); */
   opacity: 100%;
   color: white;
   font-size: 3rem;
@@ -230,7 +237,6 @@ main{
   text-align: center;
   margin: auto;
   margin-top: 10%;
-  /* background-color: rgb(20, 18, 28 , 0.3); */
   opacity: 100%;
   color: white;
   background-color: rgb(20, 18, 28 , 0.7);
@@ -244,7 +250,6 @@ main{
   text-align: center;
   margin: auto;
   margin-top: 10%;
-  /* background-color: rgb(20, 18, 28 , 0.3); */
   opacity: 100%;
   color: white;
   background-color: rgb(20, 18, 28 , 0.7);
@@ -292,8 +297,6 @@ main{
   -webkit-user-select: none;
   -moz-user-select: none;
   background-size: contain;
-  /* background-repeat: no-repeat;
-  background-position: center; */
 }
 
 .key {
@@ -316,7 +319,6 @@ main{
   height: calc(32.5vw / var(--map-size));
   max-width: calc(100vh / var(--map-size));
   max-height: calc(65vh / var(--map-size));
-  /* background-color: #42c3ca; */
 }
 
 .cell span,
@@ -330,8 +332,7 @@ main{
 .cell .fruits{
   width: 100%;
   height: 100%;
-  font-size: 1.8vmax; /*Állíthatod az értéket, de a vmax-ot hagyd benne!*/
-  /* color: white; Igazából csak át kell rakni a textet egy kurva almafára aztán kész */
+  font-size: 1.8vmax;
   color: linear-gradient(45deg, #05012b, #ff0000);
   text-shadow: 2px 2px 2px black;
   display: flex;
