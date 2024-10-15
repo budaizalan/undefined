@@ -10,6 +10,7 @@ let numberOfGames = 0;
 let onAfterScreen = false;
 let IsAbilityActivated = false;
 let activatedAbility = '';
+let selectClicked = false;
 const records: number[] = [];
 const stepsText = document.querySelector('#game-steps');
 const fruitsText = document.querySelector('#game-fruits');
@@ -30,6 +31,9 @@ let originalFruits: number[] = [];
 
 function Generator(size: number, player_x: number, player_y: number) {
     gameDiv!.textContent = '';
+    let overlay = document.createElement('div');
+    overlay.className = 'game-table-overlay';
+    gameDiv!.append(overlay);
     for (let i = 1; i < size+1; i++) {
         for (let j = 1; j < size+1; j++) {
             let div = document.createElement('div');
@@ -49,12 +53,9 @@ function Generator(size: number, player_x: number, player_y: number) {
                         console.log('click');
                         if(game.firstClick){
                             PlayerParam(div.id);
-                        } else{
-                            if(IsAbilityActivated && activatedAbility == 'teleport'){
-                               teleportPlayer(parseInt(div.getAttribute('x')!), parseInt(div.getAttribute('y')!));
-                            }
                         }
                     }, false);
+                
             }
             if(game.showAbilities){
                 if(game.map[i][j] instanceof Cell){
@@ -73,9 +74,16 @@ function Generator(size: number, player_x: number, player_y: number) {
                 span.textContent = '';
             }
             div.append(span);
+            if(game.map[i][j].fruits != 0){
+                let selectOverlay = document.createElement('div');
+                selectOverlay.className = 'select-overlay';
+                div.append(selectOverlay);
+            }
             gameDiv!.append(div);
         }
+        toggleSelectOverlay(IsAbilityActivated && activatedAbility === 'teleport');
     }
+    
 }
 
 function fruitGathering(x: number, y: number) {
@@ -160,6 +168,10 @@ function resetAbility(ability: string){
     if(abilityCount != null){
         abilityCount!.textContent = game.collectedAbilities[ability].toString();
     }
+    if(ability == 'teleport') {
+        toggleSelectOverlay(false);
+        ploc.freezed = false;
+    }
 }
 
 function resetAbilitiesCount(){
@@ -241,20 +253,64 @@ function AddRecord(){
     scoreboardText!.appendChild(record);
 }
 
+function toggleSelectOverlay(bool: boolean) {
+    const gameTableOverlay = document.querySelector('.game-table-overlay');
+    (gameTableOverlay as HTMLElement)!.style.display = bool ? 'block' : 'none';
+    const selectOverlays = document.querySelectorAll('.select-overlay');
+    selectOverlays.forEach((overlay) => {
+        if(parseInt(overlay.parentElement!.getAttribute('x')!) != ploc._position.x || parseInt(overlay.parentElement!.getAttribute('y')!) != ploc._position.y){
+            (overlay as HTMLElement).style.display = bool ? 'block' : 'none';
+        }
+        const timeElapsed = (Date.now() % 2000) / 1000;
+        (overlay as HTMLElement).style.animation = 'none';
+        requestAnimationFrame(() => {
+            (overlay as HTMLElement).style.animation = `zoomInOut 2s infinite`;
+            (overlay as HTMLElement).style.animationDelay = `-${timeElapsed}s`;
+        });
+        overlay.addEventListener('mouseenter', () => {
+            overlay.classList.add('hovered');
+            (overlay as HTMLElement).style.animation = 'none';
+        });
+
+        overlay.addEventListener('mouseleave', () => {
+            const timeElapsed = (Date.now() % 2000) / 1000;
+            overlay.classList.remove('hovered');
+            (overlay as HTMLElement).style.animation = 'none';
+            requestAnimationFrame(() => {
+                (overlay as HTMLElement).style.animation = `zoomInOut 2s infinite`;
+                (overlay as HTMLElement).style.animationDelay = `-${timeElapsed}s`;
+            });
+        });
+
+        overlay.addEventListener('click', () => {
+            if(selectClicked) return;
+            selectClicked = true;
+            teleportPlayer(parseInt(overlay.parentElement!.getAttribute('x')!), parseInt(overlay.parentElement!.getAttribute('y')!));
+            setTimeout(() => {
+                selectClicked = false;
+            }, 250);
+        });
+    });
+}
+
 body!.addEventListener('keydown', (e) => {
     let sensibleStep = true;
     if (game.steps != 0) {
         if((e as KeyboardEvent).key === 'q' && game.collectedAbilities['teleport'] > 0){
             let button = document.querySelector('#button-teleport');
             if(button?.classList.contains('activated')){
+                ploc.freezed = false;
                 button?.classList.remove('activated');
                 IsAbilityActivated = false;
                 activatedAbility = '';
+                toggleSelectOverlay(false);
             } else{
                 if(!IsAbilityActivated){
+                    ploc.freezed = true;
                     button?.classList.add('activated');
                     IsAbilityActivated = true;
                     activatedAbility = 'teleport';
+                    toggleSelectOverlay(true);
                 }
             }
             sensibleStep = false;
@@ -294,43 +350,44 @@ body!.addEventListener('keydown', (e) => {
             }
             sensibleStep = false;
         }
-
-        else if ((e as KeyboardEvent).key === 'ArrowLeft' && game.map[ploc._position.y][ploc._position.x-1].fruits != 0 && ploc._position.x !> 1) {
-            keyLeft!.classList.add('active');
-            if(IsAbilityActivated && activatedAbility == 'dash'){
-                dashFruitGathering(ploc.dashLeft(game.map));
-            } else { 
-                ploc.moveLeft();
+        if(!ploc.freezed){
+            if ((e as KeyboardEvent).key === 'ArrowLeft' && game.map[ploc._position.y][ploc._position.x-1].fruits != 0 && ploc._position.x !> 1) {
+                keyLeft!.classList.add('active');
+                if(IsAbilityActivated && activatedAbility == 'dash'){
+                    dashFruitGathering(ploc.dashLeft(game.map));
+                } else { 
+                    ploc.moveLeft();
+                }
+            } else if ((e as KeyboardEvent).key === 'ArrowRight' && game.map[ploc._position.y][ploc._position.x+1].fruits != 0 && ploc._position.x < 10) {
+                keyRight!.classList.add('active');
+                if(IsAbilityActivated && activatedAbility == 'dash'){
+                    dashFruitGathering(ploc.dashRight(game.map));
+                } else { 
+                    ploc.moveRight();
+                }
+            } else if ((e as KeyboardEvent).key === 'ArrowUp' && game.map[ploc._position.y-1][ploc._position.x].fruits != 0 && ploc._position.y !> 1) {
+                keyUP!.classList.add('active');
+                if(IsAbilityActivated && activatedAbility == 'dash'){
+                    dashFruitGathering(ploc.dashUp(game.map));
+                } else{
+                    ploc.moveUp();
+                }
+            } else if ((e as KeyboardEvent).key === 'ArrowDown' && game.map[ploc._position.y+1][ploc._position.x].fruits != 0 && ploc._position.y < 10) {
+                keyDown!.classList.add('active');
+                if(IsAbilityActivated && activatedAbility == 'dash'){
+                    dashFruitGathering(ploc.dashDown(game.map));
+                } else{
+                    ploc.moveDown();
+                }
+            } else {
+                sensibleStep = false;
             }
-        } else if ((e as KeyboardEvent).key === 'ArrowRight' && game.map[ploc._position.y][ploc._position.x+1].fruits != 0 && ploc._position.x < 10) {
-            keyRight!.classList.add('active');
-            if(IsAbilityActivated && activatedAbility == 'dash'){
-                dashFruitGathering(ploc.dashRight(game.map));
-            } else { 
-                ploc.moveRight();
+            Generator(mapSize, ploc._position.x, ploc._position.y)
+            if (sensibleStep) {
+                game.steps--;
+                stepsText!.textContent = game.steps.toString();
+                fruitGathering(ploc._position.x, ploc._position.y)
             }
-        } else if ((e as KeyboardEvent).key === 'ArrowUp' && game.map[ploc._position.y-1][ploc._position.x].fruits != 0 && ploc._position.y !> 1) {
-            keyUP!.classList.add('active');
-            if(IsAbilityActivated && activatedAbility == 'dash'){
-                dashFruitGathering(ploc.dashUp(game.map));
-            } else{
-                ploc.moveUp();
-            }
-        } else if ((e as KeyboardEvent).key === 'ArrowDown' && game.map[ploc._position.y+1][ploc._position.x].fruits != 0 && ploc._position.y < 10) {
-            keyDown!.classList.add('active');
-            if(IsAbilityActivated && activatedAbility == 'dash'){
-                dashFruitGathering(ploc.dashDown(game.map));
-            } else{
-                ploc.moveDown();
-            }
-        } else {
-            sensibleStep = false;
-        }
-        Generator(mapSize, ploc._position.x, ploc._position.y)
-        if (sensibleStep) {
-            game.steps--;
-            stepsText!.textContent = game.steps.toString();
-            fruitGathering(ploc._position.x, ploc._position.y)
         }
     }if (!onAfterScreen && game.steps == 0){
         let afterScreen = document.createElement('div');
@@ -366,6 +423,5 @@ body!.addEventListener('keydown', (e) => {
         keyUP!.classList.remove('active');
     }, 150);
 }); 
-
 
 Generator(mapSize, 0, 0);

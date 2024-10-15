@@ -9,6 +9,7 @@ let numberOfGames = 0;
 let onAfterScreen = false;
 let IsAbilityActivated = false;
 let activatedAbility = '';
+let selectClicked = false;
 const records = [];
 const stepsText = document.querySelector('#game-steps');
 const fruitsText = document.querySelector('#game-fruits');
@@ -27,6 +28,9 @@ let duplicatedCells = [];
 let originalFruits = [];
 function Generator(size, player_x, player_y) {
     gameDiv.textContent = '';
+    let overlay = document.createElement('div');
+    overlay.className = 'game-table-overlay';
+    gameDiv.append(overlay);
     for (let i = 1; i < size + 1; i++) {
         for (let j = 1; j < size + 1; j++) {
             let div = document.createElement('div');
@@ -47,11 +51,6 @@ function Generator(size, player_x, player_y) {
                     if (game.firstClick) {
                         PlayerParam(div.id);
                     }
-                    else {
-                        if (IsAbilityActivated && activatedAbility == 'teleport') {
-                            teleportPlayer(parseInt(div.getAttribute('x')), parseInt(div.getAttribute('y')));
-                        }
-                    }
                 }, false);
             }
             if (game.showAbilities) {
@@ -71,8 +70,14 @@ function Generator(size, player_x, player_y) {
                 span.textContent = '';
             }
             div.append(span);
+            if (game.map[i][j].fruits != 0) {
+                let selectOverlay = document.createElement('div');
+                selectOverlay.className = 'select-overlay';
+                div.append(selectOverlay);
+            }
             gameDiv.append(div);
         }
+        toggleSelectOverlay(IsAbilityActivated && activatedAbility === 'teleport');
     }
 }
 function fruitGathering(x, y) {
@@ -156,6 +161,10 @@ function resetAbility(ability) {
     if (abilityCount != null) {
         abilityCount.textContent = game.collectedAbilities[ability].toString();
     }
+    if (ability == 'teleport') {
+        toggleSelectOverlay(false);
+        ploc.freezed = false;
+    }
 }
 function resetAbilitiesCount() {
     game.abilities.forEach(ability => {
@@ -231,21 +240,63 @@ function AddRecord() {
     bestTryText.appendChild(bestRecord);
     scoreboardText.appendChild(record);
 }
+function toggleSelectOverlay(bool) {
+    const gameTableOverlay = document.querySelector('.game-table-overlay');
+    gameTableOverlay.style.display = bool ? 'block' : 'none';
+    const selectOverlays = document.querySelectorAll('.select-overlay');
+    selectOverlays.forEach((overlay) => {
+        if (parseInt(overlay.parentElement.getAttribute('x')) != ploc._position.x || parseInt(overlay.parentElement.getAttribute('y')) != ploc._position.y) {
+            overlay.style.display = bool ? 'block' : 'none';
+        }
+        const timeElapsed = (Date.now() % 2000) / 1000;
+        overlay.style.animation = 'none';
+        requestAnimationFrame(() => {
+            overlay.style.animation = `zoomInOut 2s infinite`;
+            overlay.style.animationDelay = `-${timeElapsed}s`;
+        });
+        overlay.addEventListener('mouseenter', () => {
+            overlay.classList.add('hovered');
+            overlay.style.animation = 'none';
+        });
+        overlay.addEventListener('mouseleave', () => {
+            const timeElapsed = (Date.now() % 2000) / 1000;
+            overlay.classList.remove('hovered');
+            overlay.style.animation = 'none';
+            requestAnimationFrame(() => {
+                overlay.style.animation = `zoomInOut 2s infinite`;
+                overlay.style.animationDelay = `-${timeElapsed}s`;
+            });
+        });
+        overlay.addEventListener('click', () => {
+            if (selectClicked)
+                return;
+            selectClicked = true;
+            teleportPlayer(parseInt(overlay.parentElement.getAttribute('x')), parseInt(overlay.parentElement.getAttribute('y')));
+            setTimeout(() => {
+                selectClicked = false;
+            }, 250);
+        });
+    });
+}
 body.addEventListener('keydown', (e) => {
     let sensibleStep = true;
     if (game.steps != 0) {
         if (e.key === 'q' && game.collectedAbilities['teleport'] > 0) {
             let button = document.querySelector('#button-teleport');
             if (button?.classList.contains('activated')) {
+                ploc.freezed = false;
                 button?.classList.remove('activated');
                 IsAbilityActivated = false;
                 activatedAbility = '';
+                toggleSelectOverlay(false);
             }
             else {
                 if (!IsAbilityActivated) {
+                    ploc.freezed = true;
                     button?.classList.add('activated');
                     IsAbilityActivated = true;
                     activatedAbility = 'teleport';
+                    toggleSelectOverlay(true);
                 }
             }
             sensibleStep = false;
