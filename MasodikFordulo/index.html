@@ -44,35 +44,65 @@
                 <div class="game-scoreboard">
                     <p>Lépések: <span id="game-steps">0</span></p>
                     <p>Gyümölcsök: <span id="game-fruits">0</span></p>
-                    <div class="row">
-                        <div class="col-6">
-                            <span class="ability">
-                                <img src="./images/teleport.png" alt="">
-                                <span class="ability-count" id="teleport">0</span>
-                                <span class="ability-button" id="button-teleport">Q</span>
-                            </span>
+                    <div class="abilities">
+
+                        <div class="row">
+                            <div class="col-6">
+                                <span class="ability">
+                                    <img src="./images/teleport.png" alt="">
+                                    <span class="ability-count" id="teleport">0</span>
+                                    <span class="ability-button" id="button-teleport">Q</span>
+                                </span>
+                            </div>
+                            <div class="col-6">
+                                <span class="ability">
+                                    <img src="./images/dash.png" alt="">
+                                    <span class="ability-count" id="dash">0</span>
+                                    <span class="ability-button" id="button-dash">W</span>
+                                </span>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <span class="ability">
-                                <img src="./images/dash.png" alt="">
-                                <span class="ability-count" id="dash">0</span>
-                                <span class="ability-button" id="button-dash">W</span>
-                            </span>
+                        <div class="row">
+                            <div class="col-6">
+                                <span class="ability">
+                                    <img src="./images/harvest.png" alt="">
+                                    <span class="ability-count" id="harvest">0</span>
+                                    <span class="ability-button" id="button-harvest">E</span>
+                                </span>
+                            </div>
+                            <div class="col-6">
+                                <span class="ability">
+                                    <img src="./images/duplicate.png" alt="">
+                                    <span class="ability-count" id="duplicate">0</span>
+                                    <span class="ability-button" id="button-duplicate">R</span>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <span class="ability">
-                                <img src="./images/harvest.png" alt="">
-                                <span class="ability-count" id="harvest">0</span>
-                                <span class="ability-button" id="button-harvest">E</span>
+                    <div class="movementkeys">
+                        <div class="row upperrow">
+                            <div class="keysplace"></div>
+                            <span class="keys">
+                                <div class="col-4">
+                                    <span class="key" id="key-up">↑</span>
+                                </div>
                             </span>
                         </div>
-                        <div class="col-6">
-                            <span class="ability">
-                                <img src="./images/duplicate.png" alt="">
-                                <span class="ability-count" id="duplicate">0</span>
-                                <span class="ability-button" id="button-duplicate">R</span>
+                        <div class="row underrow">
+                            <span class="keys">
+                                <div class="col-4">
+                                    <span class="key" id="key-left">←</span>
+                                </div>
+                            </span>
+                            <span class="keys">
+                                <div class="col-4">
+                                    <span class="key" id="key-up">↓</span>
+                                </div>
+                            </span>
+                            <span class="keys">
+                                <div class="col-4">
+                                    <span class="key" id="key-down">→</span>
+                                </div>
                             </span>
                         </div>
                     </div>
@@ -80,7 +110,7 @@
             </div>
         </div>
     </main>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>

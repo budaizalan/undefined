@@ -281,6 +281,8 @@ body!.addEventListener('keydown', (e) => {
             sensibleStep = false;
         }
         else if ((e as KeyboardEvent).key === 'ArrowLeft' && game.map[ploc._position.y][ploc._position.x-1].fruits != 0 ) {
+            let keyleft = document.getElementById('#key-left');
+            keyleft!.classList.add('active')
             if(IsAbilityActivated && activatedAbility == 'dash'){
                 dashFruitGathering(ploc.dashLeft(game.map));
             } else { 
