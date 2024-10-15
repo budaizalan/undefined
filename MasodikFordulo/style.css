@@ -222,7 +222,7 @@ main{
   height: 100%;
   font-size: 1.8vmax; /*Állíthatod az értéket, de a vmax-ot hagyd benne!*/
   background-color: white;
-  background-image: url(./images/hunor.jpg );
+  background-image: url(./images/cement-shoes.png );
   background-size:contain;
   background-repeat: no-repeat;
   background-position: center;

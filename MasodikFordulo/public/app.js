@@ -117,7 +117,7 @@ function NewGame() {
 }
 function AddRecord() {
     let record = document.createElement('div');
-    record.textContent = ` Az ${numberOfTries}. fordulóban elért pontszám: ${collectedFruits}`;
+    record.textContent = `${numberOfTries}. fordulóban elért pontszám: ${collectedFruits}`;
     let bestRecord = document.createElement('div');
     records.push(collectedFruits);
     bestTryText.textContent = '';
