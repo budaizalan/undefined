@@ -203,6 +203,7 @@ function PlayerParam(id: string){
 
 function Restart(){
     AddRecord();
+    fetchGetHighestScore();
     game.firstClick = true;
     game.steps = 10;
     game.collectedFruits = 0;
@@ -227,6 +228,7 @@ function Restart(){
 
 function NewGame(){
     AddRecord();
+    fetchGetHighestScore();
     game.firstClick = true;
     game.steps = 10;
     game.collectedFruits = 0;
@@ -397,6 +399,7 @@ body!.addEventListener('keydown', (e) => {
             }
         }
     }if (!onAfterScreen && game.steps == 0){
+        fetchPost('Pallang Hunor', game.collectedFruits);
         let afterScreen = document.createElement('div');
         let afterScreenText = document.createElement('div');
         let afterScreenRestartButtonDiv = document.createElement('div');
@@ -430,5 +433,24 @@ body!.addEventListener('keydown', (e) => {
         keyUP!.classList.remove('active');
     }, 150);
 }); 
+
+function fetchPost(name: string, score: number) {
+    fetch('http://pallanghunor.nhely.hu/api/', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"name": name, "score": score, "date": new Date()})
+      });
+}
+
+async function fetchGetHighestScore() {
+    let response = await fetch('http://pallanghunor.nhely.hu/api/');
+    let highestScore = await response.json();
+    console.log(highestScore);
+    
+}
+
 
 Generator(mapSize, 0, 0);
