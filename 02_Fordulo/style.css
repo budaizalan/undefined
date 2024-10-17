@@ -1,0 +1,569 @@
+:root {
+  --map-size: 1;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  background: linear-gradient(45deg, #05012b, #200d5e);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: white;
+}
+
+.nav-link,
+.container {
+  background-color: #14121c;
+  color: white;
+}
+
+/* Navbar */
+
+.navbar {
+  border-bottom: solid black 2px;
+  background-color: #14121c;
+  overflow: hidden;
+  font-size: 20px;
+}
+
+
+.navbar a {
+  font-size: 20px;
+  margin-right: 30px;
+  background-color: transparent;
+}
+
+.active {
+  color: white !important;
+}
+
+.nav-link:hover {
+  color: #42c3ca !important;
+}
+
+/* Title */
+
+.title{
+  position: absolute;
+  top: 0;
+  left: 43%;
+  text-align: center;
+  font-size: 4vh;
+}
+
+/* Game */
+
+main{
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  text-align: center;
+  margin: auto;
+  position: relative;
+  top: 13vh;
+  max-width: 600vh;
+  width: 90vw;
+  background-color: #14121c;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px 0 rgba(255, 255, 255, 0.2),
+    0 5px 15px 0 rgba(255, 255, 255, 0.15);
+  height: 80vh;
+}
+
+.game{
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+  align-items: center;
+  height: 100%;
+}
+
+.game-overlay{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}
+
+.game-overlay-content{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
+.input-group {
+  position: relative;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  justify-content: center;
+}
+
+#player-name{
+  width: 100%;
+  height: 5vh;
+  font-size: 2vh;
+  border-radius: 5px;
+  border: 1px solid white;
+  background-color: #14121c;
+  color: white;
+  text-align: center;
+}
+
+#player-name::placeholder{
+  color: white;
+  opacity: 0.5;
+}
+
+#player-name:-ms-input-placeholder{
+  color: white;
+  opacity: 0.5;
+}
+
+#player-name::-ms-input-placeholder{
+  color: white;
+  opacity: 0.5;
+}
+
+.invalid{
+  border-color: rgb(255, 88, 88) !important;
+}
+
+#player-name-feedback{
+  display: none;
+  color: rgb(255, 88, 88);
+}
+
+.game-scoreboard, .game-info {
+  width: 20%;
+  height: 90%;
+  background-color: #14121c;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px 0 rgba(255, 255, 255, 0.2),
+    0 5px 15px 0 rgba(255, 255, 255, 0.15);
+}
+
+.game-scoreboard {
+  overflow-y: auto;
+}
+
+.ability-row{
+  width: 100%;
+  margin: 0;
+}
+
+.ability{
+  display: flex;
+  position: relative;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.ability img{
+  width: 4vw;
+  height: auto;
+  border-radius: 30%;
+  margin-right: 20px;
+}
+
+.ability .ability-help{
+  position: absolute;
+  top: -10%;
+  left: 45%;
+}
+
+.ability .ability-help img{
+  height: 1.2vw;
+  width: 1.2vw;
+  margin: 0;
+}
+
+.ability .ability-help img:hover{
+  background-color: #572ff5;
+  border-radius: 50%;
+  transition: background-color 0.5s;
+}
+
+.ability-help-tooltip {
+  color: white;
+  background-color: #572ff5;
+  box-shadow: 0px 2px 8px rgb(140, 82, 247);
+  border-radius: 10px;
+  padding: 5px;
+  width: 250px;
+  text-align: center;
+  position: absolute;
+  top: -50%;
+  left: 150%;
+  transform: translate(-100%, -100%);
+  opacity: 0;
+  z-index: 3;
+  pointer-events: none; /* Prevents blocking other elements */
+  transition: opacity 0.5s ease-in-out;
+}
+
+.ability-help-tooltip::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 88%;
+  border-width: 10px;
+  border-style: solid;
+  border-color: #572ff5 transparent transparent transparent;
+}
+
+.ability-help:hover .ability-help-tooltip {
+  opacity: 1;
+}
+
+.ability-help-tooltip p{
+  margin: 0;
+}
+
+.ability-count{
+  position: absolute;
+  bottom: -10px;
+  left: 15px;
+}
+
+.ability-button{
+  display: flex;
+  color: white;
+  border: 1px solid white;
+  box-shadow: 0 0 8px rgb(207, 207, 207);
+  height: 2.5vw;
+  width: 2.5vw;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.ability .activated{
+  background-color: #14a143;
+}
+
+.game-table {
+  overflow: hidden;
+  width: fit-content;
+  height: fit-content;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--map-size), 1fr);
+  background-color: #14121c;
+  border-radius: 5px; /* Ezt döntsétek el hogy kell-e */
+}
+
+.game-table-overlay{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;
+  z-index: 1;
+}
+
+.disabled {
+  display: none;
+}
+
+.afterscreen {
+  position: absolute;
+  text-align: center;
+  background-color: rgb(20, 18, 28 , 0.7);
+  opacity: 100%;
+  color: white;
+  font-size: 6rem;
+  height: 100%;
+  width: 100%;
+}
+
+.afterscreentext {
+  position: absolute;
+  text-align: center;
+  opacity: 100%;
+  color: white;
+  font-size: 3rem;
+  height: 100%;
+  width: 100%;
+}
+
+.aftercreenrestartbuttondiv {
+  position: relative;
+  text-align: center;
+  margin: auto;
+  margin-top: 10%;
+  opacity: 100%;
+  color: white;
+  background-color: rgb(20, 18, 28 , 0.7);
+  font-size: 2rem;
+  height: 10%;
+  width: 40%;
+}
+
+.aftercreennewgamebuttondiv {
+  position: relative;
+  text-align: center;
+  margin: auto;
+  margin-top: 10%;
+  opacity: 100%;
+  color: white;
+  background-color: rgb(20, 18, 28 , 0.7);
+  font-size: 2rem;
+  height: 10%;
+  width: 40%;
+}
+
+.afterscreenrestartbutton{
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  border: 0px;
+  color: white;
+}
+
+.afterscreennewgamebutton{
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  border: 0px;
+  color: white;
+}
+
+.active {
+  background-color: #14a143;
+}
+
+.movementkeys{
+  position: relative;
+  top: 10%;
+  text-align: center;
+}
+
+.keys {
+  display: flex;
+  color: white;
+  border: 1px solid white;
+  box-shadow: 0 0 8px rgb(207, 207, 207);
+  height: 5vw;
+  width: 5vw;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  background-size: contain;
+}
+
+.key {
+  font-size: 2vh;
+}
+
+.upperrow {
+  display: inline-block; 
+  text-align: center;
+}
+
+.underrow{
+  display: inline-flex;
+  text-align: center;
+}
+
+.cell {
+  position: relative;
+  width: calc(50vw / var(--map-size));
+  height: calc(32.5vw / var(--map-size));
+  max-width: calc(100vh / var(--map-size));
+  max-height: calc(65vh / var(--map-size));
+}
+
+.cell span,
+.ability{
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.cell .fruits{
+  width: 100%;
+  height: 100%;
+  font-size: 1.8vmax;
+  text-shadow: 2px 2px 2px black;
+  display: flex;
+  background-color: white;
+  background-image: url(./images/tree.png);
+  background-size:contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.cell .select-overlay {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background: url(./images/select1.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  z-index: 2;
+  animation: zoomInOut 2s infinite;
+}
+
+@keyframes zoomInOut {
+  0%, 100% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1);
+  }
+}
+
+.cell .select-overlay.hovered {
+  background: url(./images/select2.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.cell .ability-teleport,
+.cell .ability-dash,
+.cell .ability-harvest,
+.cell .ability-duplicate{
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.cell .ability-teleport{
+  background-image: url(./images/teleport.png);
+}
+
+.cell .ability-dash{
+  background-image: url(./images/dash.png);
+}
+
+.cell .ability-harvest{
+  background-image: url(./images/harvest.png);
+}
+
+.cell .ability-duplicate{
+  background-image: url(./images/duplicate.png);
+}
+
+.cell .field {
+  width: 100%;
+  height: 100%;
+  font-size: 1.8vmax; /*Állíthatod az értéket, de a vmax-ot hagyd benne!*/
+  background-color: white;
+  background-image: url(./images/stone.webp );
+  background-size:contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.cell .Player {
+  width: 100%;
+  height: 100%;
+  font-size: 1.8vmax; /*Állíthatod az értéket, de a vmax-ot hagyd benne!*/
+  background-color: white;
+  background-image: url(./images/cement-shoes.png );
+  background-size:contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+@media screen and (max-width: 1100px) {
+  .game {
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+    flex-wrap: wrap;
+  }
+  .holder {
+    order: -1;
+    margin-top: 2vh;
+  }
+  .game-scoreboard, .game-info {
+    width: 48%;
+    height: calc(100% - 70vw);
+    min-height: calc(100% - 50vh);
+    margin-top: 2vh;
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
+  }
+  .movementkeys{
+    display: none;
+  }
+  .cell {
+    width: calc(80vw / var(--map-size));
+    height: calc(52vw / var(--map-size));
+    max-width: calc(60vh / var(--map-size));
+    max-height: calc(39vh / var(--map-size));
+  }
+  .ability{
+    flex: 0 0 auto;
+    width: 50%;
+  }
+  .ability-button{
+    height: 5vw;
+    width: 5vw;
+  }
+  .ability img{
+    width: 6vw;
+  }
+  .ability .ability-help img{
+    height: 2vw;
+    width: 2vw;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .ability{
+    flex: 0 0 auto;
+    width: 100%;
+  }
+  .ability-button{
+    height: 6vw;
+    width: 6vw;
+  }
+  .ability img{
+    width: 6.5vw;
+  }
+  .ability .ability-help img{
+    height: 2.5vw;
+    width: 2.5vw;
+  }
+  
+}
