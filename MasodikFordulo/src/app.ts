@@ -416,7 +416,6 @@ body!.addEventListener('keydown', (e) => {
             }
         }
     }if (!onAfterScreen && game.steps == 0){
-        const playerNameText = (<HTMLInputElement>document.getElementById('playerName')).value;
         fetchPost(playerNameText, game.collectedFruits);
         let afterScreen = document.createElement('div');
         let afterScreenText = document.createElement('div');
