@@ -11,7 +11,10 @@ let onAfterScreen = false;
 let IsAbilityActivated = false;
 let activatedAbility = '';
 let selectClicked = false;
+let playerNameText: string;
 const records: number[] = [];
+const gameOverlay = document.querySelector('.game-overlay') as HTMLElement;
+const startGameButton = document.querySelector('#start-game');
 const stepsText = document.querySelector('#game-steps');
 const fruitsText = document.querySelector('#game-fruits');
 const bestTryText = document.querySelector('#besttry');
@@ -200,6 +203,12 @@ function PlayerParam(id: string){
     game.firstClick = false;
 }
 
+function StartGame(){
+    if(playerNameText != undefined){
+        gameOverlay.style.display = "none";
+    }
+    Generator(mapSize, 0, 0)
+}
 
 function Restart(){
     AddRecord();
@@ -434,6 +443,20 @@ body!.addEventListener('keydown', (e) => {
     }, 150);
 }); 
 
+startGameButton!.addEventListener('click', () => {
+    let playerName = document.querySelector('#player-name') as HTMLInputElement;
+    let errorFeedback = document.querySelector('#player-name-feedback') as HTMLElement;
+    if(playerName.value != ''){
+        playerName.classList.remove('invalid')
+        errorFeedback.style.display = 'none';
+        gameOverlay!.style.display = 'none';
+        playerNameText = playerName.value;
+    } else {
+        playerName.classList.add('invalid')
+        errorFeedback.style.display = 'block';
+    }
+});
+
 function fetchPost(name: string, score: number) {
     fetch('http://pallanghunor.nhely.hu/api/', {
         method: 'POST',
@@ -448,9 +471,7 @@ function fetchPost(name: string, score: number) {
 async function fetchGetHighestScore() {
     let response = await fetch('http://pallanghunor.nhely.hu/api/');
     let highestScore = await response.json();
-    console.log(highestScore);
-    
 }
 
 
-Generator(mapSize, 0, 0);
+StartGame();
