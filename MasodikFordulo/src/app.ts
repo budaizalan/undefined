@@ -472,7 +472,7 @@ function fetchPost(name: string, score: number) {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({"name": name, "score": score, "date": new Date().toLocaleString('en-US', { timeZone: 'Europe/Budapest' })})
+        body: JSON.stringify({"name": name, "score": score, "date": new Date()})
       });
 }
 
