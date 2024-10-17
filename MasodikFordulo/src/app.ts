@@ -11,6 +11,7 @@ let onAfterScreen = false;
 let IsAbilityActivated = false;
 let activatedAbility = '';
 let selectClicked = false;
+let allTimeRecord = document.createElement('div')
 let playerNameText: string;
 const records: number[] = [];
 const gameOverlay = document.querySelector('.game-overlay') as HTMLElement;
@@ -18,6 +19,7 @@ const startGameButton = document.querySelector('#start-game');
 const stepsText = document.querySelector('#game-steps');
 const fruitsText = document.querySelector('#game-fruits');
 const bestTryText = document.querySelector('#besttry');
+const allTimeBestText = document.querySelector('#alltimebest');
 const gameDiv = document.querySelector('.game-table');
 const scoreboardText = document.querySelector('.game-scoreboard');
 const body = document.querySelector('.body');
@@ -211,8 +213,8 @@ function StartGame(){
 }
 
 function Restart(){
-    AddRecord();
     fetchGetHighestScore();
+    AddRecord();
     game.firstClick = true;
     game.steps = 10;
     game.collectedFruits = 0;
@@ -236,8 +238,8 @@ function Restart(){
 }
 
 function NewGame(){
-    AddRecord();
     fetchGetHighestScore();
+    AddRecord();
     game.firstClick = true;
     game.steps = 10;
     game.collectedFruits = 0;
@@ -269,6 +271,12 @@ function AddRecord(){
     bestRecord.textContent = `Eddigi legjobb eredmény: ${records.reduce((a, b) => Math.max(a, b))}`;
     bestTryText!.appendChild(bestRecord);
     scoreboardText!.appendChild(record);
+}
+
+function AllTimeRecord(alltimename: string, alltimescore: number){
+    allTimeRecord.textContent = '';
+    allTimeRecord.textContent = `Eddigi rekord: ${alltimename}: ${alltimescore}`
+    allTimeBestText!.appendChild(allTimeRecord)
 }
 
 function toggleSelectOverlay(bool: boolean) {
@@ -408,7 +416,8 @@ body!.addEventListener('keydown', (e) => {
             }
         }
     }if (!onAfterScreen && game.steps == 0){
-        fetchPost('Pallang Hunor', game.collectedFruits);
+        const playerNameText = (<HTMLInputElement>document.getElementById('playerName')).value;
+        fetchPost(playerNameText, game.collectedFruits);
         let afterScreen = document.createElement('div');
         let afterScreenText = document.createElement('div');
         let afterScreenRestartButtonDiv = document.createElement('div');
@@ -471,6 +480,9 @@ function fetchPost(name: string, score: number) {
 async function fetchGetHighestScore() {
     let response = await fetch('http://pallanghunor.nhely.hu/api/');
     let highestScore = await response.json();
+    AllTimeRecord(highestScore[0].name,highestScore[0].score);
+    console.log(highestScore);
+    
 }
 
 
