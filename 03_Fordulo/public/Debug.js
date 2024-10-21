@@ -30,7 +30,8 @@ export default class Debug {
     static toggleDebugMenu() {
         let debugMenu = document.getElementById('debug-menu');
         if (debugMenu) {
-            debugMenu.style.display = debugMenu.style.display === 'none' || debugMenu.style.display === '' ? 'flex' : 'none';
+            // debugMenu.style.display = debugMenu.style.display === 'none' || debugMenu.style.display === '' ? 'flex' : 'none';
+            debugMenu.classList.toggle('show');
         }
     }
     static toggleCoords() {
