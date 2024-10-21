@@ -5,6 +5,8 @@ const canvas = document.getElementById('mainCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+const stoneImage = new Image();
+stoneImage.src = './assets/grass.png';
 if (!ctx) {
     throw new Error('Failed to get 2D context');
 }
@@ -12,9 +14,10 @@ Debug.initialize(canvas, ctx, drawMap);
 function drawHex(x, y) {
     const corners = HexMath.calculateHexCorners(x, y);
     if (ctx) {
-        const gradient = ctx.createRadialGradient(x, y, HexMath.hexSize / 2, x, y, HexMath.hexSize);
-        gradient.addColorStop(0.4, '#f0f0f0');
-        gradient.addColorStop(1, '#cccccc');
+        const gradient = ctx.createRadialGradient(x, y, HexMath.hexSize / 4, x, y, HexMath.hexSize);
+        gradient.addColorStop(0.5, '#ffffff');
+        gradient.addColorStop(0.8, '#cccccc');
+        gradient.addColorStop(1, '#888888');
         ctx.beginPath();
         ctx.moveTo(corners[0].x, corners[0].y);
         for (let i = 1; i < 6; i++) {
@@ -22,9 +25,13 @@ function drawHex(x, y) {
         }
         ctx.closePath();
         ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
         ctx.stroke();
         ctx.fillStyle = gradient;
         ctx.fill();
+        const imgWidth = HexMath.hexWidth;
+        const imgHeight = HexMath.hexHeight;
+        ctx.drawImage(stoneImage, x - imgWidth / 2, y - imgHeight / 2, imgWidth, imgHeight);
     }
 }
 function drawMap() {
@@ -47,5 +54,7 @@ canvas.addEventListener('click', (event) => {
         console.log('No hex found at this position.');
     }
 });
-drawMap();
+stoneImage.onload = () => {
+    drawMap();
+};
 console.log('hexMap:', Game.hexMap);
