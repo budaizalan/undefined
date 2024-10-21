@@ -15,7 +15,12 @@ export default class HexMap {
             for (let r = -mapRadius; r <= mapRadius; r++) {
                 if (Math.abs(q + r) <= mapRadius) {
                     const { x, y } = HexMath.hexToPixel(q, r);
-                    this._hexMap.set(`${q},${r}`, new Hex(q, r, x, y));
+                    let doSmth = Math.floor(Math.random() * 10);
+                    if (doSmth == 0) {
+                        this._hexMap.set(`${q},${r}`, new Hex(q, r, x, y, true));
+                    } else {
+                        this._hexMap.set(`${q},${r}`, new Hex(q, r, x, y, false));
+                    }
                 }
             }
         }
