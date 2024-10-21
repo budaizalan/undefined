@@ -1,9 +1,117 @@
 *{
     margin: 0;
     padding: 0;
+    font-family: Arial, sans-serif;
 }
 
 #mainCanvas{
     display: block;
     background-color: #e0e0e0;
 }
+
+#debug-menu{
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    opacity: 0.9;
+    color: #fff;
+    font-size: 12px;
+}
+
+#debug-close{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 1rem;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #fff;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+
+#debug-close:hover{
+    background-color: #fff;
+    color: #000;
+}
+
+#debug-menu h1{
+    font-size: 4rem;
+    margin: 10px;
+    text-align: center;
+}
+
+.debug-option{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 10px;
+}
+
+#debug-menu h2{
+    font-size: 2rem;
+    margin: 10px;
+    text-align: center;
+}
+
+input[type="checkbox"]{
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+.input[type="checkbox"]:focus {
+    outline: 0;
+}
+
+.toggle {
+  height: 32px;
+  width: 52px;
+  border-radius: 16px;
+  display: inline-block;
+  position: relative;
+  margin: 10px;
+  background: linear-gradient(180deg, #2D2F39 0%, #1F2027 100%);
+  transition: all .2s ease;
+}
+
+.toggle::after{
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 1px 2px rgba(44,44,44,.2);
+    transition: all .2s cubic-bezier(.5,.1,.75,1.35);
+}
+
+.toggle:checked{
+    background: #1e90ff;
+    background: linear-gradient(180deg, #1e90ff 0%, #005cb8 100%);
+}
+
+.toggle:checked::after{
+    border-color: #654FEC;
+    transform: translatex(20px);
+}
+

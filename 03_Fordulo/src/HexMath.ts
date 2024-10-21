@@ -1,8 +1,16 @@
-export default abstract class Hex {
+export default abstract class HexMath {
     private static _hexSize = 40;
     private static _hexHeight = Math.sqrt(3) * this._hexSize;
     private static _hexWidth = 2 * this._hexSize;
     private static _hexVerticalSpacing = this._hexHeight * 0.75; // spacing between hexagons
+
+    static get hexHeight(): number {
+        return this._hexHeight;
+    }
+
+    static get hexWidth(): number {
+        return this._hexWidth;
+    }
 
     static hexToPixel(q: number, r: number): { x: number; y: number } {
         const x = this._hexSize * (3 / 2 * q);
@@ -19,5 +27,33 @@ export default abstract class Hex {
             corners.push({ x: cornerX, y: cornerY });
         }
         return corners;
+    }
+
+    static pixelToHex(x: number, y: number): { q: number; r: number } {
+        const q = (2 / 3 * x) / this._hexSize;
+        const r = (-1 / 3 * x + Math.sqrt(3) / 3 * y) / this._hexSize;
+        // Round the coordinates to the nearest hex
+        return this.hexRound(q, r);
+    }
+
+    private static hexRound(q: number, r: number): { q: number; r: number } {
+        // Calculate the third coordinate
+        let s = -q - r;
+        let rq = Math.round(q);
+        let rr = Math.round(r);
+        let rs = Math.round(s);
+
+        const q_diff = Math.abs(rq - q);
+        const r_diff = Math.abs(rr - r);
+        const s_diff = Math.abs(rs - s);
+
+        // Adjust the coordinates to ensure q + r + s = 0
+        if (q_diff > r_diff && q_diff > s_diff) {
+            rq = -rr - rs;
+        } else if (r_diff > s_diff) {
+            rr = -rq - rs;
+        }
+
+        return { q: rq, r: rr };
     }
 }

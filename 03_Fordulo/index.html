@@ -7,9 +7,16 @@
     <title>Puzzle Game</title>
 </head>
 <body>
-    <canvas id="mainCanvas">
-        <canvas id="gameCanvas"></canvas>
-    </canvas>
+    <canvas id="mainCanvas"></canvas>
+    <div id="debug-menu">
+        <h1>___ Debug menu ___</h1>
+        <span id="debug-close">X</span>
+        <div class="debug-option">
+            <h2>Show coordinates</h2>
+            <input type="checkbox" class="toggle" id="show-coords" checked>
+        </div>
+    </div>
     <script src="public/render.js" type="module"></script>
+    <script src="public/Debug.js" type="module"></script>
 </body>
 </html>
