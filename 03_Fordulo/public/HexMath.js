@@ -3,6 +3,9 @@ export default class HexMath {
     static _hexHeight = Math.sqrt(3) * this._hexSize;
     static _hexWidth = 2 * this._hexSize;
     static _hexVerticalSpacing = this._hexHeight * 0.75; // spacing between hexagons
+    static get hexSize() {
+        return this._hexSize;
+    }
     static get hexHeight() {
         return this._hexHeight;
     }

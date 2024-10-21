@@ -11,7 +11,6 @@ export default class Debug {
     }
     static setupEventListeners() {
         document.addEventListener('keydown', (event) => {
-            console.log('Key pressed:', event.key);
             if (event.key === 'd') {
                 this.toggleDebugMenu();
             }
@@ -30,9 +29,7 @@ export default class Debug {
     }
     static toggleDebugMenu() {
         let debugMenu = document.getElementById('debug-menu');
-        console.log('debugMenu:', debugMenu);
         if (debugMenu) {
-            console.log('debugMenu.style.display:', debugMenu.style.display);
             debugMenu.style.display = debugMenu.style.display === 'none' || debugMenu.style.display === '' ? 'flex' : 'none';
         }
     }

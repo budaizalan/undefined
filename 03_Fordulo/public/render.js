@@ -12,6 +12,9 @@ Debug.initialize(canvas, ctx, drawMap);
 function drawHex(x, y) {
     const corners = HexMath.calculateHexCorners(x, y);
     if (ctx) {
+        const gradient = ctx.createRadialGradient(x, y, HexMath.hexSize / 2, x, y, HexMath.hexSize);
+        gradient.addColorStop(0.4, '#f0f0f0');
+        gradient.addColorStop(1, '#cccccc');
         ctx.beginPath();
         ctx.moveTo(corners[0].x, corners[0].y);
         for (let i = 1; i < 6; i++) {
@@ -20,7 +23,7 @@ function drawHex(x, y) {
         ctx.closePath();
         ctx.strokeStyle = '#000';
         ctx.stroke();
-        ctx.fillStyle = '#f0f0f0';
+        ctx.fillStyle = gradient;
         ctx.fill();
     }
 }

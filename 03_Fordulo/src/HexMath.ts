@@ -4,6 +4,10 @@ export default abstract class HexMath {
     private static _hexWidth = 2 * this._hexSize;
     private static _hexVerticalSpacing = this._hexHeight * 0.75; // spacing between hexagons
 
+    static get hexSize(): number {
+        return this._hexSize;
+    }
+
     static get hexHeight(): number {
         return this._hexHeight;
     }
