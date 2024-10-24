@@ -1,9 +1,10 @@
 export default class Debug {
     private static _coordsEnabled = true;
+    private static _gapsEnabled = true;
 
     private static _ctx: CanvasRenderingContext2D | null = null;
     private static _canvas: HTMLCanvasElement | null = null;
-    private static _drawMap: (() => void) | null = null;
+    private static _drawMap: ((gaps?: boolean) => void) | null = null;
 
     static initialize(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, drawMap: () => void){
         this._canvas = canvas;
@@ -14,16 +15,24 @@ export default class Debug {
 
     static setupEventListeners() {
         document.addEventListener('keydown', (event) => {
-            if (event.key === 'd') {
+            if (event.key === 'd' || event.key === 'Escape') {
                 this.toggleDebugMenu();
             }
         });
         let showCoordsButton = document.getElementById('show-coords') as HTMLInputElement;
+        let showGapsButton = document.getElementById('show-gaps') as HTMLInputElement;
         showCoordsButton.checked = this._coordsEnabled;
+        showGapsButton.checked = this._gapsEnabled;
         if (showCoordsButton) {
             showCoordsButton.addEventListener('click', () => {
                 this.toggleCoords();
                 this._drawMap?.();
+            });
+        }
+        if (showGapsButton) {
+            showGapsButton.addEventListener('click', () => {
+                this.toggleGaps();
+                this._drawMap?.(true);
             });
         }
         document.getElementById('debug-close')?.addEventListener('click', () => {
@@ -37,6 +46,10 @@ export default class Debug {
             // debugMenu.style.display = debugMenu.style.display === 'none' || debugMenu.style.display === '' ? 'flex' : 'none';
             debugMenu.classList.toggle('show');
         }
+    }
+
+    static toggleGaps() {
+        this._gapsEnabled = !this._gapsEnabled;
     }
 
     static toggleCoords() {

@@ -19,7 +19,7 @@ if (!ctx) {
 
 Debug.initialize(canvas, ctx, drawMap);
 
-function drawHex(x: number, y: number, fu: boolean, s?: number, d?: number): void {
+function drawHex(x: number, y: number, grassBackground: boolean, gaps?: boolean): void {
     const corners = HexMath.calculateHexCorners(x, y);
     if (ctx) {
         const gradient = ctx.createRadialGradient(x, y, HexMath.hexSize / 4, x, y, HexMath.hexSize);
@@ -32,14 +32,16 @@ function drawHex(x: number, y: number, fu: boolean, s?: number, d?: number): voi
             ctx.lineTo(corners[i].x, corners[i].y);
         }
         ctx.closePath();
-        ctx.strokeStyle = '#000';
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        // if (gaps) {  -- vonalak nem kellenek mert csak tologatják a hexagonokat
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        // }
         ctx.fillStyle = gradient;
         ctx.fill();
         const imgWidth = HexMath.hexWidth;
         const imgHeight = HexMath.hexHeight;
-        if (fu) {
+        if (grassBackground) {
             ctx.drawImage(stoneImage, x - imgWidth / 2, y - imgHeight / 2, imgWidth, imgHeight);
         } else {
             ctx.drawImage(grassImage, x - imgWidth / 2, y - imgHeight / 2, imgWidth, imgHeight);
@@ -47,10 +49,14 @@ function drawHex(x: number, y: number, fu: boolean, s?: number, d?: number): voi
     }
 }
 
-function drawMap(): void {
+function drawMap(gaps?: boolean): void {
     const hexes = Game.hexMap.getAllHexes();
     for (const hex of hexes) {
-        drawHex(hex.x + canvas.width / 2, hex.y + canvas.height / 2, false);
+        if (!gaps) {
+            drawHex(hex.x + canvas.width / 2, hex.y + canvas.height / 2, false, true);
+        } else {
+            drawHex(hex.x + canvas.width / 2, hex.y + canvas.height / 2, false, false);
+        }
         Debug.drawCoords(hex.x, hex.y, hex.q, hex.r);
     }
 }
@@ -63,7 +69,13 @@ canvas.addEventListener('click', (event) => {
     const hex = Game.hexMap.getHex(q, r);
     if (hex) {
         console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
-        drawHex(hex.x + canvas.width / 2, hex.y + canvas.height / 2, true, hex.q, hex.r);
+        for (let i = 0; i < 6; i++) {
+
+        }
+        drawHex((hex.x + HexMath.calculateHexDiagonal()) + canvas.width / 2, hex.y + canvas.height / 2, true, false);
+        drawHex((hex.x - HexMath.calculateHexDiagonal()) + canvas.width / 2, hex.y + canvas.height / 2, true, false);
+        drawHex(hex.x + canvas.width / 2, (hex.y + HexMath.calculateHexTiagonal()) + canvas.height / 2, true, false);
+        drawHex(hex.x + canvas.width / 2, (hex.y - HexMath.calculateHexTiagonal()) + canvas.height / 2, true, false);
         Debug.drawCoords(hex.x, hex.y, hex.q, hex.r); //Rákattintott hex kiirja e az értéket
         console.log(hex);
         

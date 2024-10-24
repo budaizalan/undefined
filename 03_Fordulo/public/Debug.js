@@ -1,5 +1,6 @@
 export default class Debug {
     static _coordsEnabled = true;
+    static _gapsEnabled = true;
     static _ctx = null;
     static _canvas = null;
     static _drawMap = null;
@@ -11,16 +12,24 @@ export default class Debug {
     }
     static setupEventListeners() {
         document.addEventListener('keydown', (event) => {
-            if (event.key === 'd') {
+            if (event.key === 'd' || event.key === 'Escape') {
                 this.toggleDebugMenu();
             }
         });
         let showCoordsButton = document.getElementById('show-coords');
+        let showGapsButton = document.getElementById('show-gaps');
         showCoordsButton.checked = this._coordsEnabled;
+        showGapsButton.checked = this._gapsEnabled;
         if (showCoordsButton) {
             showCoordsButton.addEventListener('click', () => {
                 this.toggleCoords();
                 this._drawMap?.();
+            });
+        }
+        if (showGapsButton) {
+            showGapsButton.addEventListener('click', () => {
+                this.toggleGaps();
+                this._drawMap?.(true);
             });
         }
         document.getElementById('debug-close')?.addEventListener('click', () => {
@@ -33,6 +42,9 @@ export default class Debug {
             // debugMenu.style.display = debugMenu.style.display === 'none' || debugMenu.style.display === '' ? 'flex' : 'none';
             debugMenu.classList.toggle('show');
         }
+    }
+    static toggleGaps() {
+        this._gapsEnabled = !this._gapsEnabled;
     }
     static toggleCoords() {
         this._coordsEnabled = !this._coordsEnabled;
