@@ -62,12 +62,13 @@
 
 .debug-option{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     border: 1px solid #fff;
     border-radius: 5px;
     padding: 5px;
     margin: 10px;
+    width: 20vw;
 }
 
 #debug-menu h2{

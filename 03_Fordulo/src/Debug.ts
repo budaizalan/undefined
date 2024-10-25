@@ -1,4 +1,6 @@
 export default class Debug {
+    private static _debugMenu: HTMLElement | null =  document.getElementById('debug-menu') as HTMLElement;
+    private static _enabled = true;
     private static _coordsEnabled = true;
     private static _gapsEnabled = true;
 
@@ -15,8 +17,8 @@ export default class Debug {
 
     static setupEventListeners() {
         document.addEventListener('keydown', (event) => {
-            if (event.key === 'd' || event.key === 'Escape') {
-                this.toggleDebugMenu();
+            if (event.key === 'd' || (event.key === 'Escape' && this._debugMenu?.classList.contains('show'))) {
+                    this.toggleDebugMenu();
             }
         });
         let showCoordsButton = document.getElementById('show-coords') as HTMLInputElement;
@@ -41,10 +43,8 @@ export default class Debug {
     }
 
     static toggleDebugMenu() {
-        let debugMenu = document.getElementById('debug-menu') as HTMLElement;
-        if (debugMenu) {
-            // debugMenu.style.display = debugMenu.style.display === 'none' || debugMenu.style.display === '' ? 'flex' : 'none';
-            debugMenu.classList.toggle('show');
+        if (this._debugMenu) {
+            this._debugMenu.classList.toggle('show');
         }
     }
 

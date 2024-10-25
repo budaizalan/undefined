@@ -1,5 +1,7 @@
+import Hex from "./Hex";
+
 export default abstract class HexMath {
-    private static _hexSize = 40;
+    private static _hexSize = 30;
     private static _hexHeight = Math.sqrt(3) * this._hexSize;
     private static _hexWidth = 2 * this._hexSize;
     private static _hexVerticalSpacing = this._hexHeight * 0.75; // spacing between hexagons
@@ -31,32 +33,31 @@ export default abstract class HexMath {
             const cornerY = y + this._hexSize * Math.sin(angle);
             corners.push({ x: cornerX, y: cornerY });
         }
-        console.log(`${this._differenceBetweenTwoCorners} gec`);
 
         return corners;
     }
 
-    static calculateHexDiagonal() {
-        let diagonal = 0;
-        for (let i = 0; i < 6; i++) {
-            const angle = (Math.PI / 3) * i;
-            if (i == 0 || i == 2) {
-                diagonal += this._hexSize * Math.cos(angle);
-            }
-        }
+    // static calculateHexDiagonal() {
+    //     let diagonal = 0;
+    //     for (let i = 0; i < 6; i++) {
+    //         const angle = (Math.PI / 3) * i;
+    //         if (i == 0 || i == 2) {
+    //             diagonal += this._hexSize * Math.cos(angle);
+    //         }
+    //     }
         
-        return (diagonal * 6);
-    }
+    //     return (diagonal * 6);
+    // }
 
-    static calculateHexTiagonal(){
-        const angle = (Math.PI / 1.5);
-        let tiagonal = this._hexSize * Math.cos(angle);
-        var results = []
-        // for each qmin ≤ q ≤ qmax:
-        //     for each max(rmin, -q-smax) ≤ r ≤ min(rmax, -q-smin):
-        //         results.append(Hex(q, r))
-        return tiagonal * 6.92;
-    }
+    // static calculateHexTiagonal(){
+    //     const angle = (Math.PI / 1.5);
+    //     let tiagonal = this._hexSize * Math.cos(angle);
+    //     var results = []
+    //     // for each qmin ≤ q ≤ qmax:
+    //     //     for each max(rmin, -q-smax) ≤ r ≤ min(rmax, -q-smin):
+    //     //         results.append(Hex(q, r))
+    //     return tiagonal * 6.92;
+    // }
 
     static pixelToHex(x: number, y: number): { q: number; r: number } {
         const q = (2 / 3 * x) / this._hexSize;
@@ -84,5 +85,21 @@ export default abstract class HexMath {
         }
 
         return { q: rq, r: rr };
+    }
+
+    static calculateRange(hex: Hex, range: number): { q: number; r: number }[] {
+        const qmin = hex.q - range;
+        const qmax = hex.q + range;
+        const rmin = hex.r - range;
+        const rmax = hex.r + range;
+        const smax = -hex.q - hex.r + range;
+        const smin = -hex.q - hex.r - range;
+        const results = [];
+        for (let q = qmin; q <= qmax; q++) {
+            for (let r = Math.max(rmin, -q - smax); r <= Math.min(rmax, -q - smin); r++) {
+                results.push({ q, r });
+            }
+        }
+        return results;
     }
 }

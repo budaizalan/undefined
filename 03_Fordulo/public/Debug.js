@@ -1,4 +1,6 @@
 export default class Debug {
+    static _debugMenu = document.getElementById('debug-menu');
+    static _enabled = true;
     static _coordsEnabled = true;
     static _gapsEnabled = true;
     static _ctx = null;
@@ -12,7 +14,7 @@ export default class Debug {
     }
     static setupEventListeners() {
         document.addEventListener('keydown', (event) => {
-            if (event.key === 'd' || event.key === 'Escape') {
+            if (event.key === 'd' || (event.key === 'Escape' && this._debugMenu?.classList.contains('show'))) {
                 this.toggleDebugMenu();
             }
         });
@@ -37,10 +39,8 @@ export default class Debug {
         });
     }
     static toggleDebugMenu() {
-        let debugMenu = document.getElementById('debug-menu');
-        if (debugMenu) {
-            // debugMenu.style.display = debugMenu.style.display === 'none' || debugMenu.style.display === '' ? 'flex' : 'none';
-            debugMenu.classList.toggle('show');
+        if (this._debugMenu) {
+            this._debugMenu.classList.toggle('show');
         }
     }
     static toggleGaps() {

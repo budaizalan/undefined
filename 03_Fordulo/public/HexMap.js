@@ -7,11 +7,17 @@ export default class HexMap {
         this.initializeMap(mapRadius);
     }
     initializeMap(mapRadius) {
+        console.log(Math.round(-innerHeight / HexMath.hexHeight) - 1);
+        console.log(-innerWidth / 2);
+        console.log(Math.round(-innerWidth / 2 / (HexMath.hexWidth * 0.75)));
         for (let q = -mapRadius; q <= mapRadius; q++) {
             for (let r = -mapRadius; r <= mapRadius; r++) {
                 if (Math.abs(q + r) <= mapRadius) {
                     const { x, y } = HexMath.hexToPixel(q, r);
-                    this._hexMap.set(`${q},${r}`, new Hex(q, r, x, y));
+                    if (Math.abs(x) >= 0 && Math.abs(x) < window.innerWidth / 2 + HexMath.hexSize && Math.abs(y) >= 0 && Math.abs(y) < window.innerHeight / 2 + HexMath.hexSize) {
+                        // console.log(`q: ${q}, r: ${r}, x: ${x}, y: ${y}`);
+                        this._hexMap.set(`${q},${r}`, new Hex(q, r, x, y));
+                    }
                 }
             }
         }
