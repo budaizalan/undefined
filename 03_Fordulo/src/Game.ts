@@ -1,7 +1,7 @@
 import HexMap from "./HexMap.js";
 
 export default abstract class Game {
-    private static _mapRadius = 5;
+    private static _mapRadius = 7;
     private static _hexMap = new HexMap(this._mapRadius);
 
     static get mapRadius(): number {
