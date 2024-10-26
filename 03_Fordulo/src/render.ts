@@ -58,7 +58,7 @@ canvas.addEventListener('click', (event) => {
     const hex = Game.hexMap.getHex(q, r);
     if (hex) {
         console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
-        const range = 2;
+        const range = 1;
         HexMath.calculateRange(hex, range).forEach((hexPosition) => {
             const hex = Game.hexMap.getHex(hexPosition.q, hexPosition.r);
             if (hex) {
