@@ -1,14 +1,20 @@
 import Hex from "./Hex";
 
 export default abstract class HexMath {
-    private static _hexSize = 30;
-    private static _hexHeight = Math.sqrt(3) * this._hexSize;
-    private static _hexWidth = 2 * this._hexSize;
-    private static _hexVerticalSpacing = this._hexHeight * 0.75; // spacing between hexagons
-    private static _differenceBetweenTwoCorners = 0;
+    private static _hexSize: number;
+    private static _hexHeight: number;
+    private static _hexWidth: number;
+    private static _hexVerticalSpacing: number; // spacing between hexagons
 
     static get hexSize(): number {
         return this._hexSize;
+    }
+
+    static set hexSize(value: number) {
+        this._hexSize = value;
+        this._hexHeight = Math.sqrt(3) * this._hexSize;
+        this._hexWidth = 2 * this._hexSize;
+        this._hexVerticalSpacing = this._hexHeight * 0.75;
     }
 
     static get hexHeight(): number {
@@ -17,6 +23,10 @@ export default abstract class HexMath {
 
     static get hexWidth(): number {
         return this._hexWidth;
+    }
+
+    static get hexVerticalSpacing(): number {
+        return this._hexVerticalSpacing;
     }
 
     static hexToPixel(q: number, r: number): { x: number; y: number } {
@@ -36,28 +46,6 @@ export default abstract class HexMath {
 
         return corners;
     }
-
-    // static calculateHexDiagonal() {
-    //     let diagonal = 0;
-    //     for (let i = 0; i < 6; i++) {
-    //         const angle = (Math.PI / 3) * i;
-    //         if (i == 0 || i == 2) {
-    //             diagonal += this._hexSize * Math.cos(angle);
-    //         }
-    //     }
-        
-    //     return (diagonal * 6);
-    // }
-
-    // static calculateHexTiagonal(){
-    //     const angle = (Math.PI / 1.5);
-    //     let tiagonal = this._hexSize * Math.cos(angle);
-    //     var results = []
-    //     // for each qmin ≤ q ≤ qmax:
-    //     //     for each max(rmin, -q-smax) ≤ r ≤ min(rmax, -q-smin):
-    //     //         results.append(Hex(q, r))
-    //     return tiagonal * 6.92;
-    // }
 
     static pixelToHex(x: number, y: number): { q: number; r: number } {
         const q = (2 / 3 * x) / this._hexSize;

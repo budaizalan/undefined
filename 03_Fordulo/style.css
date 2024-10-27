@@ -6,7 +6,14 @@
 
 #mainCanvas{
     display: block;
-    background-color: #e0e0e0;
+}
+
+#backgroundCanvas{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    background-color: #65adff;
+    z-index: -1;
 }
 
 #debug-menu{
