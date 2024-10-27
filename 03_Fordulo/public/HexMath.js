@@ -1,17 +1,25 @@
 export default class HexMath {
-    static _hexSize = 30;
-    static _hexHeight = Math.sqrt(3) * this._hexSize;
-    static _hexWidth = 2 * this._hexSize;
-    static _hexVerticalSpacing = this._hexHeight * 0.75; // spacing between hexagons
-    static _differenceBetweenTwoCorners = 0;
+    static _hexSize;
+    static _hexHeight;
+    static _hexWidth;
+    static _hexVerticalSpacing; // spacing between hexagons
     static get hexSize() {
         return this._hexSize;
+    }
+    static set hexSize(value) {
+        this._hexSize = value;
+        this._hexHeight = Math.sqrt(3) * this._hexSize;
+        this._hexWidth = 2 * this._hexSize;
+        this._hexVerticalSpacing = this._hexHeight * 0.75;
     }
     static get hexHeight() {
         return this._hexHeight;
     }
     static get hexWidth() {
         return this._hexWidth;
+    }
+    static get hexVerticalSpacing() {
+        return this._hexVerticalSpacing;
     }
     static hexToPixel(q, r) {
         const x = this._hexSize * (3 / 2 * q);
@@ -28,25 +36,6 @@ export default class HexMath {
         }
         return corners;
     }
-    // static calculateHexDiagonal() {
-    //     let diagonal = 0;
-    //     for (let i = 0; i < 6; i++) {
-    //         const angle = (Math.PI / 3) * i;
-    //         if (i == 0 || i == 2) {
-    //             diagonal += this._hexSize * Math.cos(angle);
-    //         }
-    //     }
-    //     return (diagonal * 6);
-    // }
-    // static calculateHexTiagonal(){
-    //     const angle = (Math.PI / 1.5);
-    //     let tiagonal = this._hexSize * Math.cos(angle);
-    //     var results = []
-    //     // for each qmin ≤ q ≤ qmax:
-    //     //     for each max(rmin, -q-smax) ≤ r ≤ min(rmax, -q-smin):
-    //     //         results.append(Hex(q, r))
-    //     return tiagonal * 6.92;
-    // }
     static pixelToHex(x, y) {
         const q = (2 / 3 * x) / this._hexSize;
         const r = (-1 / 3 * x + Math.sqrt(3) / 3 * y) / this._hexSize;
