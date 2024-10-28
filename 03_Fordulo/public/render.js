@@ -2,6 +2,7 @@ import Debug from "./Debug.js";
 import Game from "./Game.js";
 import HexMath from "./HexMath.js";
 import Images from "./Images.js";
+import { City } from "./Structures.js";
 const bgCanvas = document.getElementById('backgroundCanvas');
 const bgCtx = bgCanvas.getContext('2d');
 const canvas = document.getElementById('mainCanvas');
@@ -103,14 +104,17 @@ canvas.addEventListener('contextmenu', (event) => {
     const hex = Game.hexMap.getHex(q, r);
     if (hex) {
         console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
-        if (hex && Game.factoriesToPlace.length != 0) {
+        console.log(hex.structure);
+        if (hex && !(hex.structure instanceof City) && Game.factoriesToPlace.length != 0) {
             hex.setStructure(Game.factoryToPlace);
             hex.structure.setPosition(hex);
+            Game.setPlacedFactory(hex.structure);
             hex.setTerrain('stone', images.stoneImage);
         }
+        Game.checkIntersection();
         console.log(hex);
         drawMap();
-        // console.log(Game.hexMap);        
+        console.log(Game.hexMap);
     }
     else {
         console.log('No hex found at this position.');

@@ -1,9 +1,11 @@
+import { City, Factory } from "./Structures";
+
 export default class Hex {
     private _position: { q: number; r: number };
     private _coords: { x: number; y: number };
     private _terrain: string;
     private _terrainImage: HTMLImageElement = new Image();
-    private _structure: object | undefined = undefined;
+    private _structure: Factory | City | undefined = undefined;
 
     get q(): number {
         return this._position.q;

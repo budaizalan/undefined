@@ -1,8 +1,11 @@
 import Hex from "./Hex.js";
 import HexMap from "./HexMap.js";
 import HexMath from "./HexMath.js";
+import Images from "./Images.js";
 import Objective from "./Objective.js";
 import { City, Factory } from "./Structures.js";
+
+const images = new Images();
 
 export default abstract class Game {
     private static _mapRadius = 8;
@@ -11,6 +14,7 @@ export default abstract class Game {
     private static _cities: City[] = [];
     private static _factories: Factory[] = [];
     private static _factoriesToPlace: Factory[] = [];
+    private static _placedFactory: Factory;
 
     static get mapRadius(): number {
         return Game._mapRadius;
@@ -37,11 +41,15 @@ export default abstract class Game {
     }
 
     static get factoryToPlace(): Factory {
-        let factory: Factory = this._factoriesToPlace[0];
+        this._placedFactory = this._factoriesToPlace[0];
         this._factoriesToPlace.shift();
-        console.log(this._factoriesToPlace);
-        
-        return factory;
+        this.objective?.factoriesToPlace!-1;
+        console.log(this._factoriesToPlace);        
+        return this._placedFactory;
+    }
+
+    public static setPlacedFactory(_placed: Factory){
+        this._placedFactory = _placed;
     }
 
     public static setObjective(_difficulty: number){
@@ -74,7 +82,26 @@ export default abstract class Game {
         this._cities.push(this.generateCity([-5, 7], ["C1"]));
         this._factories.push(new Factory("C1", 2));
         this._factoriesToPlace = this._factories;
-        console.log(this.cities);                        
-        console.log(this.factories); 
+        // console.log(this.cities);                        
+        // console.log(this.factories); 
+    }
+
+    public static checkIntersection(){    
+        HexMath.calculateRange(this._placedFactory.position!, this._placedFactory.range).map(v => Game._hexMap.getHex(v.q, v.r)).map(ph => ph?.setTerrain("ocean", images.oceanImage))    
+        // this.hexMap.getAllHexes().filter(h => h.structure instanceof City).map(h => (h.structure as City).cover.map(c =>{
+        //     HexMath.calculateRange(this._placedFactory.position!, this._placedFactory.range).forEach(ph => {
+        //         if(c == ph){
+        //             (h.structure as City).cover.map(h => (h.structure as City).setIsSupplied(true));
+                    
+        //         };
+        //     })        
+        // }))
+        // this.hexMap.getAllHexes().filter(mh => mh.structure instanceof City).map(h => (h.structure as City).cover).map(ch =>{
+        //     HexMath.calculateRange(this._placedFactory.position!, this._placedFactory.range).forEach(ph => {
+        //         if(ch[0] == Game._hexMap.getHex(ph.q, ph.r)){
+        //             (ch[0].structure as City).cover.map(ch => (ch.structure as City).setIsSupplied(true));
+        //         }          
+        //     });            
+        // });
     }
 }
