@@ -10,6 +10,7 @@ export default abstract class Game {
     private static _objective: Objective | undefined = undefined;
     private static _cities: City[] = [];
     private static _factories: Factory[] = [];
+    private static _factoriesToPlace: Factory[] = [];
 
     static get mapRadius(): number {
         return Game._mapRadius;
@@ -29,6 +30,18 @@ export default abstract class Game {
 
     static get factories(): Factory[] {
         return this._factories;
+    }
+
+    static get factoriesToPlace(): Factory[] {
+        return this._factoriesToPlace;
+    }
+
+    static get factoryToPlace(): Factory {
+        let factory: Factory = this._factoriesToPlace[0];
+        this._factoriesToPlace.shift();
+        console.log(this._factoriesToPlace);
+        
+        return factory;
     }
 
     public static setObjective(_difficulty: number){
@@ -60,6 +73,7 @@ export default abstract class Game {
         this._factories.push(new Factory("B1", 2));
         this._cities.push(this.generateCity([-5, 7], ["C1"]));
         this._factories.push(new Factory("C1", 2));
+        this._factoriesToPlace = this._factories;
         console.log(this.cities);                        
         console.log(this.factories); 
     }

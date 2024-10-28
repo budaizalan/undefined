@@ -8,6 +8,7 @@ export default class Game {
     static _objective = undefined;
     static _cities = [];
     static _factories = [];
+    static _factoriesToPlace = [];
     static get mapRadius() {
         return Game._mapRadius;
     }
@@ -22,6 +23,15 @@ export default class Game {
     }
     static get factories() {
         return this._factories;
+    }
+    static get factoriesToPlace() {
+        return this._factoriesToPlace;
+    }
+    static get factoryToPlace() {
+        let factory = this._factoriesToPlace[0];
+        this._factoriesToPlace.shift();
+        console.log(this._factoriesToPlace);
+        return factory;
     }
     static setObjective(_difficulty) {
         this._objective = new Objective(_difficulty);
@@ -49,6 +59,7 @@ export default class Game {
         this._factories.push(new Factory("B1", 2));
         this._cities.push(this.generateCity([-5, 7], ["C1"]));
         this._factories.push(new Factory("C1", 2));
+        this._factoriesToPlace = this._factories;
         console.log(this.cities);
         console.log(this.factories);
     }

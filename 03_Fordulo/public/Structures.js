@@ -28,17 +28,24 @@ class City {
     constructor(_requirements, _cover) {
         this._requirements = _requirements;
         this._cover = _cover;
-        this._cover.map(h => h.setTerrain('stone', images.stoneImage));
+        this._cover.map(h => { h.setTerrain('stone', images.stoneImage); h.setStructure(this); });
     }
 }
 class Factory {
     _productionType;
     _range;
+    _position;
     get productionType() {
         return this._productionType;
     }
     get range() {
         return this._range;
+    }
+    get position() {
+        return this._position;
+    }
+    setPosition(_position) {
+        this._position = _position;
     }
     constructor(_productionType, _range) {
         this._productionType = _productionType;

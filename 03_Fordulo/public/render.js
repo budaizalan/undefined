@@ -82,13 +82,35 @@ canvas.addEventListener('click', (event) => {
         HexMath.calculateRange(hex, range).forEach((hexPosition) => {
             console.log(`Hex: q=${hexPosition.q}, r=${hexPosition.r}`);
             const hex = Game.hexMap.getHex(hexPosition.q, hexPosition.r);
-            if (hex) {
-                hex.setTerrain('stone', images.stoneImage);
-            }
+            console.log(hex);
+            // if (hex) {
+            //     hex.setTerrain('stone', images.stoneImage);
+            // }
         });
         drawMap();
         drawCity(hex);
         // drawHex((hex.x + HexMath.calculateHexDiagonal()) + canvas.width / 2, hex.y + canvas.height / 2, true, false);
+    }
+    else {
+        console.log('No hex found at this position.');
+    }
+});
+canvas.addEventListener('contextmenu', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left - canvas.width / 2;
+    const y = event.clientY - rect.top - canvas.height / 2;
+    const { q, r } = HexMath.pixelToHex(x, y);
+    const hex = Game.hexMap.getHex(q, r);
+    if (hex) {
+        console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
+        if (hex && Game.factoriesToPlace.length != 0) {
+            hex.setStructure(Game.factoryToPlace);
+            hex.structure.setPosition(hex);
+            hex.setTerrain('stone', images.stoneImage);
+        }
+        console.log(hex);
+        drawMap();
+        // console.log(Game.hexMap);        
     }
     else {
         console.log('No hex found at this position.');
