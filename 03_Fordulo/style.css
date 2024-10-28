@@ -3,17 +3,22 @@
     padding: 0;
     font-family: Arial, sans-serif;
 }
-
-#mainCanvas{
-    display: block;
-}
-
 #backgroundCanvas{
-    width: 100vw;
-    height: 100vh;
     position: absolute;
     background-color: #65adff;
     z-index: -1;
+}
+
+#gameCanvas{
+    display: block;
+    z-index: 2;
+}
+
+#UICanvas{
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 4;
 }
 
 #debug-menu{
@@ -30,7 +35,6 @@
     opacity: 0;
     visibility: hidden;
     color: #fff;
-    font-size: 12px;
     transition: all 0.3s ease-in-out;
 }
 
@@ -75,11 +79,11 @@
     border-radius: 5px;
     padding: 5px;
     margin: 10px;
-    width: 20vw;
+    min-width: 20vw;
 }
 
 #debug-menu h2{
-    font-size: 2rem;
+    font-size: 1.5rem;
     margin: 10px;
     text-align: center;
 }

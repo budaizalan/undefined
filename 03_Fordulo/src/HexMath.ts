@@ -36,15 +36,15 @@ export default abstract class HexMath {
         return { x, y };
     }
 
-    static calculateHexCorners(x: number, y: number): { x: number; y: number; }[] {
+    static calculateHexCorners(x: number, y: number, hexSize: number = this._hexSize): { x: number; y: number; }[] {
+        hexSize = hexSize || this._hexSize;
         const corners = [];
         for (let i = 0; i < 6; i++) {
             const angle = (Math.PI / 3) * i;
-            const cornerX = x + this._hexSize * Math.cos(angle);
-            const cornerY = y + this._hexSize * Math.sin(angle);
+            const cornerX = x + hexSize * Math.cos(angle);
+            const cornerY = y + hexSize * Math.sin(angle);
             corners.push({ x: cornerX, y: cornerY });
         }
-
         return corners;
     }
 
@@ -92,5 +92,16 @@ export default abstract class HexMath {
             }
         }
         return results;
+    }
+
+    static isPointInHex(ctx: CanvasRenderingContext2D , x: number, y: number, hexPosition: {x: number, y: number}, hexSize: number): boolean {
+        const corners = this.calculateHexCorners(hexPosition.x, hexPosition.y, hexSize);
+        const path = new Path2D();
+        path.moveTo(corners[0].x, corners[0].y);
+        for (let j = 1; j < 6; j++) {
+            path.lineTo(corners[j].x, corners[j].y);
+        }
+        path.closePath();
+        return ctx.isPointInPath(path, x, y);
     }
 }

@@ -1,16 +1,18 @@
 import Debug from "./Debug.js";
+import Factory from "./Factory.js";
 import Game from "./Game.js";
 import Hex from "./Hex.js";
 import HexMath from "./HexMath.js";
 import Images from "./Images.js";
 import { City, Factory } from "./Structures.js";
+import UI from "./UI.js";
 
 const bgCanvas = document.getElementById('backgroundCanvas') as HTMLCanvasElement;
+const gameCanvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
 const bgCtx = bgCanvas.getContext('2d');
-const canvas = document.getElementById('mainCanvas') as HTMLCanvasElement;
-const ctx = canvas.getContext('2d');
-bgCanvas.width = canvas.width = window.innerWidth;
-bgCanvas.height = canvas.height = window.innerHeight;
+const gameCtx = gameCanvas.getContext('2d');
+bgCanvas.width = gameCanvas.width = window.innerWidth;
+bgCanvas.height = gameCanvas.height = window.innerHeight;
 
 const images = new Images();
 
@@ -24,31 +26,32 @@ const images = new Images();
 // stoneImage.src = './assets/stone.png';
 // oceanImage.src = './assets/ocean.png';
 
-if (!ctx) {
+if (!gameCtx || !bgCtx) {
     throw new Error('Failed to get 2D context');
 }
 
-Debug.initialize(canvas, ctx, drawMap);
+Debug.initialize(bgCanvas, bgCtx, drawMap);
+UI.initialize(bgCanvas, bgCtx);
 
 function drawHex(x: number, y: number, terrainImage: HTMLImageElement): void {
     const corners = HexMath.calculateHexCorners(x, y);
-    if (ctx) {
-        const gradient = ctx.createRadialGradient(x, y, HexMath.hexSize / 4, x, y, HexMath.hexSize);
+    if (bgCtx) {
+        const gradient = bgCtx.createRadialGradient(x, y, HexMath.hexSize / 4, x, y, HexMath.hexSize);
         gradient.addColorStop(0.5, '#ffffff');
         gradient.addColorStop(0.8, '#cccccc');
         gradient.addColorStop(1, '#888888');
-        ctx.beginPath();
-        ctx.moveTo(corners[0].x, corners[0].y);
+        bgCtx.beginPath();
+        bgCtx.moveTo(corners[0].x, corners[0].y);
         for (let i = 1; i < 6; i++) {
-            ctx.lineTo(corners[i].x, corners[i].y);
+            bgCtx.lineTo(corners[i].x, corners[i].y);
         }
-        ctx.closePath();
-        ctx.strokeStyle = '#000';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        ctx.fillStyle = gradient;
-        ctx.fill();
-        ctx.drawImage(terrainImage, x - HexMath.hexWidth / 2, y - HexMath.hexHeight / 2, HexMath.hexWidth, HexMath.hexHeight);
+        bgCtx.closePath();
+        bgCtx.strokeStyle = '#000';
+        bgCtx.lineWidth = 2;
+        bgCtx.stroke();
+        bgCtx.fillStyle = gradient;
+        bgCtx.fill();
+        bgCtx.drawImage(terrainImage, x - HexMath.hexWidth / 2, y - HexMath.hexHeight / 2, HexMath.hexWidth, HexMath.hexHeight);
     }
 }
 
@@ -59,7 +62,7 @@ function drawBackground(): void {
         for (let r = -rows; r <= rows; r++) {
             const { x, y } = HexMath.hexToPixel(q, r);
             if(x >= -window.innerWidth / 2 - HexMath.hexWidth && x <= window.innerWidth / 2 + HexMath.hexWidth && y >= -window.innerHeight / 2 - HexMath.hexHeight && y <= window.innerHeight / 2 + HexMath.hexHeight) {
-                drawHex(x + canvas.width / 2, y + canvas.height / 2, images.oceanImage);
+                drawHex(x + gameCanvas.width / 2, y + gameCanvas.height / 2, images.oceanImage);
             }
         }
     }
@@ -68,30 +71,27 @@ function drawBackground(): void {
 function drawMap(): void {
     const hexes = Game.hexMap.getAllHexes(); 
     for (const hex of hexes) {
-        drawHex(hex.x + canvas.width / 2, hex.y + canvas.height / 2, hex.terrainImage);
+        drawHex(hex.x + gameCanvas.width / 2, hex.y + gameCanvas.height / 2, hex.terrainImage);
         Debug.drawCoords(hex.x, hex.y, hex.q, hex.r);
     }
 }
 
 function drawCity(hex: Hex): void {
-    console.log(hex)
     if (hex) {
-        if (ctx) {
-            console.log(HexMath.hexWidth, HexMath.hexHeight);
-            
+        if (gameCtx) {
             // ctx.drawImage(cityImage, hex.x - (HexMath.hexWidth) + canvas.width / 2, hex.y - (HexMath.hexHeight + 15) + canvas.height / 2, HexMath.hexWidth * 2, HexMath.hexHeight * 2);
         }
     }
 }
 
-canvas.addEventListener('click', (event) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left - canvas.width / 2;
-    const y = event.clientY - rect.top - canvas.height / 2;
+gameCanvas.addEventListener('click', (event) => {
+    const rect = gameCanvas.getBoundingClientRect();
+    const x = event.clientX - rect.left - gameCanvas.width / 2;
+    const y = event.clientY - rect.top - gameCanvas.height / 2;
     const { q, r } = HexMath.pixelToHex(x, y);
     const hex = Game.hexMap.getHex(q, r);
     if (hex) {
-        console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
+        // console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
         const range = 1;
         HexMath.calculateRange(hex, range).forEach((hexPosition) => {
             console.log(`Hex: q=${hexPosition.q}, r=${hexPosition.r}`);            
@@ -127,6 +127,57 @@ canvas.addEventListener('contextmenu', (event) => {
     }
 });
 
+gameCanvas.addEventListener('mousedown', (event) => {
+    const rect = gameCanvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    for(let i = 0; i < UI.factories.length; i++){
+        if(HexMath.isPointInHex(gameCtx, x, y, {x: UI.factories[i].x, y: UI.factories[i].y}, UI.factories[i].size)){
+            Game.factoryTypesCount[UI.factories[i].factoryType]--;
+            Game.draggingFactory = UI.factories[i];
+            Game.draggingFactory.x = x;
+            Game.draggingFactory.y = y;
+            UI.draw();
+            return;
+        }
+    }
+});
+gameCanvas.addEventListener('mousemove', (event) => {
+    const rect = gameCanvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    if(Game.draggingFactory){
+        Game.draggingFactory.x = x;
+        Game.draggingFactory.y = y;
+    } else {
+        for(let i = 0; i < UI.factories.length; i++){
+            if(HexMath.isPointInHex(gameCtx, x, y, {x: UI.factories[i].x, y: UI.factories[i].y}, UI.factories[i].size)){
+                gameCanvas.style.cursor = 'pointer';
+                return;
+            }
+        }
+        gameCanvas.style.cursor = 'default';
+    }
+});
+gameCanvas.addEventListener('mouseup', (event) => {
+    if (Game.draggingFactory) {
+        Game.factoryTypesCount[Game.draggingFactory.factoryType]++;
+        Game.draggingFactory = null;
+    }
+    UI.draw();
+});
+
+function draw(): void {
+    if (gameCtx) {
+        gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+        gameCtx.drawImage(bgCanvas, 0, 0);
+        if (Game.draggingFactory) {
+            UI.drawFactory(gameCtx, Game.draggingFactory);
+        }
+    }
+    requestAnimationFrame(draw);
+}
+
 function StartGame() {
     if (!imagesLoaded()) {
         setTimeout(StartGame, 100);
@@ -135,13 +186,15 @@ function StartGame() {
     // drawBackground();
     Game.setObjective(0);
     drawMap();
+    UI.draw();
+    draw();
 }
 
 function imagesLoaded(){
-    console.log('grassImage:', images.grassImage.complete);
-    console.log('stoneImage:', images.stoneImage.complete);
-    console.log('oceanImage:', images.oceanImage.complete);
-    return images.grassImage.complete && images.stoneImage.complete && images.oceanImage.complete && images.grassImage2.complete;
+    return grassImage.complete
+        && stoneImage.complete
+        && oceanImage.complete
+        && grassImage2.complete;
 }
 
 StartGame();
