@@ -1,7 +1,7 @@
 export default class Debug {
     static _debugMenu = document.getElementById('debug-menu');
     static _enabled = true;
-    static _coordsEnabled = true;
+    static _coordsEnabled = false;
     static _gapsEnabled = true;
     static _ctx = null;
     static _canvas = null;
