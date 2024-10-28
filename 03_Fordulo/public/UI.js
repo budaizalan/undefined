@@ -42,7 +42,7 @@ export default class UI {
             const factoryTypeCounts = this._factoryTypesCount;
             const factoryKeys = Object.keys(factoryTypeCounts);
             for (let i = 0; i < factoryKeys.length; i++) {
-                const factory = new Factory(factoryKeys[i]);
+                const factory = new Factory(factoryKeys[i], 2);
                 factory.x = this._canvas.width - this._UIWidth / 2;
                 factory.y = y + i * 100;
                 this._UIFactories.push(factory);

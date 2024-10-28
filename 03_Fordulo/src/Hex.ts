@@ -1,5 +1,3 @@
-import { City, Factory } from "./Structures";
-
 export default class Hex {
     private _position: { q: number; r: number };
     private _coords: { x: number; y: number };

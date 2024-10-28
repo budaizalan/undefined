@@ -4,7 +4,7 @@ import HexMap from "./HexMap.js";
 import HexMath from "./HexMath.js";
 import Images from "./Images.js";
 import Objective from "./Objective.js";
-import { City, Factory } from "./Structures.js";
+import City from "./Structures.js";
 
 const images = new Images();
 
@@ -17,11 +17,13 @@ export default abstract class Game {
     private static _factoriesToPlace: Factory[] = [];
     private static _placedFactory: Factory;
     private static _factoryTypesCount: { [key: string]: number } = { 'blue': 2, 'green': 1, 'red': 1 };
-    private static _factories: Array<Factory> = [];
+    // ====
+    private static _factories2: Array<Factory> = [];
+    // ====
     private static _draggingFactory: Factory | null = null;
 
-    static get factories(): Array<Factory> {
-        return Game._factories;
+    static get factories2(): Array<Factory> {
+        return Game._factories2;
     }
 
     static get mapRadius(): number {
@@ -104,7 +106,7 @@ export default abstract class Game {
     public static checkIntersection() : void{    
         console.log(this._placedFactory.position);
         
-        HexMath.calculateRange(this._placedFactory.position!, this._placedFactory.range).map(v => Game._hexMap.getHex(v.q, v.r)).map(ph => {
+        HexMath.calculateRange(this._hexMap.getHex(this._placedFactory.position!.q, this._placedFactory.position!.r)!, this._placedFactory.range).map(v => Game._hexMap.getHex(v.q, v.r)).map(ph => {
             ph?.setTerrain("ocean", images.oceanImage)
             this.cities.map(c => c.cover.map(ch =>{
                 if(c.requirements.includes(this._placedFactory.productionType) && ch === ph){

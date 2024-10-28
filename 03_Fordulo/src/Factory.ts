@@ -3,7 +3,10 @@ export default class Factory {
     private _size: number = 50;
     private _width: number = 2 * this._size;
     private _height: number = Math.sqrt(3) * this._size;
-    private _factoryType: string;
+
+    private _productionType: string;
+    private _range: number
+    private _position: {q: number, r: number} | undefined;
     // private _factoryImage: HTMLImageElement = new Image();
     // private _factoryImageSrc: string;
 
@@ -47,17 +50,34 @@ export default class Factory {
         this._height = value;
     }
 
-    get factoryType(): string {
-        return this._factoryType;
+    // get factoryType(): string {
+    //     return this._factoryType;
+    // }
+
+    get productionType() : string{
+        return this._productionType;
+    }
+        
+    get range():number{
+        return this._range;
+    }
+        
+    get position(): {q: number, r: number} | undefined{
+        return this._position;
+    }
+        
+    public setPosition(_position: {q: number, r: number}){
+        this._position = _position;
     }
 
     // get factoryImage(): HTMLImageElement {
     //     return this._factoryImage;
     // }
 
-    constructor(factoryType: string) {
+    constructor(_productionType: string, _range: number) {
         this._coords = { x: 0, y: 0};
-        this._factoryType = factoryType;
+        this._productionType = _productionType;
+        this._range = _range;
         // this._factoryImageSrc = `./assets/factory${this._factoryType}.png`;
         // this._factoryImage.src = this._factoryImageSrc;
     }

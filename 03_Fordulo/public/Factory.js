@@ -3,7 +3,9 @@ export default class Factory {
     _size = 50;
     _width = 2 * this._size;
     _height = Math.sqrt(3) * this._size;
-    _factoryType;
+    _productionType;
+    _range;
+    _position;
     // private _factoryImage: HTMLImageElement = new Image();
     // private _factoryImageSrc: string;
     get x() {
@@ -36,15 +38,28 @@ export default class Factory {
     set height(value) {
         this._height = value;
     }
-    get factoryType() {
-        return this._factoryType;
+    // get factoryType(): string {
+    //     return this._factoryType;
+    // }
+    get productionType() {
+        return this._productionType;
+    }
+    get range() {
+        return this._range;
+    }
+    get position() {
+        return this._position;
+    }
+    setPosition(_position) {
+        this._position = _position;
     }
     // get factoryImage(): HTMLImageElement {
     //     return this._factoryImage;
     // }
-    constructor(factoryType) {
+    constructor(_productionType, _range) {
         this._coords = { x: 0, y: 0 };
-        this._factoryType = factoryType;
+        this._productionType = _productionType;
+        this._range = _range;
         // this._factoryImageSrc = `./assets/factory${this._factoryType}.png`;
         // this._factoryImage.src = this._factoryImageSrc;
     }
