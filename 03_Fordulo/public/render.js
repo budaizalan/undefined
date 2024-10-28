@@ -16,30 +16,30 @@ grassImage.src = './assets/grass.png';
 grassImage2.src = './assets/grass2.png';
 stoneImage.src = './assets/stone.png';
 oceanImage.src = './assets/ocean.png';
-if (!gameCtx) {
+if (!gameCtx || !bgCtx) {
     throw new Error('Failed to get 2D context');
 }
-Debug.initialize(gameCanvas, gameCtx, drawMap);
-UI.initialize(gameCanvas, gameCtx);
+Debug.initialize(bgCanvas, bgCtx, drawMap);
+UI.initialize(bgCanvas, bgCtx);
 function drawHex(x, y, terrainImage) {
     const corners = HexMath.calculateHexCorners(x, y);
-    if (gameCtx) {
-        const gradient = gameCtx.createRadialGradient(x, y, HexMath.hexSize / 4, x, y, HexMath.hexSize);
+    if (bgCtx) {
+        const gradient = bgCtx.createRadialGradient(x, y, HexMath.hexSize / 4, x, y, HexMath.hexSize);
         gradient.addColorStop(0.5, '#ffffff');
         gradient.addColorStop(0.8, '#cccccc');
         gradient.addColorStop(1, '#888888');
-        gameCtx.beginPath();
-        gameCtx.moveTo(corners[0].x, corners[0].y);
+        bgCtx.beginPath();
+        bgCtx.moveTo(corners[0].x, corners[0].y);
         for (let i = 1; i < 6; i++) {
-            gameCtx.lineTo(corners[i].x, corners[i].y);
+            bgCtx.lineTo(corners[i].x, corners[i].y);
         }
-        gameCtx.closePath();
-        gameCtx.strokeStyle = '#000';
-        gameCtx.lineWidth = 2;
-        gameCtx.stroke();
-        gameCtx.fillStyle = gradient;
-        gameCtx.fill();
-        gameCtx.drawImage(terrainImage, x - HexMath.hexWidth / 2, y - HexMath.hexHeight / 2, HexMath.hexWidth, HexMath.hexHeight);
+        bgCtx.closePath();
+        bgCtx.strokeStyle = '#000';
+        bgCtx.lineWidth = 2;
+        bgCtx.stroke();
+        bgCtx.fillStyle = gradient;
+        bgCtx.fill();
+        bgCtx.drawImage(terrainImage, x - HexMath.hexWidth / 2, y - HexMath.hexHeight / 2, HexMath.hexWidth, HexMath.hexHeight);
     }
 }
 function drawBackground() {
@@ -62,10 +62,8 @@ function drawMap() {
     }
 }
 function drawCity(hex) {
-    console.log(hex);
     if (hex) {
         if (gameCtx) {
-            console.log(HexMath.hexWidth, HexMath.hexHeight);
             // ctx.drawImage(cityImage, hex.x - (HexMath.hexWidth) + canvas.width / 2, hex.y - (HexMath.hexHeight + 15) + canvas.height / 2, HexMath.hexWidth * 2, HexMath.hexHeight * 2);
         }
     }
@@ -77,10 +75,9 @@ gameCanvas.addEventListener('click', (event) => {
     const { q, r } = HexMath.pixelToHex(x, y);
     const hex = Game.hexMap.getHex(q, r);
     if (hex) {
-        console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
+        // console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
         const range = 1;
         HexMath.calculateRange(hex, range).forEach((hexPosition) => {
-            console.log(`Hex: q=${hexPosition.q}, r=${hexPosition.r}`);
             const hex = Game.hexMap.getHex(hexPosition.q, hexPosition.r);
             if (hex) {
                 hex.setTerrain('stone', stoneImage);
@@ -102,7 +99,9 @@ gameCanvas.addEventListener('mousedown', (event) => {
         if (HexMath.isPointInHex(gameCtx, x, y, { x: UI.factories[i].x, y: UI.factories[i].y }, UI.factories[i].size)) {
             Game.factoryTypesCount[UI.factories[i].factoryType]--;
             Game.draggingFactory = UI.factories[i];
-            Game.draggingFactory.offset = { x: x - UI.factories[i].x, y: y - UI.factories[i].y };
+            Game.draggingFactory.x = x;
+            Game.draggingFactory.y = y;
+            UI.draw();
             return;
         }
     }
@@ -112,8 +111,8 @@ gameCanvas.addEventListener('mousemove', (event) => {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
     if (Game.draggingFactory) {
-        Game.draggingFactory.x = x - Game.draggingFactory.offset.x;
-        Game.draggingFactory.y = y - Game.draggingFactory.offset.y;
+        Game.draggingFactory.x = x;
+        Game.draggingFactory.y = y;
     }
     else {
         for (let i = 0; i < UI.factories.length; i++) {
@@ -132,20 +131,16 @@ gameCanvas.addEventListener('mouseup', (event) => {
     }
     UI.draw();
 });
-function refreshScreen() {
+function draw() {
     if (gameCtx) {
         gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-        drawMap();
-        UI.draw();
+        gameCtx.drawImage(bgCanvas, 0, 0);
         if (Game.draggingFactory) {
-            UI.drawFactory(Game.draggingFactory);
+            UI.drawFactory(gameCtx, Game.draggingFactory);
         }
     }
+    requestAnimationFrame(draw);
 }
-function startRefreshingScreen() {
-    setInterval(refreshScreen, 1000 / 60); // Refresh screen 60 times per second
-}
-startRefreshingScreen();
 function StartGame() {
     if (!imagesLoaded()) {
         setTimeout(StartGame, 100);
@@ -154,6 +149,7 @@ function StartGame() {
     // drawBackground();
     drawMap();
     UI.draw();
+    draw();
 }
 function imagesLoaded() {
     return grassImage.complete

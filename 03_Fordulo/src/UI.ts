@@ -53,25 +53,25 @@ export default abstract class UI {
                 factory.x = this._canvas.width - this._UIWidth / 2;
                 factory.y = y + i * 100;
                 this._UIFactories.push(factory);
-                this.drawFactory(factory);
+                this.drawFactory(this._ctx, factory);
                 this.drawFactoryCount(factory, factoryTypeCounts[factoryKeys[i]]);
             }
         }
     }
 
-    static drawFactory(factory: Factory): void {
+    static drawFactory(ctx: CanvasRenderingContext2D, factory: Factory): void {
         const corners = HexMath.calculateHexCorners(factory.x, factory.y, factory.size);
-        this._ctx.beginPath();
-        this._ctx.moveTo(corners[0].x, corners[0].y);
+        ctx.beginPath();
+        ctx.moveTo(corners[0].x, corners[0].y);
         for (let i = 1; i < 6; i++) {
-            this._ctx.lineTo(corners[i].x, corners[i].y);
+            ctx.lineTo(corners[i].x, corners[i].y);
         }
-        this._ctx.closePath();
-        this._ctx.strokeStyle = '#000';
-        this._ctx.lineWidth = 2;
-        this._ctx.stroke();
-        this._ctx.fillStyle = '#fff';
-        this._ctx.fill();
+        ctx.closePath();
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.fillStyle = '#fff';
+        ctx.fill();
     }
 
     static drawFactoryCount(factory: Factory, count: number): void {
@@ -90,4 +90,51 @@ export default abstract class UI {
             this._ctx.fillText(count.toString(), factory.x + factory.size + 5 - radius - textWidth / 2, factory.y - factory.height / 2 + radius + 6);
         }
     }
+
+    // static setupEventListeners(): void {
+    //     this._canvas.addEventListener('mousedown', (event) => {
+    //         console.log('mousedown');
+            
+    //         const rect = this._canvas.getBoundingClientRect();
+    //         const x = event.clientX - rect.left;
+    //         const y = event.clientY - rect.top;
+    //         console.log(x, y);
+    //         console.log(this._UIFactories);
+    //         for(let i = 0; i < this._UIFactories.length; i++){
+    //             if(HexMath.isPointInHex(this._ctx, x, y, {x: this._UIFactories[i].x, y: this._UIFactories[i].y}, this._UIFactories[i].size)){
+    //                 Game.factoryTypesCount[this._UIFactories[i].factoryType]--;
+    //                 Game.draggingFactory = this._UIFactories[i];
+    //                 Game.draggingFactory.offset = {x: x - this._UIFactories[i].x, y: y - this._UIFactories[i].y};
+    //                 return;
+    //             }
+    //         }
+    //     });
+    //     this._canvas.addEventListener('mousemove', (event) => {
+    //         const rect = this._canvas.getBoundingClientRect();
+    //         const x = event.clientX - rect.left;
+    //         const y = event.clientY - rect.top;
+    //         if(Game.draggingFactory){
+    //             Game.draggingFactory.x = x - Game.draggingFactory.offset.x;
+    //             Game.draggingFactory.y = y - Game.draggingFactory.offset.y;
+    //             UI.draw();
+    //             this.drawFactory(Game.draggingFactory);
+    //         } else {
+    //             for(let i = 0; i < this._UIFactories.length; i++){
+    //                 if(HexMath.isPointInHex(this._ctx, x, y, {x: this._UIFactories[i].x, y: this._UIFactories[i].y}, this._UIFactories[i].size)){
+    //                     this._canvas.style.cursor = 'pointer';
+    //                     return;
+    //                 }
+    //             }
+    //             this._canvas.style.cursor = 'default';
+    //         }
+    //     });
+    //     this._canvas.addEventListener('mouseup', (event) => {
+    //         if (Game.draggingFactory) {
+    //             Game.factoryTypesCount[Game.draggingFactory.factoryType]++;
+    //             Game.draggingFactory = null;
+    //             console.log(this._UIFactories);
+    //         }
+    //         UI.draw();
+    //     });
+    // }
 }

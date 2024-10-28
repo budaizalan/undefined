@@ -1,6 +1,5 @@
 export default class Factory {
     _coords;
-    _offset = { x: 0, y: 0 };
     _size = 50;
     _width = 2 * this._size;
     _height = Math.sqrt(3) * this._size;
@@ -18,12 +17,6 @@ export default class Factory {
     }
     set y(value) {
         this._coords.y = value;
-    }
-    get offset() {
-        return this._offset;
-    }
-    set offset(value) {
-        this._offset = value;
     }
     get size() {
         return this._size;

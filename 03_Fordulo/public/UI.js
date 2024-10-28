@@ -46,24 +46,24 @@ export default class UI {
                 factory.x = this._canvas.width - this._UIWidth / 2;
                 factory.y = y + i * 100;
                 this._UIFactories.push(factory);
-                this.drawFactory(factory);
+                this.drawFactory(this._ctx, factory);
                 this.drawFactoryCount(factory, factoryTypeCounts[factoryKeys[i]]);
             }
         }
     }
-    static drawFactory(factory) {
+    static drawFactory(ctx, factory) {
         const corners = HexMath.calculateHexCorners(factory.x, factory.y, factory.size);
-        this._ctx.beginPath();
-        this._ctx.moveTo(corners[0].x, corners[0].y);
+        ctx.beginPath();
+        ctx.moveTo(corners[0].x, corners[0].y);
         for (let i = 1; i < 6; i++) {
-            this._ctx.lineTo(corners[i].x, corners[i].y);
+            ctx.lineTo(corners[i].x, corners[i].y);
         }
-        this._ctx.closePath();
-        this._ctx.strokeStyle = '#000';
-        this._ctx.lineWidth = 2;
-        this._ctx.stroke();
-        this._ctx.fillStyle = '#fff';
-        this._ctx.fill();
+        ctx.closePath();
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.fillStyle = '#fff';
+        ctx.fill();
     }
     static drawFactoryCount(factory, count) {
         if (this._ctx) {
