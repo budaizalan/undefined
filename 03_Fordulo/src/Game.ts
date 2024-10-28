@@ -87,21 +87,11 @@ export default abstract class Game {
     }
 
     public static checkIntersection(){    
-        HexMath.calculateRange(this._placedFactory.position!, this._placedFactory.range).map(v => Game._hexMap.getHex(v.q, v.r)).map(ph => ph?.setTerrain("ocean", images.oceanImage))    
-        // this.hexMap.getAllHexes().filter(h => h.structure instanceof City).map(h => (h.structure as City).cover.map(c =>{
-        //     HexMath.calculateRange(this._placedFactory.position!, this._placedFactory.range).forEach(ph => {
-        //         if(c == ph){
-        //             (h.structure as City).cover.map(h => (h.structure as City).setIsSupplied(true));
-                    
-        //         };
-        //     })        
-        // }))
-        // this.hexMap.getAllHexes().filter(mh => mh.structure instanceof City).map(h => (h.structure as City).cover).map(ch =>{
-        //     HexMath.calculateRange(this._placedFactory.position!, this._placedFactory.range).forEach(ph => {
-        //         if(ch[0] == Game._hexMap.getHex(ph.q, ph.r)){
-        //             (ch[0].structure as City).cover.map(ch => (ch.structure as City).setIsSupplied(true));
-        //         }          
-        //     });            
-        // });
+        HexMath.calculateRange(this._placedFactory.position!, this._placedFactory.range).map(v => Game._hexMap.getHex(v.q, v.r)).map(ph => {
+            ph?.setTerrain("ocean", images.oceanImage)
+            if(ph?.structure instanceof City && ph.structure.requirements.includes(this._placedFactory.productionType)){
+                ph.structure.cover.map(phsc => (phsc.structure as City).setIsSupplied(true));
+            };
+        });    
     }
 }
