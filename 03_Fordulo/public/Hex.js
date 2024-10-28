@@ -3,7 +3,6 @@ export default class Hex {
     _coords;
     _terrain;
     _terrainImage = new Image();
-    _structure = undefined;
     get q() {
         return this._position.q;
     }
@@ -19,15 +18,9 @@ export default class Hex {
     get terrain() {
         return this._terrain;
     }
-    get structure() {
-        return this._structure;
-    }
     setTerrain(terrain, terrainImage) {
         this._terrain = terrain;
         this._terrainImage = terrainImage;
-    }
-    setStructure(_structure) {
-        this._structure = _structure;
     }
     get terrainImage() {
         return this._terrainImage;

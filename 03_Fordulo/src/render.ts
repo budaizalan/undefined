@@ -117,17 +117,10 @@ canvas.addEventListener('contextmenu', (event) => {
     const hex = Game.hexMap.getHex(q, r);
     if (hex) {
         console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
-        console.log(hex.structure);               
-        if (hex && !(hex.structure instanceof City) && Game.factoriesToPlace.length != 0) {
-            hex.setStructure(Game.factoryToPlace);    
-            (hex.structure as Factory).setPosition(hex);
-            Game.setPlacedFactory(hex.structure as Factory);
-            hex.setTerrain('stone', images.stoneImage);
-        }
+        Game.setFactory(hex);
         Game.checkIntersection();
-        console.log(hex);
         drawMap();
-        console.log(Game.hexMap);        
+        console.log(Game.cities);        
     } else {
         console.log('No hex found at this position.');
     }

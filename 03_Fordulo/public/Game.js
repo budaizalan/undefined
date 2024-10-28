@@ -67,16 +67,24 @@ export default class Game {
         this._cities.push(this.generateCity([-5, 7], ["C1"]));
         this._factories.push(new Factory("C1", 2));
         this._factoriesToPlace = this._factories;
-        // console.log(this.cities);                        
-        // console.log(this.factories); 
+    }
+    static setFactory(_hex) {
+        if (_hex && Game.factoriesToPlace.length != 0) {
+            let factory = this.factoryToPlace;
+            factory.setPosition(_hex);
+            Game.setPlacedFactory(factory);
+            _hex.setTerrain('stone', images.stoneImage);
+        }
     }
     static checkIntersection() {
+        console.log(this._placedFactory.position);
         HexMath.calculateRange(this._placedFactory.position, this._placedFactory.range).map(v => Game._hexMap.getHex(v.q, v.r)).map(ph => {
             ph?.setTerrain("ocean", images.oceanImage);
-            if (ph?.structure instanceof City && ph.structure.requirements.includes(this._placedFactory.productionType)) {
-                ph.structure.cover.map(phsc => phsc.structure.setIsSupplied(true));
-            }
-            ;
+            this.cities.map(c => c.cover.map(ch => {
+                if (c.requirements.includes(this._placedFactory.productionType) && ch === ph) {
+                    c.setIsSupplied(true);
+                }
+            }));
         });
     }
 }

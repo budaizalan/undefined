@@ -2,8 +2,6 @@ export default class Objective {
     _difficulty;
     _factoriesToPlace = 3;
     _types = ["A1", "B2", "C3"];
-    // private _cities: City[];
-    // private _factories: Factory[];
     get difficulty() {
         return this._difficulty;
     }

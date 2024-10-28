@@ -1,13 +1,7 @@
-import HexMap from "./HexMap";
-import { City, Factory } from "./Structures";
-
 export default class Objective{
     private _difficulty;
     private _factoriesToPlace = 3;
     private _types: string[] = ["A1", "B2", "C3"]
-
-    // private _cities: City[];
-    // private _factories: Factory[];
 
     get difficulty(): number{
         return this._difficulty;

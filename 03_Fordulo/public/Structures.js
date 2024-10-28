@@ -1,14 +1,5 @@
 import Images from "./Images.js";
 const images = new Images();
-// abstract class Structure{
-//     protected _cover: Hex[]; 
-//     get cover(): Hex[] {
-//         return this._cover;
-//     }
-//     constructor(_cover: Hex[]) {
-//         this._cover = _cover;        
-//     }
-// }
 class City {
     _requirements;
     _isSupplied = false;
@@ -28,7 +19,9 @@ class City {
     constructor(_requirements, _cover) {
         this._requirements = _requirements;
         this._cover = _cover;
-        this._cover.map(h => { h.setTerrain('stone', images.stoneImage); h.setStructure(this); });
+        this._cover.map(h => {
+            h.setTerrain('stone', images.stoneImage);
+        });
     }
 }
 class Factory {
