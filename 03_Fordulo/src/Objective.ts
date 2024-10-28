@@ -26,6 +26,4 @@ export default class Objective{
     constructor(_difficulty: number) {
         this._difficulty = _difficulty
     }
-
-
 }

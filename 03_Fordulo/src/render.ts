@@ -95,14 +95,14 @@ canvas.addEventListener('click', (event) => {
         const range = 1;
         HexMath.calculateRange(hex, range).forEach((hexPosition) => {
             console.log(`Hex: q=${hexPosition.q}, r=${hexPosition.r}`);            
-            const hex = Game.hexMap.getHex(hexPosition.q, hexPosition.r);
-            console.log(hex);
+            // const hex = Game.hexMap.getHex(hexPosition.q, hexPosition.r);
+            // console.log(hex);
             // if (hex) {
             //     hex.setTerrain('stone', images.stoneImage);
             // }
         });
         drawMap();
-        drawCity(hex);
+        // drawCity(hex);
         // drawHex((hex.x + HexMath.calculateHexDiagonal()) + canvas.width / 2, hex.y + canvas.height / 2, true, false);
     } else {
         console.log('No hex found at this position.');
@@ -115,12 +115,13 @@ canvas.addEventListener('contextmenu', (event) => {
     const y = event.clientY - rect.top - canvas.height / 2;
     const { q, r } = HexMath.pixelToHex(x, y);
     const hex = Game.hexMap.getHex(q, r);
-    if (hex) {
+    if (hex && hex.terrain != "stone") {
         console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
         Game.setFactory(hex);
         Game.checkIntersection();
         drawMap();
-        console.log(Game.cities);        
+        Game.checkEndGame();
+        console.log(Game.cities); 
     } else {
         console.log('No hex found at this position.');
     }

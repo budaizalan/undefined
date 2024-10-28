@@ -33,7 +33,7 @@ export default class Game {
     static get factoryToPlace() {
         this._placedFactory = this._factoriesToPlace[0];
         this._factoriesToPlace.shift();
-        this.objective?.factoriesToPlace - 1;
+        this.objective?.setFactoriesToPlace(this.objective?.factoriesToPlace - 1);
         console.log(this._factoriesToPlace);
         return this._placedFactory;
     }
@@ -54,17 +54,17 @@ export default class Game {
                 break;
         }
     }
-    static generateCity(_startHex, _type) {
+    static generateCity(_id, _startHex, _type) {
         let hexes = [];
         HexMath.calculateRange(Game._hexMap.getHex(_startHex[0], _startHex[1]), 1).forEach(v => hexes.push(Game._hexMap.getHex(v.q, v.r)));
-        return new City(_type, hexes);
+        return new City(_id, _type, hexes);
     }
     static initializeDifficulty1() {
-        this._cities.push(this.generateCity([-4, -2], ["A1"]));
+        this._cities.push(this.generateCity(1, [-4, -2], ["A1"]));
         this._factories.push(new Factory("A1", 2));
-        this._cities.push(this.generateCity([5, -2], ["B1"]));
+        this._cities.push(this.generateCity(2, [5, -2], ["B1"]));
         this._factories.push(new Factory("B1", 2));
-        this._cities.push(this.generateCity([-5, 7], ["C1"]));
+        this._cities.push(this.generateCity(3, [-5, 7], ["C1"]));
         this._factories.push(new Factory("C1", 2));
         this._factoriesToPlace = this._factories;
     }
@@ -86,5 +86,26 @@ export default class Game {
                 }
             }));
         });
+    }
+    static getUnsuppliedCities() {
+        return this.cities.filter(c => c.isSupplied == false);
+    }
+    static checkEndGame() {
+        if (this.objective?.factoriesToPlace == 0) {
+            this.isSolutionCorrect();
+            return true;
+        }
+        return false;
+    }
+    static isSolutionCorrect() {
+        let unsuppliedCities = this.getUnsuppliedCities();
+        if (unsuppliedCities.length == 0) {
+            console.log('Helyes megoldás, gratula!');
+        }
+        else {
+            let returnString = "";
+            unsuppliedCities.forEach(c => returnString += ` ${c.id}.`);
+            console.log((`${returnString} városok nem kaptak megfelelő ellátást!`));
+        }
     }
 }
