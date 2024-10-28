@@ -3,6 +3,7 @@ export default class Hex {
     private _coords: { x: number; y: number };
     private _terrain: string;
     private _terrainImage: HTMLImageElement = new Image();
+    private _structure: object | undefined = undefined;
 
     get q(): number {
         return this._position.q;
@@ -24,9 +25,17 @@ export default class Hex {
         return this._terrain;
     }
 
+    get structure(): object | undefined{
+        return this._structure;
+    }
+
     public setTerrain(terrain: string, terrainImage: HTMLImageElement) {
         this._terrain = terrain;
         this._terrainImage = terrainImage;
+    }
+
+    public setStructure(_structure: object){
+        this._structure = _structure;
     }
 
     get terrainImage(): HTMLImageElement {

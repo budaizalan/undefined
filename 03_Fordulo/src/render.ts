@@ -2,6 +2,7 @@ import Debug from "./Debug.js";
 import Game from "./Game.js";
 import Hex from "./Hex.js";
 import HexMath from "./HexMath.js";
+import Images from "./Images.js";
 
 const bgCanvas = document.getElementById('backgroundCanvas') as HTMLCanvasElement;
 const bgCtx = bgCanvas.getContext('2d');
@@ -10,15 +11,17 @@ const ctx = canvas.getContext('2d');
 bgCanvas.width = canvas.width = window.innerWidth;
 bgCanvas.height = canvas.height = window.innerHeight;
 
-const stoneImage = new Image();
-const grassImage = new Image();
-const grassImage2 = new Image();
-const oceanImage = new Image();
+const images = new Images();
 
-grassImage.src = './assets/grass.png';
-grassImage2.src = './assets/grass2.png';
-stoneImage.src = './assets/stone.png';
-oceanImage.src = './assets/ocean.png';
+// const stoneImage = new Image();
+// const grassImage = new Image();
+// const grassImage2 = new Image();
+// const oceanImage = new Image();
+
+// grassImage.src = './assets/grass.png';
+// grassImage2.src = './assets/grass2.png';
+// stoneImage.src = './assets/stone.png';
+// oceanImage.src = './assets/ocean.png';
 
 if (!ctx) {
     throw new Error('Failed to get 2D context');
@@ -55,7 +58,7 @@ function drawBackground(): void {
         for (let r = -rows; r <= rows; r++) {
             const { x, y } = HexMath.hexToPixel(q, r);
             if(x >= -window.innerWidth / 2 - HexMath.hexWidth && x <= window.innerWidth / 2 + HexMath.hexWidth && y >= -window.innerHeight / 2 - HexMath.hexHeight && y <= window.innerHeight / 2 + HexMath.hexHeight) {
-                drawHex(x + canvas.width / 2, y + canvas.height / 2, oceanImage);
+                drawHex(x + canvas.width / 2, y + canvas.height / 2, images.oceanImage);
             }
         }
     }
@@ -93,7 +96,7 @@ canvas.addEventListener('click', (event) => {
             console.log(`Hex: q=${hexPosition.q}, r=${hexPosition.r}`);
             const hex = Game.hexMap.getHex(hexPosition.q, hexPosition.r);
             if (hex) {
-                hex.setTerrain('stone', stoneImage);
+                hex.setTerrain('stone', images.stoneImage);
             }
         });
         drawMap();
@@ -110,14 +113,15 @@ function StartGame() {
         return;
     }
     // drawBackground();
+    Game.setObjective(0);
     drawMap();
 }
 
 function imagesLoaded(){
-    console.log('grassImage:', grassImage.complete);
-    console.log('stoneImage:', stoneImage.complete);
-    console.log('oceanImage:', oceanImage.complete);
-    return grassImage.complete && stoneImage.complete && oceanImage.complete && grassImage2.complete;
+    console.log('grassImage:', images.grassImage.complete);
+    console.log('stoneImage:', images.stoneImage.complete);
+    console.log('oceanImage:', images.oceanImage.complete);
+    return images.grassImage.complete && images.stoneImage.complete && images.oceanImage.complete && images.grassImage2.complete;
 }
 
 StartGame();
