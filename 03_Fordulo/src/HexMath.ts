@@ -1,4 +1,5 @@
-import Hex from "./Hex";
+import Game from "./Game.js";
+import Hex from "./Hex.js";
 
 export default abstract class HexMath {
     private static _hexSize: number;
@@ -85,7 +86,9 @@ export default abstract class HexMath {
         const results = [];
         for (let q = qmin; q <= qmax; q++) {
             for (let r = Math.max(rmin, -q - smax); r <= Math.min(rmax, -q - smin); r++) {
-                results.push({ q, r });
+                if(q >= -Game.mapRadius && q <= Game.mapRadius && r >= -Game.mapRadius && r <= Game.mapRadius){
+                    results.push({ q, r });
+                }
             }
         }
         return results;

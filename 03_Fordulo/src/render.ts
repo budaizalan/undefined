@@ -12,9 +12,11 @@ bgCanvas.height = canvas.height = window.innerHeight;
 
 const stoneImage = new Image();
 const grassImage = new Image();
+const grassImage2 = new Image();
 const oceanImage = new Image();
 
 grassImage.src = './assets/grass.png';
+grassImage2.src = './assets/grass2.png';
 stoneImage.src = './assets/stone.png';
 oceanImage.src = './assets/ocean.png';
 
@@ -67,6 +69,17 @@ function drawMap(): void {
     }
 }
 
+function drawCity(hex: Hex): void {
+    console.log(hex)
+    if (hex) {
+        if (ctx) {
+            console.log(HexMath.hexWidth, HexMath.hexHeight);
+            
+            // ctx.drawImage(cityImage, hex.x - (HexMath.hexWidth) + canvas.width / 2, hex.y - (HexMath.hexHeight + 15) + canvas.height / 2, HexMath.hexWidth * 2, HexMath.hexHeight * 2);
+        }
+    }
+}
+
 canvas.addEventListener('click', (event) => {
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left - canvas.width / 2;
@@ -77,12 +90,14 @@ canvas.addEventListener('click', (event) => {
         console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
         const range = 1;
         HexMath.calculateRange(hex, range).forEach((hexPosition) => {
+            console.log(`Hex: q=${hexPosition.q}, r=${hexPosition.r}`);
             const hex = Game.hexMap.getHex(hexPosition.q, hexPosition.r);
             if (hex) {
                 hex.setTerrain('stone', stoneImage);
             }
         });
         drawMap();
+        drawCity(hex);
         // drawHex((hex.x + HexMath.calculateHexDiagonal()) + canvas.width / 2, hex.y + canvas.height / 2, true, false);
     } else {
         console.log('No hex found at this position.');
@@ -102,7 +117,7 @@ function imagesLoaded(){
     console.log('grassImage:', grassImage.complete);
     console.log('stoneImage:', stoneImage.complete);
     console.log('oceanImage:', oceanImage.complete);
-    return grassImage.complete && stoneImage.complete && oceanImage.complete;
+    return grassImage.complete && stoneImage.complete && oceanImage.complete && grassImage2.complete;
 }
 
 StartGame();
