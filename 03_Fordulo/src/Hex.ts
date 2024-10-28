@@ -1,3 +1,5 @@
+import { City, Factory } from "./Structures";
+
 export default class Hex {
     private _position: { q: number; r: number };
     private _coords: { x: number; y: number };
@@ -28,7 +30,7 @@ export default class Hex {
         this._terrain = terrain;
         this._terrainImage = terrainImage;
     }
-
+    
     get terrainImage(): HTMLImageElement {
         return this._terrainImage;
     }
