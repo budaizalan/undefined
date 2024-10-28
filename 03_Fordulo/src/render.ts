@@ -132,12 +132,14 @@ gameCanvas.addEventListener('mousedown', (event) => {
     const y = event.clientY - rect.top;
     for(let i = 0; i < UI.factories.length; i++){
         if(HexMath.isPointInHex(gameCtx, x, y, {x: UI.factories[i].x, y: UI.factories[i].y}, UI.factories[i].size)){
-            Game.factoryTypesCount[UI.factories[i].productionType]--;
+            if(Game.factoryTypesCount[UI.factories[i].productionType] > 0){
+                Game.factoryTypesCount[UI.factories[i].productionType]--;
             Game.draggingFactory = UI.factories[i];
             Game.draggingFactory.x = x;
             Game.draggingFactory.y = y;
             UI.draw();
             return;
+            }            
         }
     }
 });
@@ -161,7 +163,14 @@ gameCanvas.addEventListener('mousemove', (event) => {
 gameCanvas.addEventListener('mouseup', (event) => {
     if (Game.draggingFactory) {
         Game.factoryTypesCount[Game.draggingFactory.productionType]++;
-        const rect = gameCanvas.getBoundingClientRect();
+        placeFactory(event);
+        Game.draggingFactory = null;
+    }
+    UI.draw();
+});
+
+function placeFactory(event: any): void{
+    const rect = gameCanvas.getBoundingClientRect();
         const x = event.clientX - rect.left - gameCanvas.width / 2;
         const y = event.clientY - rect.top - gameCanvas.height / 2;
         const { q, r } = HexMath.pixelToHex(x, y);
@@ -176,10 +185,7 @@ gameCanvas.addEventListener('mouseup', (event) => {
         } else {
             console.log('Cannot place there.');
         }
-        Game.draggingFactory = null;
-    }
-    UI.draw();
-});
+}
 
 function draw(): void {
     if (gameCtx) {

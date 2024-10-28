@@ -118,12 +118,14 @@ gameCanvas.addEventListener('mousedown', (event) => {
     const y = event.clientY - rect.top;
     for (let i = 0; i < UI.factories.length; i++) {
         if (HexMath.isPointInHex(gameCtx, x, y, { x: UI.factories[i].x, y: UI.factories[i].y }, UI.factories[i].size)) {
-            Game.factoryTypesCount[UI.factories[i].productionType]--;
-            Game.draggingFactory = UI.factories[i];
-            Game.draggingFactory.x = x;
-            Game.draggingFactory.y = y;
-            UI.draw();
-            return;
+            if (Game.factoryTypesCount[UI.factories[i].productionType] > 0) {
+                Game.factoryTypesCount[UI.factories[i].productionType]--;
+                Game.draggingFactory = UI.factories[i];
+                Game.draggingFactory.x = x;
+                Game.draggingFactory.y = y;
+                UI.draw();
+                return;
+            }
         }
     }
 });
@@ -148,26 +150,29 @@ gameCanvas.addEventListener('mousemove', (event) => {
 gameCanvas.addEventListener('mouseup', (event) => {
     if (Game.draggingFactory) {
         Game.factoryTypesCount[Game.draggingFactory.productionType]++;
-        const rect = gameCanvas.getBoundingClientRect();
-        const x = event.clientX - rect.left - gameCanvas.width / 2;
-        const y = event.clientY - rect.top - gameCanvas.height / 2;
-        const { q, r } = HexMath.pixelToHex(x, y);
-        const hex = Game.hexMap.getHex(q, r);
-        if (hex && hex.terrain != "stone" && hex.terrain != "ocean") {
-            console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
-            Game.setFactory(hex);
-            Game.checkIntersection();
-            drawMap();
-            Game.checkEndGame();
-            console.log(Game.cities);
-        }
-        else {
-            console.log('Cannot place there.');
-        }
+        placeFactory(event);
         Game.draggingFactory = null;
     }
     UI.draw();
 });
+function placeFactory(event) {
+    const rect = gameCanvas.getBoundingClientRect();
+    const x = event.clientX - rect.left - gameCanvas.width / 2;
+    const y = event.clientY - rect.top - gameCanvas.height / 2;
+    const { q, r } = HexMath.pixelToHex(x, y);
+    const hex = Game.hexMap.getHex(q, r);
+    if (hex && hex.terrain != "stone" && hex.terrain != "ocean") {
+        console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
+        Game.setFactory(hex);
+        Game.checkIntersection();
+        drawMap();
+        Game.checkEndGame();
+        console.log(Game.cities);
+    }
+    else {
+        console.log('Cannot place there.');
+    }
+}
 function draw() {
     if (gameCtx) {
         gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);

@@ -13,7 +13,7 @@ export default class Game {
     static _factories = [];
     static _factoriesToPlace = [];
     static _placedFactory;
-    static _factoryTypesCount = { 'blue': 2, 'green': 1, 'red': 1 };
+    static _factoryTypesCount = { 'blue': 1, 'green': 1, 'red': 1 };
     // ====
     static _factories2 = [];
     // ====
@@ -43,6 +43,7 @@ export default class Game {
         this._placedFactory = this._factoriesToPlace[0];
         this._factoriesToPlace.shift();
         this.objective?.setFactoriesToPlace(this.objective?.factoriesToPlace - 1);
+        this._factoryTypesCount[this._placedFactory.productionType] -= 1;
         console.log(this._factoriesToPlace);
         return this._placedFactory;
     }
@@ -69,12 +70,12 @@ export default class Game {
         return new City(_id, _type, hexes);
     }
     static initializeDifficulty1() {
-        this._cities.push(this.generateCity(1, [-4, -2], ["A1"]));
-        this._factories.push(new Factory("A1", 2));
-        this._cities.push(this.generateCity(2, [5, -2], ["B1"]));
-        this._factories.push(new Factory("B1", 2));
-        this._cities.push(this.generateCity(3, [-5, 7], ["C1"]));
-        this._factories.push(new Factory("C1", 2));
+        this._cities.push(this.generateCity(1, [-4, -2], ["blue"]));
+        this._factories.push(new Factory("blue", 2));
+        this._cities.push(this.generateCity(2, [5, -2], ["green"]));
+        this._factories.push(new Factory("green", 2));
+        this._cities.push(this.generateCity(3, [-5, 7], ["red"]));
+        this._factories.push(new Factory("red", 2));
         this._factoriesToPlace = this._factories;
     }
     static setFactory(_hex) {
