@@ -115,7 +115,7 @@ canvas.addEventListener('contextmenu', (event) => {
     const y = event.clientY - rect.top - canvas.height / 2;
     const { q, r } = HexMath.pixelToHex(x, y);
     const hex = Game.hexMap.getHex(q, r);
-    if (hex && hex.terrain != "stone") {
+    if (hex && hex.terrain != "stone" && hex.terrain != "ocean") {
         console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
         Game.setFactory(hex);
         Game.checkIntersection();
@@ -123,7 +123,7 @@ canvas.addEventListener('contextmenu', (event) => {
         Game.checkEndGame();
         console.log(Game.cities); 
     } else {
-        console.log('No hex found at this position.');
+        console.log('Cannot place there.');
     }
 });
 
