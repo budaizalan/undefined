@@ -1,15 +1,11 @@
 export default class Objective {
     _difficulty;
     _factoriesToPlace = 3;
-    _types = ["A1", "B2", "C3"];
     get difficulty() {
         return this._difficulty;
     }
     get factoriesToPlace() {
         return this._factoriesToPlace;
-    }
-    get types() {
-        return this._types;
     }
     setDifficulty(_difficulty) {
         this._difficulty = _difficulty;

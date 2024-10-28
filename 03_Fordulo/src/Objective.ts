@@ -1,7 +1,6 @@
 export default class Objective{
     private _difficulty;
     private _factoriesToPlace = 3;
-    private _types: string[] = ["A1", "B2", "C3"]
 
     get difficulty(): number{
         return this._difficulty;
@@ -9,10 +8,6 @@ export default class Objective{
 
     get factoriesToPlace(): number{
         return this._factoriesToPlace;
-    }
-
-    get types(): string[]{
-        return this._types;
     }
 
     public setDifficulty(_difficulty: number){
