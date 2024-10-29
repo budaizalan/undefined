@@ -3,10 +3,11 @@ import HexMap from "./HexMap.js";
 import HexMath from "../utilities/HexMath.js";
 import Images from "./Images.js";
 import City from "./City.js";
+import Levels from "./Levels.js";
+import Objective from "./Objective.js";
 export default class Game {
     static _mapRadius = 8;
     static _hexMap = new HexMap(this._mapRadius);
-    static _objective = undefined;
     static _cities = [];
     static _factories = [];
     static _factoriesToPlace = [];
@@ -26,9 +27,6 @@ export default class Game {
     static get hexMap() {
         return Game._hexMap;
     }
-    static get objective() {
-        return this._objective;
-    }
     static get cities() {
         return this._cities;
     }
@@ -40,10 +38,6 @@ export default class Game {
     }
     static get generateParams() {
         return this._params;
-    }
-    static AdjustParams(position) {
-        this._params = position;
-        this.generateLevel();
     }
     static factoryToPlace(factory) {
         this._placedFactory = factory;
@@ -65,16 +59,18 @@ export default class Game {
         });
         return new City(_id, _type, hexes, { q: _startHex[0], r: _startHex[1] });
     }
-    static generateLevel() {
-        console.log(`${this.generateParams}`);
+    static generateLevel(level) {
+        Objective.setLevel(Levels.levels[level - 1]);
         this._cities = [];
         this._factories = [];
-        this._cities.push(this.generateCity(1, [this._params[0], this._params[1]], ["blue"]));
-        this._factories.push(new Factory("blue", 2));
-        this._cities.push(this.generateCity(2, [this._params[0], this._params[1]], ["green"]));
-        this._factories.push(new Factory("green", 2));
-        this._cities.push(this.generateCity(3, [this._params[0], this._params[1]], ["red"]));
-        this._factories.push(new Factory("red", 2));
+        Objective.getCities().forEach((c) => {
+            this._cities.push(this.generateCity(c.id, [c.position.q, c.position.r], [c.type]));
+        });
+        Objective.getFactories().forEach((f) => {
+            this._factories.push(new Factory(f.productionType, f.range));
+        });
+        console.log(this._cities);
+        console.log(this._factories);
         this._factoriesToPlace = this._factories;
     }
     static setFactory(_hex, factory) {
@@ -88,7 +84,6 @@ export default class Game {
     }
     static checkIntersection() {
         HexMath.calculateRange(this._hexMap.getHex(this._placedFactory.position.q, this._placedFactory.position.r), this._placedFactory.range).map(v => Game._hexMap.getHex(v.q, v.r)).map(ph => {
-            // ph?.setTerrain("ocean", Images.oceanImage)
             this.cities.map(c => c.cover.map(ch => {
                 if (c.requirements.includes(this._placedFactory.productionType) && ch === ph) {
                     c.setIsSupplied(true);
@@ -100,7 +95,7 @@ export default class Game {
         return this.cities.filter(c => c.isSupplied == false);
     }
     static checkEndGame() {
-        if (this.objective?.factoriesToPlace == 0) {
+        if (Objective.factoriesToPlace == 0) {
             this.isSolutionCorrect();
             return true;
         }

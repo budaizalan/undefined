@@ -1,24 +1,45 @@
-export default class Objective{
-    private _difficulty;
-    private _factoriesToPlace = 3;
+export default abstract class Objective{
+    private static _difficulty: number = 0;
+    private static _factoriesToPlace: number = 3;
+    private static _level: number = 0;
+    private static _cities: [] = [];
+    private static _factories: [] = [];
 
-    get difficulty(): number{
+
+    static get difficulty(): number{
         return this._difficulty;
     }
 
-    get factoriesToPlace(): number{
+    static get factoriesToPlace(): number{
         return this._factoriesToPlace;
     }
 
-    public setDifficulty(_difficulty: number){
+    static get factories(): []{
+        return this.factories;
+    }
+
+    public static getCities(){
+        return this._cities;
+    }
+
+    public static getFactories(){
+        return this._factories;
+    }
+
+    public static setDifficulty(_difficulty: number){
         this._difficulty = _difficulty;
     }    
     
-    public setFactoriesToPlace(_toPlace: number){
+    public static setFactoriesToPlace(_toPlace: number){
         this._factoriesToPlace = _toPlace;
-    } 
+    }
 
-    constructor(_difficulty: number) {
-        this._difficulty = _difficulty
+    public static setLevel(level: any){
+        this._level = level.level;
+        this._cities = level.cities;
+        this._factories = level.factories;
+        console.log(this._level);
+        console.log(this._cities);
+        console.log(this._factories);
     }
 }

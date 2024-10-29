@@ -84,13 +84,11 @@ function drawMap(): void {
         drawHex(factory.x + gameCanvas.width / 2, factory.y + gameCanvas.height / 2, factory.terrainImage, factory.terrain);
     } 
     for (const city of cities) {
-        console.log(city);            
         let city1: City | undefined;
         Game.cities.map(c => {
             if(c.position.q == city.q && c.position.r == city.r)
                 city1 = c;
         }); 
-        console.log(Game.cities.filter(c => c.cover.includes(city)));
         drawCity(city.x + gameCanvas.width / 2, city.y + gameCanvas.height / 2, city.terrainImage, city.terrain, city1?.isSupplied, city1?.requirements[0])
     }      
 }
@@ -109,7 +107,6 @@ function drawRange(hex: Hex){
         if(hex){
             if(bgCtx){
                 const hexCorners = HexMath.calculateHexCorners(hex.x + bgCanvas.width / 2, hex.y + bgCanvas.height / 2);
-                console.log(hexCorners);
                 bgCtx.beginPath();
                 bgCtx.moveTo(hexCorners[0].x, hexCorners[0].y);
                 for (let i = 1; i < 6; i++) {
@@ -123,89 +120,91 @@ function drawRange(hex: Hex){
     });
 }
 
-gameCanvas.addEventListener('mousedown', (event) => {
-    const rect = gameCanvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    for(let i = 0; i < UI.factories.length; i++){
-        if(HexMath.isPointInHex(gameCtx, x, y, {x: UI.factories[i].x, y: UI.factories[i].y}, UI.factories[i].size)){
-            if(Game.factoryTypesCount[UI.factories[i].productionType] > 0){
-                gameCanvas.style.cursor = 'grabbing';
-                Game.factoryTypesCount[UI.factories[i].productionType]--;
-                Game.draggingFactory = UI.factories[i];
-                Game.draggingFactory.x = x;
-                Game.draggingFactory.y = y;
-                UI.draw();
-                return;
-            }            
+function setupEventListeners(){
+    gameCanvas.addEventListener('mousedown', (event) => {
+        const rect = gameCanvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        for(let i = 0; i < UI.factories.length; i++){
+            if(HexMath.isPointInHex(gameCtx!, x, y, {x: UI.factories[i].x, y: UI.factories[i].y}, UI.factories[i].size)){
+                if(Game.factoryTypesCount[UI.factories[i].productionType] > 0){
+                    gameCanvas.style.cursor = 'grabbing';
+                    Game.factoryTypesCount[UI.factories[i].productionType]--;
+                    Game.draggingFactory = UI.factories[i];
+                    Game.draggingFactory.x = x;
+                    Game.draggingFactory.y = y;
+                    UI.draw();
+                    return;
+                }            
+            }
         }
-    }
-});
-gameCanvas.addEventListener('mousemove', (event) => {
-    const rect = gameCanvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    if(Game.draggingFactory){
-        const {q , r} = HexMath.pixelToHex(x - gameCanvas.width / 2, y - gameCanvas.height / 2);
-        const hex = Game.hexMap.getHex(q, r);
-        if(hex){
-            if((hex.type != 'city') && (hex.type != 'factory')){
-                if(hex.q != Game.draggingFactory.position?.q || hex.r != Game.draggingFactory.position?.r){
-                    Game.draggingFactory.onMap = true;
-                    Game.draggingFactory.size = HexMath.hexSize;
-                    Game.draggingFactory.setPosition({q, r});
-                    Game.draggingFactory.x = hex.x + gameCanvas.width / 2;
-                    Game.draggingFactory.y = hex.y + gameCanvas.height / 2;
-                    drawBgCanvas(Game.draggingFactory);
-                }   
+    });
+    gameCanvas.addEventListener('mousemove', (event) => {
+        const rect = gameCanvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        if(Game.draggingFactory){
+            const {q , r} = HexMath.pixelToHex(x - gameCanvas.width / 2, y - gameCanvas.height / 2);
+            const hex = Game.hexMap.getHex(q, r);
+            if(hex){
+                if((hex.type != 'city') && (hex.type != 'factory')){
+                    if(hex.q != Game.draggingFactory.position?.q || hex.r != Game.draggingFactory.position?.r){
+                        Game.draggingFactory.onMap = true;
+                        Game.draggingFactory.size = HexMath.hexSize;
+                        Game.draggingFactory.setPosition({q, r});
+                        Game.draggingFactory.x = hex.x + gameCanvas.width / 2;
+                        Game.draggingFactory.y = hex.y + gameCanvas.height / 2;
+                        drawBgCanvas(Game.draggingFactory);
+                    }   
+                } else {
+                    if(Game.draggingFactory.onMap){ 
+                        drawBgCanvas();
+                    }
+                    Game.draggingFactory.onMap = false;
+                    Game.draggingFactory.setPosition(undefined);
+                    Game.draggingFactory.x = x;
+                    Game.draggingFactory.y = y;
+                }
             } else {
                 if(Game.draggingFactory.onMap){ 
                     drawBgCanvas();
                 }
                 Game.draggingFactory.onMap = false;
+                Game.draggingFactory.size = 50;
                 Game.draggingFactory.setPosition(undefined);
                 Game.draggingFactory.x = x;
                 Game.draggingFactory.y = y;
             }
         } else {
-            if(Game.draggingFactory.onMap){ 
-                drawBgCanvas();
+            for(let i = 0; i < UI.factories.length; i++){
+                if(HexMath.isPointInHex(gameCtx!, x, y, {x: UI.factories[i].x, y: UI.factories[i].y}, UI.factories[i].size) && Game.factoryTypesCount[UI.factories[i].productionType] > 0){
+                    gameCanvas.style.cursor = 'pointer';
+                    return;
+                }
             }
-            Game.draggingFactory.onMap = false;
-            Game.draggingFactory.size = 50;
-            Game.draggingFactory.setPosition(undefined);
-            Game.draggingFactory.x = x;
-            Game.draggingFactory.y = y;
+            gameCanvas.style.cursor = 'default';
         }
-    } else {
-        for(let i = 0; i < UI.factories.length; i++){
-            if(HexMath.isPointInHex(gameCtx, x, y, {x: UI.factories[i].x, y: UI.factories[i].y}, UI.factories[i].size) && Game.factoryTypesCount[UI.factories[i].productionType] > 0){
-                gameCanvas.style.cursor = 'pointer';
-                return;
-            }
-        }
+    });
+    gameCanvas.addEventListener('mouseup', (event) => {
+        const rect = gameCanvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
         gameCanvas.style.cursor = 'default';
-    }
-});
-gameCanvas.addEventListener('mouseup', (event) => {
-    const rect = gameCanvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    gameCanvas.style.cursor = 'default';
-    if (Game.draggingFactory) {
-        const {q , r} = HexMath.pixelToHex(x - gameCanvas.width / 2, y - gameCanvas.height / 2);
-        const hex = Game.hexMap.getHex(q, r);
-        Game.factoryTypesCount[Game.draggingFactory.productionType]++;
-        if(hex){
-            if((hex.type != 'city' && hex.type != 'factory') ){
-                placeFactory(event, Game.draggingFactory);
+        if (Game.draggingFactory) {
+            const {q , r} = HexMath.pixelToHex(x - gameCanvas.width / 2, y - gameCanvas.height / 2);
+            const hex = Game.hexMap.getHex(q, r);
+            Game.factoryTypesCount[Game.draggingFactory.productionType]++;
+            if(hex){
+                if((hex.type != 'city' && hex.type != 'factory') ){
+                    placeFactory(event, Game.draggingFactory);
+                }
             }
+            Game.draggingFactory = null;
         }
-        Game.draggingFactory = null;
-    }
-    drawBgCanvas();
-    UI.draw();
-});
+        drawBgCanvas();
+        UI.draw();
+    });
+}
 
 function placeFactory(event: any, factory: Factory): void{
     const rect = gameCanvas.getBoundingClientRect();
@@ -243,14 +242,20 @@ function drawBgCanvas(draggingFactory?: Factory): void {
     }
 }
 
-export function StartGame(): void {
+export function StartGame(level: number): void {
+    resetGame();
+    Game.generateLevel(level);
     if (!Images.imagesLoaded()) {
         setTimeout(StartGame, 100);
         return;
     }
+    setupEventListeners();
     // drawBackground();
     drawBgCanvas();
     draw();
+}
+
+function resetGame(): void {
 }
 
 console.log('hexMap:', Game.hexMap);

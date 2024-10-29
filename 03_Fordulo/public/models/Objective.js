@@ -1,19 +1,36 @@
 export default class Objective {
-    _difficulty;
-    _factoriesToPlace = 3;
-    get difficulty() {
+    static _difficulty = 0;
+    static _factoriesToPlace = 3;
+    static _level = 0;
+    static _cities = [];
+    static _factories = [];
+    static get difficulty() {
         return this._difficulty;
     }
-    get factoriesToPlace() {
+    static get factoriesToPlace() {
         return this._factoriesToPlace;
     }
-    setDifficulty(_difficulty) {
+    static get factories() {
+        return this.factories;
+    }
+    static getCities() {
+        return this._cities;
+    }
+    static getFactories() {
+        return this._factories;
+    }
+    static setDifficulty(_difficulty) {
         this._difficulty = _difficulty;
     }
-    setFactoriesToPlace(_toPlace) {
+    static setFactoriesToPlace(_toPlace) {
         this._factoriesToPlace = _toPlace;
     }
-    constructor(_difficulty) {
-        this._difficulty = _difficulty;
+    static setLevel(level) {
+        this._level = level.level;
+        this._cities = level.cities;
+        this._factories = level.factories;
+        console.log(this._level);
+        console.log(this._cities);
+        console.log(this._factories);
     }
 }
