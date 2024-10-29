@@ -79,7 +79,7 @@ function drawMap() {
         console.log(city);
         let city1;
         Game.cities.map(c => {
-            if (c.cover.includes(city))
+            if (c.position.q == city.q && c.position.r == city.r)
                 city1 = c;
         });
         console.log(Game.cities.filter(c => c.cover.includes(city)));
