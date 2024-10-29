@@ -1,31 +1,18 @@
-import Debug from "./Debug.js";
-import Factory from "./Factory.js";
-import Game from "./Game.js";
-import Hex from "./Hex.js";
-import HexMath from "./HexMath.js";
-import Images from "./Images.js";
-import City from "./Structures.js";
+import Debug from "./utilities/Debug.js";
+import Factory from "./models/Factory.js";
+import Game from "./models/Game.js";
+import Hex from "./models/Hex.js";
+import HexMath from "./utilities/HexMath.js";
+import Images from "./models/Images.js";
 import UI from "./UI.js";
 
 const bgCanvas = document.getElementById('backgroundCanvas') as HTMLCanvasElement;
 const gameCanvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
 const bgCtx = bgCanvas.getContext('2d');
 const gameCtx = gameCanvas.getContext('2d');
+const images = new Images();
 bgCanvas.width = gameCanvas.width = window.innerWidth;
 bgCanvas.height = gameCanvas.height = window.innerHeight;
-
-const images = new Images();
-
-// const stoneImage = new Image();
-// const grassImage = new Image();
-// const grassImage2 = new Image();
-// const oceanImage = new Image();
-
-// grassImage.src = './assets/grass.png';
-// grassImage2.src = './assets/grass2.png';
-// stoneImage.src = './assets/stone.png';
-// oceanImage.src = './assets/ocean.png';
-
 if (!gameCtx || !bgCtx) {
     throw new Error('Failed to get 2D context');
 }
@@ -75,55 +62,6 @@ function drawMap(): void {
         Debug.drawCoords(hex.x, hex.y, hex.q, hex.r);
     }
 }
-
-function drawCity(hex: Hex): void {
-    if (hex) {
-        if (gameCtx) {
-            // ctx.drawImage(cityImage, hex.x - (HexMath.hexWidth) + canvas.width / 2, hex.y - (HexMath.hexHeight + 15) + canvas.height / 2, HexMath.hexWidth * 2, HexMath.hexHeight * 2);
-        }
-    }
-}
-
-gameCanvas.addEventListener('click', (event) => {
-    const rect = gameCanvas.getBoundingClientRect();
-    const x = event.clientX - rect.left - gameCanvas.width / 2;
-    const y = event.clientY - rect.top - gameCanvas.height / 2;
-    const { q, r } = HexMath.pixelToHex(x, y);
-    const hex = Game.hexMap.getHex(q, r);
-    if (hex) {
-        // console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
-        const range = 1;
-        HexMath.calculateRange(hex, range).forEach((hexPosition) => {
-            console.log(`Hex: q=${hexPosition.q}, r=${hexPosition.r}`);            
-            // const hex = Game.hexMap.getHex(hexPosition.q, hexPosition.r);
-            // console.log(hex);
-            // if (hex) {
-            //     hex.setTerrain('stone', images.stoneImage);
-            // }
-        });
-        drawMap();
-    } else {
-        console.log('No hex found at this position.');
-    }
-});
-
-// gameCanvas.addEventListener('contextmenu', (event) => {
-//     const rect = gameCanvas.getBoundingClientRect();
-//     const x = event.clientX - rect.left - gameCanvas.width / 2;
-//     const y = event.clientY - rect.top - gameCanvas.height / 2;
-//     const { q, r } = HexMath.pixelToHex(x, y);
-//     const hex = Game.hexMap.getHex(q, r);
-//     if (hex && hex.terrain != "stone" && hex.terrain != "ocean") {
-//         console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
-//         Game.setFactory(hex);
-//         Game.checkIntersection();
-//         drawMap();
-//         Game.checkEndGame();
-//         console.log(Game.cities); 
-//     } else {
-//         console.log('Cannot place there.');
-//     }
-// });
 
 gameCanvas.addEventListener('mousedown', (event) => {
     const rect = gameCanvas.getBoundingClientRect();
@@ -196,12 +134,10 @@ function placeFactory(event: any): void{
         const { q, r } = HexMath.pixelToHex(x, y);
         const hex = Game.hexMap.getHex(q, r);
         if (hex && hex.terrain != "stone" && hex.terrain != "ocean") {
-            console.log(`Clicked on hex: q=${hex.q}, r=${hex.r}`);
             Game.setFactory(hex);
             Game.checkIntersection();
             drawMap();
             Game.checkEndGame();
-            console.log(Game.cities); 
         } else {
             console.log('Cannot place there.');
         }

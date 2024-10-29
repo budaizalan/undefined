@@ -1,5 +1,5 @@
 import Hex from "./Hex.js";
-import HexMath from "./HexMath.js";
+import HexMath from "../utilities/HexMath.js";
 export default class HexMap {
     _hexMap;
     constructor(mapRadius) {
@@ -7,9 +7,6 @@ export default class HexMap {
         this.initializeMap(mapRadius);
     }
     initializeMap(mapRadius) {
-        // const columns = Math.floor((window.innerWidth / 2 + HexMath.hexSize) / (HexMath.hexWidth * 0.75));
-        // const rows = Math.ceil(columns / 2) + (Math.round((window.innerHeight / 2 + HexMath.hexSize) / (HexMath.hexHeight)));
-        // console.log(`Columns: ${columns}, Rows: ${rows}`); ;
         HexMath.hexSize = Math.floor(((window.innerHeight / 2) / mapRadius) / Math.sqrt(3)) * 0.9;
         for (let q = -mapRadius; q <= mapRadius; q++) {
             for (let r = -mapRadius; r <= mapRadius; r++) {

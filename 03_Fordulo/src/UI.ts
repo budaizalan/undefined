@@ -1,6 +1,6 @@
-import Factory from "./Factory.js";
-import Game from "./Game.js";
-import HexMath from "./HexMath.js";
+import Factory from "./models/Factory.js";
+import Game from "./models/Game.js";
+import HexMath from "./utilities/HexMath.js";
 
 export default abstract class UI {
     private static _canvas: HTMLCanvasElement;
@@ -108,51 +108,4 @@ export default abstract class UI {
             this._ctx.fillText(count.toString(), factory.x + factory.size + 5 - radius - textWidth / 2, factory.y - factory.height / 2 + radius + 6);
         }
     }
-
-    // static setupEventListeners(): void {
-    //     this._canvas.addEventListener('mousedown', (event) => {
-    //         console.log('mousedown');
-            
-    //         const rect = this._canvas.getBoundingClientRect();
-    //         const x = event.clientX - rect.left;
-    //         const y = event.clientY - rect.top;
-    //         console.log(x, y);
-    //         console.log(this._UIFactories);
-    //         for(let i = 0; i < this._UIFactories.length; i++){
-    //             if(HexMath.isPointInHex(this._ctx, x, y, {x: this._UIFactories[i].x, y: this._UIFactories[i].y}, this._UIFactories[i].size)){
-    //                 Game.factoryTypesCount[this._UIFactories[i].factoryType]--;
-    //                 Game.draggingFactory = this._UIFactories[i];
-    //                 Game.draggingFactory.offset = {x: x - this._UIFactories[i].x, y: y - this._UIFactories[i].y};
-    //                 return;
-    //             }
-    //         }
-    //     });
-    //     this._canvas.addEventListener('mousemove', (event) => {
-    //         const rect = this._canvas.getBoundingClientRect();
-    //         const x = event.clientX - rect.left;
-    //         const y = event.clientY - rect.top;
-    //         if(Game.draggingFactory){
-    //             Game.draggingFactory.x = x - Game.draggingFactory.offset.x;
-    //             Game.draggingFactory.y = y - Game.draggingFactory.offset.y;
-    //             UI.draw();
-    //             this.drawFactory(Game.draggingFactory);
-    //         } else {
-    //             for(let i = 0; i < this._UIFactories.length; i++){
-    //                 if(HexMath.isPointInHex(this._ctx, x, y, {x: this._UIFactories[i].x, y: this._UIFactories[i].y}, this._UIFactories[i].size)){
-    //                     this._canvas.style.cursor = 'pointer';
-    //                     return;
-    //                 }
-    //             }
-    //             this._canvas.style.cursor = 'default';
-    //         }
-    //     });
-    //     this._canvas.addEventListener('mouseup', (event) => {
-    //         if (Game.draggingFactory) {
-    //             Game.factoryTypesCount[Game.draggingFactory.factoryType]++;
-    //             Game.draggingFactory = null;
-    //             console.log(this._UIFactories);
-    //         }
-    //         UI.draw();
-    //     });
-    // }
 }

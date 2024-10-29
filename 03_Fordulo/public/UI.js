@@ -1,6 +1,6 @@
-import Factory from "./Factory.js";
-import Game from "./Game.js";
-import HexMath from "./HexMath.js";
+import Factory from "./models/Factory.js";
+import Game from "./models/Game.js";
+import HexMath from "./utilities/HexMath.js";
 export default class UI {
     static _canvas;
     static _ctx;

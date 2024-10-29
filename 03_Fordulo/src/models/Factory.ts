@@ -1,5 +1,3 @@
-import Hex from "./Hex";
-
 export default class Factory {
     private _position: {q: number, r: number} | undefined;
     private _coords: { x: number; y: number };
