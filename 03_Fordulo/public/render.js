@@ -117,6 +117,7 @@ gameCanvas.addEventListener('mousedown', (event) => {
     for (let i = 0; i < UI.factories.length; i++) {
         if (HexMath.isPointInHex(gameCtx, x, y, { x: UI.factories[i].x, y: UI.factories[i].y }, UI.factories[i].size)) {
             if (Game.factoryTypesCount[UI.factories[i].productionType] > 0) {
+                gameCanvas.style.cursor = 'grabbing';
                 Game.factoryTypesCount[UI.factories[i].productionType]--;
                 Game.draggingFactory = UI.factories[i];
                 Game.draggingFactory.x = x;
@@ -132,7 +133,6 @@ gameCanvas.addEventListener('mousemove', (event) => {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
     if (Game.draggingFactory) {
-        gameCanvas.style.cursor = 'grabbing';
         const { q, r } = HexMath.pixelToHex(x - gameCanvas.width / 2, y - gameCanvas.height / 2);
         const hex = Game.hexMap.getHex(q, r);
         if (hex) {
@@ -158,7 +158,7 @@ gameCanvas.addEventListener('mousemove', (event) => {
     }
     else {
         for (let i = 0; i < UI.factories.length; i++) {
-            if (HexMath.isPointInHex(gameCtx, x, y, { x: UI.factories[i].x, y: UI.factories[i].y }, UI.factories[i].size)) {
+            if (HexMath.isPointInHex(gameCtx, x, y, { x: UI.factories[i].x, y: UI.factories[i].y }, UI.factories[i].size) && Game.factoryTypesCount[UI.factories[i].productionType] > 0) {
                 gameCanvas.style.cursor = 'pointer';
                 return;
             }
@@ -167,6 +167,7 @@ gameCanvas.addEventListener('mousemove', (event) => {
     }
 });
 gameCanvas.addEventListener('mouseup', (event) => {
+    gameCanvas.style.cursor = 'default';
     if (Game.draggingFactory) {
         Game.factoryTypesCount[Game.draggingFactory.productionType]++;
         placeFactory(event);
