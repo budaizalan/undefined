@@ -86,6 +86,8 @@ export default class Game {
                 }
             }));
         });
+        Objective.setFactoriesToPlace(Objective.factoriesToPlace - 1);
+        console.log(Objective.factoriesToPlace);
     }
     static getUnsuppliedCities() {
         return this.cities.filter(c => c.isSupplied == false);

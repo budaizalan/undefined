@@ -99,8 +99,10 @@ export default abstract class Game {
                 if(c.requirements.includes(this._placedFactory.productionType) && ch === ph){
                     c.setIsSupplied(true);
                 }
-            }));           
+            }));
         });    
+        Objective.setFactoriesToPlace(Objective.factoriesToPlace-1);
+        console.log(Objective.factoriesToPlace);
     }
 
     public static getUnsuppliedCities(): City[]{

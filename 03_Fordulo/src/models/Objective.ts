@@ -14,6 +14,10 @@ export default abstract class Objective{
         return this._factoriesToPlace;
     }
 
+    static set factoriesToPlace(_toPlace: number){
+        this._factoriesToPlace = _toPlace;
+    }
+
     static get factories(): []{
         return this.factories;
     }

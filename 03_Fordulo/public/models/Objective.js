@@ -10,6 +10,9 @@ export default class Objective {
     static get factoriesToPlace() {
         return this._factoriesToPlace;
     }
+    static set factoriesToPlace(_toPlace) {
+        this._factoriesToPlace = _toPlace;
+    }
     static get factories() {
         return this.factories;
     }
