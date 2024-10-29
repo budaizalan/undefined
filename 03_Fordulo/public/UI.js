@@ -52,6 +52,24 @@ export default class UI {
         }
     }
     static drawFactory(ctx, factory) {
+        if (factory.onMap) {
+            if (factory.position != undefined) {
+                HexMath.calculateRange({ q: factory.position.q, r: factory.position.r }, factory.range).forEach((hexPosition) => {
+                    const hex = Game.hexMap.getHex(hexPosition.q, hexPosition.r);
+                    if (hex) {
+                        const hexCorners = HexMath.calculateHexCorners(hex.x + this._canvas.width / 2, hex.y + this._canvas.height / 2, HexMath.hexSize);
+                        ctx.beginPath();
+                        ctx.moveTo(hexCorners[0].x, hexCorners[0].y);
+                        for (let i = 1; i < 6; i++) {
+                            ctx.lineTo(hexCorners[i].x, hexCorners[i].y);
+                        }
+                        ctx.closePath();
+                        ctx.fillStyle = 'rgba(0, 0, 255, 0.2)';
+                        ctx.fill();
+                    }
+                });
+            }
+        }
         const corners = HexMath.calculateHexCorners(factory.x, factory.y, factory.size);
         ctx.beginPath();
         ctx.moveTo(corners[0].x, corners[0].y);

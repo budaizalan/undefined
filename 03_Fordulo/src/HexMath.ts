@@ -76,7 +76,7 @@ export default abstract class HexMath {
         return { q: rq, r: rr };
     }
 
-    static calculateRange(hex: Hex, range: number): { q: number; r: number }[] {
+    static calculateRange(hex: {q: number, r: number}, range: number): { q: number; r: number }[] {
         const qmin = hex.q - range;
         const qmax = hex.q + range;
         const rmin = hex.r - range;

@@ -1,11 +1,12 @@
 export default class Factory {
+    _position;
     _coords;
     _size = 50;
     _width = 2 * this._size;
     _height = Math.sqrt(3) * this._size;
     _productionType;
-    _range;
-    _position;
+    _range = 2;
+    _onMap = false;
     // private _factoryImage: HTMLImageElement = new Image();
     // private _factoryImageSrc: string;
     get x() {
@@ -20,23 +21,22 @@ export default class Factory {
     set y(value) {
         this._coords.y = value;
     }
+    get position() {
+        return this._position;
+    }
     get size() {
         return this._size;
     }
     set size(value) {
         this._size = value;
+        this._width = 2 * this._size;
+        this._height = Math.sqrt(3) * this._size;
     }
     get width() {
         return this._width;
     }
-    set width(value) {
-        this._width = value;
-    }
     get height() {
         return this._height;
-    }
-    set height(value) {
-        this._height = value;
     }
     // get factoryType(): string {
     //     return this._factoryType;
@@ -47,8 +47,11 @@ export default class Factory {
     get range() {
         return this._range;
     }
-    get position() {
-        return this._position;
+    get onMap() {
+        return this._onMap;
+    }
+    set onMap(value) {
+        this._onMap = value;
     }
     setPosition(_position) {
         this._position = _position;

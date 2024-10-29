@@ -1,4 +1,5 @@
 import Debug from "./Debug.js";
+import Factory from "./Factory.js";
 import Game from "./Game.js";
 import Hex from "./Hex.js";
 import HexMath from "./HexMath.js";
@@ -101,8 +102,6 @@ gameCanvas.addEventListener('click', (event) => {
             // }
         });
         drawMap();
-        // drawCity(hex);
-        // drawHex((hex.x + HexMath.calculateHexDiagonal()) + canvas.width / 2, hex.y + canvas.height / 2, true, false);
     } else {
         console.log('No hex found at this position.');
     }
@@ -148,8 +147,28 @@ gameCanvas.addEventListener('mousemove', (event) => {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
     if(Game.draggingFactory){
-        Game.draggingFactory.x = x;
-        Game.draggingFactory.y = y;
+        gameCanvas.style.cursor = 'grabbing';
+        const {q , r} = HexMath.pixelToHex(x - gameCanvas.width / 2, y - gameCanvas.height / 2);
+        const hex = Game.hexMap.getHex(q, r);
+        if(hex){
+            if(hex.q != Game.draggingFactory.position?.q || hex.r != Game.draggingFactory.position?.r){
+                Game.draggingFactory.onMap = true;
+                Game.draggingFactory.size = HexMath.hexSize;
+                Game.draggingFactory.setPosition({q, r});
+                Game.draggingFactory.x = hex.x + gameCanvas.width / 2;
+                Game.draggingFactory.y = hex.y + gameCanvas.height / 2;
+                drawBgCanvas(Game.draggingFactory);
+            }
+        } else {
+            if(Game.draggingFactory.onMap){ 
+                drawBgCanvas(); // refresh background Canvas so the factory doesn't stay on the map
+            }
+            Game.draggingFactory.onMap = false;
+            Game.draggingFactory.size = 50;
+            Game.draggingFactory.setPosition(undefined);
+            Game.draggingFactory.x = x;
+            Game.draggingFactory.y = y;
+        }
     } else {
         for(let i = 0; i < UI.factories.length; i++){
             if(HexMath.isPointInHex(gameCtx, x, y, {x: UI.factories[i].x, y: UI.factories[i].y}, UI.factories[i].size)){
@@ -191,11 +210,22 @@ function draw(): void {
     if (gameCtx) {
         gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
         gameCtx.drawImage(bgCanvas, 0, 0);
-        if (Game.draggingFactory) {
+        if (Game.draggingFactory && !Game.draggingFactory.onMap) {
             UI.drawFactory(gameCtx, Game.draggingFactory);
         }
     }
     requestAnimationFrame(draw);
+}
+
+function drawBgCanvas(draggingFactory?: Factory): void {
+    if(bgCtx){
+        bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+        drawMap();
+        UI.draw();
+        if(draggingFactory){
+            UI.drawFactory(bgCtx, draggingFactory);
+        }
+    }
 }
 
 function StartGame() {
