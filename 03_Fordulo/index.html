@@ -1,12 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./styles/menu.css">
+    <link rel="stylesheet" href="./styles/start.css">
     <title>Puzzle Game</title>
 </head>
+
 <body>
+    <!-- style="visibility: visible;" -->
+    <div class="menu">
+        <div id="start"></div>
+        <div class="topMenu">
+            <h1>Válassz pályát a kezdéshez</h1>
+            <div class="container">
+                <div class="row align-middle">
+                    <div class="col-md-6 col-lg-4 column" id="map1">
+                        <div class="card gr-2">
+                            <div class="txt">
+                                <h1>Első szint</h1>
+                            </div>
+                            <a href="#">Három város, egyedi akkumulátor szükséglet.</a>
+                            <img src="./assets/map1.png" alt="">
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-4 column" id="map2">
+                        <div class="card gr-3">
+                            <div class="txt">
+                                <h1>Második szint</h1>
+                            </div>
+                            <a href="javascript:void(0)">Négy város, egyedi akkumulátor szükséglet.</a>
+                            <img src="./assets/map2.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 column" id="map3">
+                        <div class="card gr-4">
+                            <div class="txt">
+                                <h1>Harmadik szint</h1>
+                            </div>
+                            <a href="javascript:void(0)">Négy város, azonos akkumulátor szükséglet.</a>
+                            <img src="./assets/map3.png" alt="">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="smallicons">
+        <span class="menuSpan">&#9776;</span>
+    </div>
+    <div id="menuControls">
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn">&times;</a>
+            <a href="javascript:void(0)" class="retrybtn">Újrakezdés</a>
+            <a href="javascript:void(0)" class="exitbtn">Kilépés</a>
+        </div>
+    </div>
     <canvas id="backgroundCanvas"></canvas>
     <canvas id="gameCanvas"></canvas>
     <div id="debug-menu">
@@ -21,7 +77,11 @@
             <input type="checkbox" class="toggle" id="show-gaps" checked>
         </div>
     </div>
+
+
     <script src="public/render.js" type="module"></script>
-    <script src="public/Debug.js" type="module"></script>
+    <script src="public/start.js" type="module"></script>
+    <script src="public/utilities/Debug.js" type="module"></script>
 </body>
+
 </html>

@@ -1,6 +1,7 @@
 export default class Hex {
     _position;
     _coords;
+    _type = 'field';
     _terrain;
     _terrainImage = new Image();
     get q() {
@@ -18,6 +19,12 @@ export default class Hex {
     get terrain() {
         return this._terrain;
     }
+    get type() {
+        return this._type;
+    }
+    setType(type) {
+        this._type = type;
+    }
     setTerrain(terrain, terrainImage) {
         this._terrain = terrain;
         this._terrainImage = terrainImage;
@@ -25,9 +32,10 @@ export default class Hex {
     get terrainImage() {
         return this._terrainImage;
     }
-    constructor(q, r, x, y, terrain = 'grass') {
+    constructor(q, r, x, y, type, terrain = 'grass') {
         this._position = { q, r };
         this._coords = { x, y };
+        this._type = type || this._type;
         this._terrain = terrain;
         this._terrainImage.src = `./assets/${this._terrain}.png`;
     }

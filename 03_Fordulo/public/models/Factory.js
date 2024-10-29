@@ -7,8 +7,6 @@ export default class Factory {
     _productionType;
     _range = 2;
     _onMap = false;
-    // private _factoryImage: HTMLImageElement = new Image();
-    // private _factoryImageSrc: string;
     get x() {
         return this._coords.x;
     }

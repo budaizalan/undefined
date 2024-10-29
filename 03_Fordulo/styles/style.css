@@ -5,20 +5,13 @@
 }
 #backgroundCanvas{
     position: absolute;
-    background-color: #65adff;
+    background-color: rgb(16, 5, 58);
     z-index: -1;
 }
 
 #gameCanvas{
     display: block;
     z-index: 2;
-}
-
-#UICanvas{
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 4;
 }
 
 #debug-menu{
@@ -31,7 +24,7 @@
     align-items: center;
     width: 100vw;
     height: 100vh;
-    background-color: #000;
+    background-color: rgb(20, 18, 28);
     opacity: 0;
     visibility: hidden;
     color: #fff;

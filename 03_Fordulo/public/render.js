@@ -7,7 +7,6 @@ const bgCanvas = document.getElementById('backgroundCanvas');
 const gameCanvas = document.getElementById('gameCanvas');
 const bgCtx = bgCanvas.getContext('2d');
 const gameCtx = gameCanvas.getContext('2d');
-const images = new Images();
 bgCanvas.width = gameCanvas.width = window.innerWidth;
 bgCanvas.height = gameCanvas.height = window.innerHeight;
 if (!gameCtx || !bgCtx) {
@@ -15,7 +14,8 @@ if (!gameCtx || !bgCtx) {
 }
 Debug.initialize(bgCanvas, bgCtx, drawMap);
 UI.initialize(bgCanvas, bgCtx);
-function drawHex(x, y, terrainImage) {
+Images.initialize();
+function drawHex(x, y, terrainImage, terrain) {
     const corners = HexMath.calculateHexCorners(x, y);
     if (bgCtx) {
         const gradient = bgCtx.createRadialGradient(x, y, HexMath.hexSize / 4, x, y, HexMath.hexSize);
@@ -28,12 +28,17 @@ function drawHex(x, y, terrainImage) {
             bgCtx.lineTo(corners[i].x, corners[i].y);
         }
         bgCtx.closePath();
-        bgCtx.strokeStyle = '#000';
-        bgCtx.lineWidth = 2;
-        bgCtx.stroke();
-        bgCtx.fillStyle = gradient;
-        bgCtx.fill();
-        bgCtx.drawImage(terrainImage, x - HexMath.hexWidth / 2, y - HexMath.hexHeight / 2, HexMath.hexWidth, HexMath.hexHeight);
+        // bgCtx.strokeStyle = '#000';
+        // bgCtx.lineWidth = 0;
+        // bgCtx.stroke();
+        // bgCtx.fillStyle = gradient;
+        // bgCtx.fill();
+        if (terrain === 'city') {
+            bgCtx.drawImage(terrainImage, x - (HexMath.hexSize * 2.5), y - (HexMath.hexHeight * 1.5), (HexMath.hexWidth * 2.5), (HexMath.hexHeight * 3));
+        }
+        else {
+            bgCtx.drawImage(terrainImage, x - HexMath.hexWidth / 2, y - HexMath.hexHeight / 2, HexMath.hexWidth, HexMath.hexHeight);
+        }
     }
 }
 function drawBackground() {
@@ -43,17 +48,69 @@ function drawBackground() {
         for (let r = -rows; r <= rows; r++) {
             const { x, y } = HexMath.hexToPixel(q, r);
             if (x >= -window.innerWidth / 2 - HexMath.hexWidth && x <= window.innerWidth / 2 + HexMath.hexWidth && y >= -window.innerHeight / 2 - HexMath.hexHeight && y <= window.innerHeight / 2 + HexMath.hexHeight) {
-                drawHex(x + gameCanvas.width / 2, y + gameCanvas.height / 2, images.oceanImage);
+                drawHex(x + gameCanvas.width / 2, y + gameCanvas.height / 2, Images.oceanImage);
             }
         }
     }
 }
 function drawMap() {
     const hexes = Game.hexMap.getAllHexes();
+    const cities = [];
+    const factories = [];
     for (const hex of hexes) {
-        drawHex(hex.x + gameCanvas.width / 2, hex.y + gameCanvas.height / 2, hex.terrainImage);
+        if (hex.type === 'city') {
+            if (hex.terrain === 'city') {
+                cities.push(hex);
+            }
+        }
+        else if (hex.type === 'factory') {
+            factories.push(hex);
+        }
+        else {
+            drawHex(hex.x + gameCanvas.width / 2, hex.y + gameCanvas.height / 2, hex.terrainImage, hex.terrain);
+        }
         Debug.drawCoords(hex.x, hex.y, hex.q, hex.r);
     }
+    for (const factory of factories) {
+        drawRange(factory);
+        drawHex(factory.x + gameCanvas.width / 2, factory.y + gameCanvas.height / 2, factory.terrainImage, factory.terrain);
+    }
+    for (const city of cities) {
+        console.log(city);
+        let city1;
+        Game.cities.map(c => {
+            if (c.cover.includes(city))
+                city1 = c;
+        });
+        console.log(Game.cities.filter(c => c.cover.includes(city)));
+        drawCity(city.x + gameCanvas.width / 2, city.y + gameCanvas.height / 2, city.terrainImage, city.terrain, city1?.isSupplied, city1?.requirements[0]);
+    }
+}
+function drawCity(x, y, image, terrainType, isSupplied, type) {
+    drawHex(x, y, image, terrainType);
+    if (!isSupplied) {
+        bgCtx?.drawImage(Images.msgBubbleImage, x - HexMath.hexSize / 3, y - HexMath.hexSize * 3, HexMath.hexSize * 2, HexMath.hexSize * 2);
+        bgCtx?.drawImage(Images.getBatteryImage(type), x + HexMath.hexSize * .25, y - HexMath.hexSize * 2.6, HexMath.hexSize, HexMath.hexSize);
+    }
+}
+function drawRange(hex) {
+    HexMath.calculateRange({ q: hex.q, r: hex.r }, 2).forEach(hexPosition => {
+        const hex = Game.hexMap.getHex(hexPosition.q, hexPosition.r);
+        if (hex) {
+            if (bgCtx) {
+                const hexCorners = HexMath.calculateHexCorners(hex.x + bgCanvas.width / 2, hex.y + bgCanvas.height / 2);
+                console.log(hexCorners);
+                bgCtx.beginPath();
+                bgCtx.moveTo(hexCorners[0].x, hexCorners[0].y);
+                for (let i = 1; i < 6; i++) {
+                    bgCtx.lineTo(hexCorners[i].x, hexCorners[i].y);
+                }
+                bgCtx.closePath();
+                bgCtx.fillStyle = 'rgba(0, 0, 255, 0.2)';
+                bgCtx.fill();
+            }
+        }
+    });
 }
 gameCanvas.addEventListener('mousedown', (event) => {
     const rect = gameCanvas.getBoundingClientRect();
@@ -81,18 +138,29 @@ gameCanvas.addEventListener('mousemove', (event) => {
         const { q, r } = HexMath.pixelToHex(x - gameCanvas.width / 2, y - gameCanvas.height / 2);
         const hex = Game.hexMap.getHex(q, r);
         if (hex) {
-            if (hex.q != Game.draggingFactory.position?.q || hex.r != Game.draggingFactory.position?.r) {
-                Game.draggingFactory.onMap = true;
-                Game.draggingFactory.size = HexMath.hexSize;
-                Game.draggingFactory.setPosition({ q, r });
-                Game.draggingFactory.x = hex.x + gameCanvas.width / 2;
-                Game.draggingFactory.y = hex.y + gameCanvas.height / 2;
-                drawBgCanvas(Game.draggingFactory);
+            if ((hex.type != 'city') && (hex.type != 'factory')) {
+                if (hex.q != Game.draggingFactory.position?.q || hex.r != Game.draggingFactory.position?.r) {
+                    Game.draggingFactory.onMap = true;
+                    Game.draggingFactory.size = HexMath.hexSize;
+                    Game.draggingFactory.setPosition({ q, r });
+                    Game.draggingFactory.x = hex.x + gameCanvas.width / 2;
+                    Game.draggingFactory.y = hex.y + gameCanvas.height / 2;
+                    drawBgCanvas(Game.draggingFactory);
+                }
+            }
+            else {
+                if (Game.draggingFactory.onMap) {
+                    drawBgCanvas();
+                }
+                Game.draggingFactory.onMap = false;
+                Game.draggingFactory.setPosition(undefined);
+                Game.draggingFactory.x = x;
+                Game.draggingFactory.y = y;
             }
         }
         else {
             if (Game.draggingFactory.onMap) {
-                drawBgCanvas(); // refresh background Canvas so the factory doesn't stay on the map
+                drawBgCanvas();
             }
             Game.draggingFactory.onMap = false;
             Game.draggingFactory.size = 50;
@@ -112,28 +180,35 @@ gameCanvas.addEventListener('mousemove', (event) => {
     }
 });
 gameCanvas.addEventListener('mouseup', (event) => {
+    const rect = gameCanvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
     gameCanvas.style.cursor = 'default';
     if (Game.draggingFactory) {
+        const { q, r } = HexMath.pixelToHex(x - gameCanvas.width / 2, y - gameCanvas.height / 2);
+        const hex = Game.hexMap.getHex(q, r);
         Game.factoryTypesCount[Game.draggingFactory.productionType]++;
-        placeFactory(event);
+        if (hex) {
+            if ((hex.type != 'city' && hex.type != 'factory')) {
+                placeFactory(event, Game.draggingFactory);
+            }
+        }
         Game.draggingFactory = null;
     }
+    drawBgCanvas();
     UI.draw();
 });
-function placeFactory(event) {
+function placeFactory(event, factory) {
     const rect = gameCanvas.getBoundingClientRect();
     const x = event.clientX - rect.left - gameCanvas.width / 2;
     const y = event.clientY - rect.top - gameCanvas.height / 2;
     const { q, r } = HexMath.pixelToHex(x, y);
     const hex = Game.hexMap.getHex(q, r);
-    if (hex && hex.terrain != "stone" && hex.terrain != "ocean") {
-        Game.setFactory(hex);
+    if (hex) {
+        Game.setFactory(hex, factory);
         Game.checkIntersection();
         drawMap();
         Game.checkEndGame();
-    }
-    else {
-        console.log('Cannot place there.');
     }
 }
 function draw() {
@@ -156,22 +231,13 @@ function drawBgCanvas(draggingFactory) {
         }
     }
 }
-function StartGame() {
-    if (!imagesLoaded()) {
+export function StartGame() {
+    if (!Images.imagesLoaded()) {
         setTimeout(StartGame, 100);
         return;
     }
     // drawBackground();
-    Game.setObjective(0);
-    drawMap();
-    UI.draw();
+    drawBgCanvas();
     draw();
 }
-function imagesLoaded() {
-    return images.grassImage.complete
-        && images.stoneImage.complete
-        && images.oceanImage.complete
-        && images.grassImage2.complete;
-}
-StartGame();
 console.log('hexMap:', Game.hexMap);

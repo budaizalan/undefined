@@ -1,5 +1,6 @@
 import Factory from "./models/Factory.js";
 import Game from "./models/Game.js";
+import Images from "./models/Images.js";
 import HexMath from "./utilities/HexMath.js";
 
 export default abstract class UI {
@@ -33,7 +34,7 @@ export default abstract class UI {
     static drawSidebar(): void {
         if(this._ctx) {
             this._ctx.clearRect(this._canvas.width - this._UIWidth, 0, this._UIWidth, this._canvas.height);
-            this._ctx.fillStyle = '#333';
+            this._ctx.fillStyle = 'rgb(20, 18, 28)';
             this._ctx.fillRect(this._canvas.width - this._UIWidth, 0, this._UIWidth, this._canvas.height);
             this._ctx.fillStyle = '#fff';
             this._ctx.font = '20px Arial';
@@ -65,7 +66,7 @@ export default abstract class UI {
                 HexMath.calculateRange({q: factory.position.q, r: factory.position.r}, factory.range).forEach((hexPosition) => {
                     const hex = Game.hexMap.getHex(hexPosition.q, hexPosition.r);
                     if (hex) {
-                        const hexCorners = HexMath.calculateHexCorners(hex.x + this._canvas.width / 2, hex.y + this._canvas.height / 2, HexMath.hexSize);
+                        const hexCorners = HexMath.calculateHexCorners(hex.x + this._canvas.width / 2, hex.y + this._canvas.height / 2);
                         ctx.beginPath();
                         ctx.moveTo(hexCorners[0].x, hexCorners[0].y);
                         for (let i = 1; i < 6; i++) {
@@ -90,6 +91,7 @@ export default abstract class UI {
         ctx.stroke();
         ctx.fillStyle = '#fff';
         ctx.fill();
+        ctx.drawImage(Images.getFactoryImage(factory.productionType), factory.x - factory.width / 2, factory.y - factory.height / 2, factory.width , factory.height);
     }
 
     static drawFactoryCount(factory: Factory, count: number): void {

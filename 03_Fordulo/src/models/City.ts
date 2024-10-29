@@ -1,13 +1,12 @@
 import Hex from "./Hex.js";
 import Images from "./Images.js";
 
-const images = new Images();
-
 export default class City{
     private _id: number;
     private _requirements: string[];
     private _isSupplied: boolean = false;
     private _cover: Hex[];
+    private _position: {r: number, q: number};
 
     get id():number{
         return this._id;
@@ -25,13 +24,18 @@ export default class City{
         return this._cover;
     }
 
+    get position(): {r: number, q: number}{
+        return this._position
+    }
+
     public setIsSupplied(_isSupplied: boolean){
         this._isSupplied = _isSupplied;
     }
 
-    constructor(_id:number, _requirements: string[], _cover: Hex[]) {
+    constructor(_id:number, _requirements: string[], _cover: Hex[], _position: {r: number, q: number}) {
         this._id = _id;
         this._requirements = _requirements;
         this._cover = _cover;
+        this._position = _position;
     }
 }

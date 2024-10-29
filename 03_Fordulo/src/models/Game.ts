@@ -5,8 +5,7 @@ import HexMath from "../utilities/HexMath.js";
 import Images from "./Images.js";
 import Objective from "./Objective.js";
 import City from "./City.js";
-
-const images = new Images();
+import Levels from "./Levels.js";
 
 export default abstract class Game {
     private static _mapRadius = 8;
@@ -17,6 +16,7 @@ export default abstract class Game {
     private static _factoriesToPlace: Factory[] = [];
     private static _placedFactory: Factory;
     private static _factoryTypesCount: { [key: string]: number } = { 'blue': 1, 'green': 1, 'red': 1 };
+    private static _params: Array<number>;
     // ====
     private static _factories2: Array<Factory> = [];
     // ====
@@ -50,65 +50,64 @@ export default abstract class Game {
         return this._factoriesToPlace;
     }
 
-    static get factoryToPlace(): Factory {
-        this._placedFactory = this._factoriesToPlace[0];
-        this._factoriesToPlace.shift();
-        this.objective?.setFactoriesToPlace(this.objective?.factoriesToPlace!-1);
+    static get generateParams(): Array<number>{
+        return this._params;
+    }
 
-        this._factoryTypesCount[this._placedFactory.productionType]-=1;           
-        return this._placedFactory;
+    public static AdjustParams(position: Array<number>) : void {
+        this._params = position;
+        this.generateLevel();
+    }
+
+    static factoryToPlace(factory: Factory): void {
+        this._placedFactory = factory;
+        // this._factoriesToPlace.shift();
+        // this.objective?.setFactoriesToPlace(this.objective?.factoriesToPlace!-1);
+        this._factoryTypesCount[this._placedFactory.productionType]-=1;
     }
 
     public static setPlacedFactory(_placed: Factory) : void{
         this._placedFactory = _placed;
     }
-
-    public static setObjective(_difficulty: number): void{
-        this._objective = new Objective(_difficulty);
-        this.generateStructures();
-    }
-
-    public static generateStructures(): void{
-        switch (this._objective?.difficulty) {
-            case 0:                
-                 this.initializeDifficulty1();
-            case 1:
-                break;                      
-            default:
-                break;
-        }
-    }
-
+    
     private static generateCity(_id:number, _startHex: number[], _type: string[]): City{
         let hexes: Hex[] = [];
         const middleHex = Game._hexMap.getHex(_startHex[0], _startHex[1])!;
-        middleHex.setTerrain('city', images.cityImage);
-        HexMath.calculateRange(middleHex, 1).forEach(v => hexes.push(Game._hexMap.getHex(v.q, v.r)!))
-        return new City(_id, _type, hexes)
+        middleHex.setTerrain('city', Images.cityImage);
+        HexMath.calculateRange(middleHex, 1).forEach(v => {
+            const hex = Game._hexMap.getHex(v.q, v.r)!;
+            hex.setType('city');
+            hexes.push(hex);
+        });
+        return new City(_id, _type, hexes, {q : _startHex[0], r : _startHex[1]})
     }    
 
-    private static initializeDifficulty1(): void{
-        this._cities.push(this.generateCity(1, [-4, -2], ["blue"]));
+    private static generateLevel(): void{
+        console.log(`${this.generateParams}`);
+        this._cities = [];
+        this._factories = [];
+        this._cities.push(this.generateCity(1, [this._params[0], this._params[1]], ["blue"]));
         this._factories.push(new Factory("blue", 2));
-        this._cities.push(this.generateCity(2, [5, -2], ["green"]));
+        this._cities.push(this.generateCity(2, [this._params[0], this._params[1]], ["green"]));
         this._factories.push(new Factory("green", 2));
-        this._cities.push(this.generateCity(3, [-5, 7], ["red"]));
+        this._cities.push(this.generateCity(3, [this._params[0], this._params[1]], ["red"]));
         this._factories.push(new Factory("red", 2));
         this._factoriesToPlace = this._factories;
     }
 
-    public static setFactory(_hex: Hex): void{
+    public static setFactory(_hex: Hex, factory: Factory): void{
         if (_hex && Game.factoriesToPlace.length != 0) {
-            let factory: Factory = this.factoryToPlace;
+            Game.factoryToPlace(factory);
             factory.setPosition(_hex);
-            Game.setPlacedFactory(factory);
-            _hex.setTerrain('stone', images.stoneImage);
+            Game.setPlacedFactory(this._placedFactory);
+            _hex.setTerrain(factory.productionType, Images.getFactoryImage(factory.productionType));
+            _hex.setType('factory');
         }
     }
 
     public static checkIntersection() : void{            
         HexMath.calculateRange(this._hexMap.getHex(this._placedFactory.position!.q, this._placedFactory.position!.r)!, this._placedFactory.range).map(v => Game._hexMap.getHex(v.q, v.r)).map(ph => {
-            ph?.setTerrain("ocean", images.oceanImage)
+            // ph?.setTerrain("ocean", Images.oceanImage)
             this.cities.map(c => c.cover.map(ch =>{
                 if(c.requirements.includes(this._placedFactory.productionType) && ch === ph){
                     c.setIsSupplied(true);
