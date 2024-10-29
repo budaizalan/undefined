@@ -33,8 +33,8 @@ export default class City{
         this._id = _id;
         this._requirements = _requirements;
         this._cover = _cover;
-        this._cover.map(h => {h.setTerrain('stone', images.stoneImage);  
-        });
+        // this._cover.map(h => {h.setTerrain('stone', images.stoneImage);  
+        // });
     }
 }
 

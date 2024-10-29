@@ -82,7 +82,9 @@ export default abstract class Game {
 
     private static generateCity(_id:number, _startHex: number[], _type: string[]): City{
         let hexes: Hex[] = [];
-        HexMath.calculateRange(Game._hexMap.getHex(_startHex[0], _startHex[1])!, 1).forEach(v => hexes.push(Game._hexMap.getHex(v.q, v.r)!))
+        const middleHex = Game._hexMap.getHex(_startHex[0], _startHex[1])!;
+        middleHex.setTerrain('city', images.cityImage);
+        HexMath.calculateRange(middleHex, 1).forEach(v => hexes.push(Game._hexMap.getHex(v.q, v.r)!))
         return new City(_id, _type, hexes)
     }    
 

@@ -66,7 +66,9 @@ export default class Game {
     }
     static generateCity(_id, _startHex, _type) {
         let hexes = [];
-        HexMath.calculateRange(Game._hexMap.getHex(_startHex[0], _startHex[1]), 1).forEach(v => hexes.push(Game._hexMap.getHex(v.q, v.r)));
+        const middleHex = Game._hexMap.getHex(_startHex[0], _startHex[1]);
+        middleHex.setTerrain('city', images.cityImage);
+        HexMath.calculateRange(middleHex, 1).forEach(v => hexes.push(Game._hexMap.getHex(v.q, v.r)));
         return new City(_id, _type, hexes);
     }
     static initializeDifficulty1() {
