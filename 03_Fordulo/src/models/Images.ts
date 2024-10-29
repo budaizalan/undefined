@@ -13,7 +13,7 @@ export default abstract class Images{
     public static msgBubbleImage = new Image();
 
     static initialize(){
-        this.grassImage.src = './assets/grass2.png';
+        this.grassImage.src = './assets/grass.png';
         this.grassImage2.src = './assets/grass2.png';
         this.stoneImage.src = './assets/stone.png';
         this.oceanImage.src = './assets/ocean.png';

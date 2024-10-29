@@ -12,15 +12,8 @@ export default class Game {
     static _factories = [];
     static _factoriesToPlace = [];
     static _placedFactory;
-    static _factoryTypesCount = { 'blue': 1, 'green': 1, 'red': 1 };
-    static _params;
-    // ====
-    static _factories2 = [];
-    // ====
+    static _factoryTypesCount = {};
     static _draggingFactory = null;
-    static get factories2() {
-        return Game._factories2;
-    }
     static get mapRadius() {
         return Game._mapRadius;
     }
@@ -36,8 +29,13 @@ export default class Game {
     static get factoriesToPlace() {
         return this._factoriesToPlace;
     }
-    static get generateParams() {
-        return this._params;
+    static reset() {
+        this._hexMap.reset();
+        this._cities = [];
+        this._factories = [];
+        this._factoriesToPlace = [];
+        this._placedFactory = new Factory('', 0);
+        this._factoryTypesCount = {};
     }
     static factoryToPlace(factory) {
         this._placedFactory = factory;
@@ -61,16 +59,14 @@ export default class Game {
     }
     static generateLevel(level) {
         Objective.setLevel(Levels.levels[level - 1]);
-        this._cities = [];
-        this._factories = [];
         Objective.getCities().forEach((c) => {
             this._cities.push(this.generateCity(c.id, [c.position.q, c.position.r], [c.type]));
         });
         Objective.getFactories().forEach((f) => {
-            this._factories.push(new Factory(f.productionType, f.range));
+            this._factories.push(new Factory(f.type, 2));
+            this._factoryTypesCount[f.type] = this._factoryTypesCount[f.type] ? this._factoryTypesCount[f.type] + f.amount : f.amount;
         });
-        console.log(this._cities);
-        console.log(this._factories);
+        console.log(this.factoryTypesCount);
         this._factoriesToPlace = this._factories;
     }
     static setFactory(_hex, factory) {

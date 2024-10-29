@@ -14,16 +14,9 @@ export default abstract class Game {
     private static _factories: Factory[] = [];
     private static _factoriesToPlace: Factory[] = [];
     private static _placedFactory: Factory;
-    private static _factoryTypesCount: { [key: string]: number } = { 'blue': 1, 'green': 1, 'red': 1 };
-    private static _params: Array<number>;
-    // ====
-    private static _factories2: Array<Factory> = [];
-    // ====
+    private static _factoryTypesCount: { [key: string]: number } = {};
     private static _draggingFactory: Factory | null = null;
 
-    static get factories2(): Array<Factory> {
-        return Game._factories2;
-    }
 
     static get mapRadius(): number {
         return Game._mapRadius;
@@ -45,8 +38,13 @@ export default abstract class Game {
         return this._factoriesToPlace;
     }
 
-    static get generateParams(): Array<number>{
-        return this._params;
+    public static reset(){
+        this._hexMap.reset();
+        this._cities = [];
+        this._factories = [];
+        this._factoriesToPlace = [];
+        this._placedFactory = new Factory('', 0);
+        this._factoryTypesCount = {};
     }
 
     static factoryToPlace(factory: Factory): void {
@@ -74,16 +72,14 @@ export default abstract class Game {
 
     public static generateLevel(level: number): void{
         Objective.setLevel(Levels.levels[level-1]);
-        this._cities = [];
-        this._factories = [];
         Objective.getCities().forEach((c: { id: number, position: { q: number, r: number }, type: string }) => {
             this._cities.push(this.generateCity(c.id, [c.position.q, c.position.r], [c.type]));
         });
-        Objective.getFactories().forEach((f: { productionType: string; range: number}) => {
-             this._factories.push(new Factory(f.productionType, f.range));
+        Objective.getFactories().forEach((f: { type: string; amount: number}) => {
+            this._factories.push(new Factory(f.type, 2));
+            this._factoryTypesCount[f.type] = this._factoryTypesCount[f.type] ? this._factoryTypesCount[f.type] + f.amount : f.amount;
         });
-        console.log(this._cities);
-        console.log(this._factories);
+        console.log(this.factoryTypesCount);
         this._factoriesToPlace = this._factories;
     }
 

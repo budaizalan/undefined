@@ -22,6 +22,12 @@ export default class HexMap {
         }
     }
 
+    public reset(): void {
+        this._hexMap.forEach(hex => {
+            hex.reset();
+        });
+    }
+
     getHex(q: number, r: number): Hex | undefined {
         return this._hexMap.get(`${q},${r}`);
     }

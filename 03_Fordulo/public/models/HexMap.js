@@ -17,6 +17,11 @@ export default class HexMap {
             }
         }
     }
+    reset() {
+        this._hexMap.forEach(hex => {
+            hex.reset();
+        });
+    }
     getHex(q, r) {
         return this._hexMap.get(`${q},${r}`);
     }

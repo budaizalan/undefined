@@ -10,7 +10,6 @@ export default abstract class UI {
     private static _hexSize: number = 50;
     private static _hexWidth: number = 2 * this._hexSize;
     private static _hexHeight: number = Math.sqrt(3) * this._hexSize;
-    private static _factoryTypesCount: { [key: string]: number } = Game.factoryTypesCount;
     private static _UIFactories: Array<Factory> = [];
 
     static initialize(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {
@@ -47,7 +46,7 @@ export default abstract class UI {
     static drawUIFactories(x: number, y: number): void {
         this._UIFactories = [];
         if(this._ctx) {
-            const factoryTypeCounts = this._factoryTypesCount;
+            const factoryTypeCounts = Game.factoryTypesCount;
             const factoryKeys = Object.keys(factoryTypeCounts);
             for (let i = 0; i < factoryKeys.length; i++) {
                 const factory= new Factory(factoryKeys[i], 2);

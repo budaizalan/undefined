@@ -9,7 +9,6 @@ export default class UI {
     static _hexSize = 50;
     static _hexWidth = 2 * this._hexSize;
     static _hexHeight = Math.sqrt(3) * this._hexSize;
-    static _factoryTypesCount = Game.factoryTypesCount;
     static _UIFactories = [];
     static initialize(canvas, ctx) {
         this._canvas = canvas;
@@ -40,7 +39,7 @@ export default class UI {
     static drawUIFactories(x, y) {
         this._UIFactories = [];
         if (this._ctx) {
-            const factoryTypeCounts = this._factoryTypesCount;
+            const factoryTypeCounts = Game.factoryTypesCount;
             const factoryKeys = Object.keys(factoryTypeCounts);
             for (let i = 0; i < factoryKeys.length; i++) {
                 const factory = new Factory(factoryKeys[i], 2);

@@ -1,3 +1,4 @@
+import Images from "./Images.js";
 export default class Hex {
     _position;
     _coords;
@@ -21,6 +22,11 @@ export default class Hex {
     }
     get type() {
         return this._type;
+    }
+    reset() {
+        this._type = 'field';
+        this._terrain = 'grass';
+        this._terrainImage = Images.grassImage;
     }
     setType(type) {
         this._type = type;
