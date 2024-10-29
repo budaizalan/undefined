@@ -27,12 +27,13 @@ export default class HexMath {
         const y = this._hexSize * (Math.sqrt(3) * (r + q / 2));
         return { x, y };
     }
-    static calculateHexCorners(x, y) {
+    static calculateHexCorners(x, y, hexSize = this._hexSize) {
+        hexSize = hexSize || this._hexSize;
         const corners = [];
         for (let i = 0; i < 6; i++) {
             const angle = (Math.PI / 3) * i;
-            const cornerX = x + this._hexSize * Math.cos(angle);
-            const cornerY = y + this._hexSize * Math.sin(angle);
+            const cornerX = x + hexSize * Math.cos(angle);
+            const cornerY = y + hexSize * Math.sin(angle);
             corners.push({ x: cornerX, y: cornerY });
         }
         return corners;
@@ -77,5 +78,15 @@ export default class HexMath {
             }
         }
         return results;
+    }
+    static isPointInHex(ctx, x, y, hexPosition, hexSize) {
+        const corners = this.calculateHexCorners(hexPosition.x, hexPosition.y, hexSize);
+        const path = new Path2D();
+        path.moveTo(corners[0].x, corners[0].y);
+        for (let j = 1; j < 6; j++) {
+            path.lineTo(corners[j].x, corners[j].y);
+        }
+        path.closePath();
+        return ctx.isPointInPath(path, x, y);
     }
 }

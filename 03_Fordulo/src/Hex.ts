@@ -28,7 +28,7 @@ export default class Hex {
         this._terrain = terrain;
         this._terrainImage = terrainImage;
     }
-
+    
     get terrainImage(): HTMLImageElement {
         return this._terrainImage;
     }
