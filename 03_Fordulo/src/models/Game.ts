@@ -79,7 +79,7 @@ export default abstract class Game {
             this._factories.push(new Factory(f.type, 2));
             this._factoryTypesCount[f.type] = this._factoryTypesCount[f.type] ? this._factoryTypesCount[f.type] + f.amount : f.amount;
         });
-        console.log(this.factoryTypesCount);
+        Objective.factoriesToPlace = this._factories.length;
         this._factoriesToPlace = this._factories;
     }
 
@@ -109,24 +109,26 @@ export default abstract class Game {
         return this.cities.filter(c => c.isSupplied == false);
     }
 
-    public static checkEndGame(){
+    public static checkEndGame(): boolean{
         if(Objective.factoriesToPlace == 0) {
-            this.isSolutionCorrect();
             return true;
         }
         return false;
     }
 
-    public static isSolutionCorrect(): void{
+    public static isSolutionCorrect(): boolean{
         let unsuppliedCities: City[] = this.getUnsuppliedCities();
         if(unsuppliedCities.length == 0){
             console.log('Helyes megoldás, gratula!');
+            return true;
         } else{
             let returnString: string = "";
-            unsuppliedCities.forEach(c => returnString+= ` ${c.id}.`)
-            console.log((`${returnString} városok nem kaptak megfelelő ellátást!`));
+            return false;
+            // unsuppliedCities.forEach(c => returnString+= ` ${c.id}.`)
+            // console.log((`${returnString} város(ok) nem kaptak megfelelő ellátást!`));
         }
     }
+
     static get factoryTypesCount(): { [key: string]: number } {
         return Game._factoryTypesCount;
     }

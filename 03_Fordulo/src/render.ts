@@ -7,6 +7,8 @@ import Images from "./models/Images.js";
 import UI from "./UI.js";
 import Levels from "./models/Levels.js";
 import City from "./models/City.js";
+import Objective from "./models/Objective.js";
+import { openDialog } from "./start.js";
 
 const bgCanvas = document.getElementById('backgroundCanvas') as HTMLCanvasElement;
 const gameCanvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -216,7 +218,29 @@ function placeFactory(event: any, factory: Factory): void{
         Game.setFactory(hex, factory);
         Game.checkIntersection();
         drawMap();
-        Game.checkEndGame();
+        Game.checkEndGame() ? endGameScreen() : null;
+    }
+}
+
+function endGameScreen(): void{
+    const endGame = document.getElementById('endGame') as HTMLDivElement;
+    const endGameText = document.getElementById('endGameText') as HTMLParagraphElement;
+    const restartButton = document.getElementById('restartButton') as HTMLButtonElement;
+    const newMapButton = document.getElementById('newMapButton') as HTMLButtonElement;
+    if(Game.isSolutionCorrect()){
+        endGameText.textContent = 'Gratulálok! Sikeresen teljesítetted a pályát!';
+    } else {
+        endGameText.textContent = 'Sajnálom! Nem sikerült teljesítened a pályát!';
+    }
+    endGame.style.display = 'flex';
+    restartButton.onclick = () => {
+        endGame.style.display = 'none';
+        resetGame();
+        StartGame(Objective.level);
+    }
+    newMapButton.onclick = () => {
+        endGame.style.display = 'none';
+        openDialog();
     }
 }
 

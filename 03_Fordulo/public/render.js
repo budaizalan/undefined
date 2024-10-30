@@ -3,6 +3,8 @@ import Game from "./models/Game.js";
 import HexMath from "./utilities/HexMath.js";
 import Images from "./models/Images.js";
 import UI from "./UI.js";
+import Objective from "./models/Objective.js";
+import { openDialog } from "./start.js";
 const bgCanvas = document.getElementById('backgroundCanvas');
 const gameCanvas = document.getElementById('gameCanvas');
 const bgCtx = bgCanvas.getContext('2d');
@@ -207,8 +209,30 @@ function placeFactory(event, factory) {
         Game.setFactory(hex, factory);
         Game.checkIntersection();
         drawMap();
-        Game.checkEndGame();
+        Game.checkEndGame() ? endGameScreen() : null;
     }
+}
+function endGameScreen() {
+    const endGame = document.getElementById('endGame');
+    const endGameText = document.getElementById('endGameText');
+    const restartButton = document.getElementById('restartButton');
+    const newMapButton = document.getElementById('newMapButton');
+    if (Game.isSolutionCorrect()) {
+        endGameText.textContent = 'Gratulálok! Sikeresen teljesítetted a pályát!';
+    }
+    else {
+        endGameText.textContent = 'Sajnálom! Nem sikerült teljesítened a pályát!';
+    }
+    endGame.style.display = 'flex';
+    restartButton.onclick = () => {
+        endGame.style.display = 'none';
+        resetGame();
+        StartGame(Objective.level);
+    };
+    newMapButton.onclick = () => {
+        endGame.style.display = 'none';
+        openDialog();
+    };
 }
 function draw() {
     if (gameCtx) {

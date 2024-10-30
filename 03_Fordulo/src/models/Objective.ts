@@ -22,6 +22,10 @@ export default abstract class Objective{
         return this.factories;
     }
 
+    static get level(): number{
+        return this._level;
+    }
+
     public static getCities(){
         return this._cities;
     }

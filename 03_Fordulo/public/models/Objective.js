@@ -16,6 +16,9 @@ export default class Objective {
     static get factories() {
         return this.factories;
     }
+    static get level() {
+        return this._level;
+    }
     static getCities() {
         return this._cities;
     }

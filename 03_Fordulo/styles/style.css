@@ -128,3 +128,48 @@ input[type="checkbox"]{
     transform: translatex(20px);
 }
 
+#endGame{
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    top: 50%;
+    left: 50%;
+    width: 50vw;
+    height: 50vh;
+    transform: translate(-50%, -50%);
+    background-color: rgb(20, 18, 28);
+    opacity: 0.96;
+    padding: 20px;
+    border-radius: 5px;
+    z-index: 5;
+}
+
+#endGameText{
+    text-align: center;
+    font-size: 2rem;
+    color: white;
+}
+
+.buttonRow{
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+}
+
+.endGameButton{
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    background-color: transparent;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+
+.endGameButton:hover{
+    background-color: white;
+    color: #000;
+    transform: scale(1.05);
+}

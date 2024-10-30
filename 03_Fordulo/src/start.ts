@@ -13,6 +13,7 @@ const closeNavigation = document.querySelector(".closebtn")!.addEventListener('c
 
 let currentLevel: number;
 
+
 function retry(){
     if(currentLevel){
         StartGame(currentLevel);
@@ -27,7 +28,7 @@ function closeNav() {
     document.getElementById("mySidenav")!.style.width = "0";
 }
 
-function openDialog(){
+export function openDialog(){
     if (levelSelect) {
         (levelSelect as HTMLElement).style.display = "block";
     }
@@ -58,3 +59,8 @@ function map3(){
     currentLevel = 3;
     StartGame(currentLevel);   
 }
+
+setTimeout(() => {
+    map1();
+}, 500);
+
