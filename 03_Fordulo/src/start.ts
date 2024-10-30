@@ -10,11 +10,14 @@ const secondMap = document.getElementById("map2")!.addEventListener('click', map
 const thirdMap = document.getElementById("map3")!.addEventListener('click', map3);
 const openNavigation = document.querySelector(".menuSpan")!.addEventListener('click', openNav);
 const closeNavigation = document.querySelector(".closebtn")!.addEventListener('click', closeNav);
-
+const endGame = document.getElementById("endGame") as HTMLElement;
 let currentLevel: number;
 
 
 function retry(){
+    endGame.style.display = "none";
+    closeNav();
+    closeLevelSelect();
     if(currentLevel){
         StartGame(currentLevel);
     }
@@ -29,6 +32,7 @@ function closeNav() {
 }
 
 export function openDialog(){
+    endGame.style.display = "none";
     if (levelSelect) {
         (levelSelect as HTMLElement).style.display = "block";
     }
