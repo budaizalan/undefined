@@ -35,8 +35,5 @@ export default class Objective {
         this._level = level.level;
         this._cities = level.cities;
         this._factories = level.factories;
-        console.log(this._level);
-        console.log(this._cities);
-        console.log(this._factories);
     }
 }

@@ -282,5 +282,3 @@ export function StartGame(level: number): void {
 function resetGame(): void {
     Game.reset();
 }
-
-console.log('hexMap:', Game.hexMap);
