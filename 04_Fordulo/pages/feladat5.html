@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bit statisztika</title>
+</head>
+<body>
+    <div>
+        <input type="text" id="Input_bit" style="width: 400px;">        
+    </div>
+    <div>
+        <p>
+            <p>Összes 1-es szám: <span id="Total1"></span></p>
+            <p>Összes 0-ás szám: </span><span id="Total0"></span></p>
+            <p>Leghosszabb 1-es sor: <span id="Longest1"></span></p>
+            <p>Leghosszabb 0-es sor: <span id="Longest0"></span></p>
+            <p>Leghosszabb váltakozó sor: <span id="Longest_changing"></span></p>
+            <p>Leghosszabb részleges sor: <span id="Longest_partial"></span></p>
+        </p>
+    </div>
+    <div>
+        <input type="text" id="Input_generate" style="width: 50px;" pattern="[0-9]">
+        <input type="button" value="Generál" id="Button_generate">
+    </div>
+    
+
+    <script type="module" src="../public/feladat5.js"></script>
+</body>
+</html>
