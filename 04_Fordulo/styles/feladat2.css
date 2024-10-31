@@ -1,0 +1,65 @@
+body {
+    background: linear-gradient(45deg, #05012b, #200d5e);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white;
+}
+
+.main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title{
+    text-align: center;
+}
+
+.size-input{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.size-input label{
+
+    margin: 0 10px;
+}
+
+.size-input .form-control{
+    width: 5vw;
+    margin: 0 10px;
+}
+
+.map-description{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.form-floating{
+    width: 20vw;
+}
+
+.form-floating .form-control{
+    width: 20vw;
+    min-height: 20vh;
+}
+
+.generate-map{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#map{
+    width: 50vw;
+    height: 50vh;
+    margin-top: 20px;
+    display: grid;
+    background-color: #05012b;
+}
