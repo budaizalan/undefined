@@ -75,6 +75,7 @@ export abstract class Game{
     private static _lines: {start: Dot, end: Dot, player: number}[] = [];
     private static _currentLine: {start: Dot | null, end: Dot | null} = {start: null, end: null};
     private static _currentPlayer: Player;
+    private static _collectedFields: number[] = [];
 
     static get size(): number{
         return this._size;
@@ -180,11 +181,27 @@ export abstract class Game{
                         ctx.fillRect(topLeft.getCoords().x, topLeft.getCoords().y, 
                                  topRight.getCoords().x - topLeft.getCoords().x, 
                                  bottomLeft.getCoords().y - topLeft.getCoords().y);
-                        if (player === 1) {
-                            player1.score += 1;
-                        } else {
-                            player2.score += 1;
+                        let collected = false;
+                        if(!Game._collectedFields.includes(i * Game.size + j)){
+                            Game._collectedFields.push(i * Game.size + j);
+                            collected = true;
                         }
+                        if(!Game._collectedFields.includes(i * Game.size + j + 1)){
+                            Game._collectedFields.push(i * Game.size + j + 1);
+                            collected = true;
+                        }
+                        if(!Game._collectedFields.includes((i + 1) * Game.size + j)){
+                            Game._collectedFields.push((i + 1) * Game.size + j);
+                            collected = true;
+                        }
+                        if(!Game._collectedFields.includes((i + 1) * Game.size + j + 1)){
+                            Game._collectedFields.push((i + 1) * Game.size + j + 1);
+                            collected = true;
+                        }
+                        if(collected){
+                            this.currentPlayer.score++;
+                        }
+
                     }
                 }
             }
@@ -248,8 +265,8 @@ gameCanvas.addEventListener('click', (event) => {
                     Game.lines.push({start: Game.currentLine.start, end: Game.currentLine.end, player: Game.currentPlayer.number});
                     console.log(Game.lines);
                     Game.currentLine = {start: null, end: null};
+                    Game.checkFieldOccupation();
                     Game.currentPlayer = Game.currentPlayer === player1 ? player2 : player1;
-                    
                     if(ctx){
                         Game.draw(ctx);
                     }
@@ -257,7 +274,6 @@ gameCanvas.addEventListener('click', (event) => {
             }
         }
     }
-    Game.checkFieldOccupation();
     player1Score.innerText = player1.score.toString();
     player2Score.innerText = player2.score.toString();
 });
