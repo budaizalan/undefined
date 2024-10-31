@@ -146,6 +146,50 @@ export abstract class Game{
             ctx.closePath();
         }
     }
+
+    static checkFieldOccupation(){
+        for (let i = 0; i < Game._size - 1; i++) {
+            for (let j = 0; j < Game._size - 1; j++) {
+                const topLeft = Game._map[i][j];
+                const topRight = Game._map[i][j + 1];
+                const bottomLeft = Game._map[i + 1][j];
+                const bottomRight = Game._map[i + 1][j + 1];
+
+                const topLine = Game._lines.find(line => 
+                    (line.start === topLeft && line.end === topRight) || 
+                    (line.start === topRight && line.end === topLeft)
+                );
+                const leftLine = Game._lines.find(line => 
+                    (line.start === topLeft && line.end === bottomLeft) || 
+                    (line.start === bottomLeft && line.end === topLeft)
+                );
+                const bottomLine = Game._lines.find(line => 
+                    (line.start === bottomLeft && line.end === bottomRight) || 
+                    (line.start === bottomRight && line.end === bottomLeft)
+                );
+                const rightLine = Game._lines.find(line => 
+                    (line.start === topRight && line.end === bottomRight) || 
+                    (line.start === bottomRight && line.end === topRight)
+                );
+
+                if (topLine && leftLine && bottomLine && rightLine) {
+                    const player = this.currentPlayer.number;
+                    const color = player === 2 ? player1.color : player2.color;
+                    if(ctx){
+                        ctx.fillStyle = color;
+                        ctx.fillRect(topLeft.getCoords().x, topLeft.getCoords().y, 
+                                 topRight.getCoords().x - topLeft.getCoords().x, 
+                                 bottomLeft.getCoords().y - topLeft.getCoords().y);
+                        if (player === 1) {
+                            player1.score += 1;
+                        } else {
+                            player2.score += 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 
@@ -156,6 +200,8 @@ const mapSize = document.getElementById('map-size') as HTMLInputElement;
 const generateButton = document.getElementById('map-generate') as HTMLButtonElement;
 const player1Color = document.getElementById('player1-color') as HTMLInputElement;
 const player2Color = document.getElementById('player2-color') as HTMLInputElement;
+const player1Score = document.getElementById('player1-collected') as HTMLSpanElement;
+const player2Score = document.getElementById('player2-collected') as HTMLSpanElement;
 let player1: Player;
 let player2: Player;
 gameCanvas.width = 600;
@@ -193,7 +239,7 @@ gameCanvas.addEventListener('click', (event) => {
                     }
                     Game.currentLine.start = dot;
                     console.log(`startDot: ${dot.getPosition().q}, ${dot.getPosition().r}`);
-                } else if(Game.currentLine.end === null && Game.currentLine.start !== dot && Game.lines.every(line => line.start !== dot && line.end !== dot)
+                } else if(Game.currentLine.end === null && Game.currentLine.start !== dot && Game.lines.every(line => line.start !== dot || line.end !== dot)
                     && ((Game.currentLine.start.getPosition().q === dot.getPosition().q && Math.abs(Game.currentLine.start.getPosition().r - dot.getPosition().r) === 1)
                     || (Game.currentLine.start.getPosition().r === dot.getPosition().r && Math.abs(Game.currentLine.start.getPosition().q - dot.getPosition().q) === 1))){
                     dot.color = Game.currentPlayer.color;
@@ -203,6 +249,7 @@ gameCanvas.addEventListener('click', (event) => {
                     console.log(Game.lines);
                     Game.currentLine = {start: null, end: null};
                     Game.currentPlayer = Game.currentPlayer === player1 ? player2 : player1;
+                    
                     if(ctx){
                         Game.draw(ctx);
                     }
@@ -210,6 +257,9 @@ gameCanvas.addEventListener('click', (event) => {
             }
         }
     }
+    Game.checkFieldOccupation();
+    player1Score.innerText = player1.score.toString();
+    player2Score.innerText = player2.score.toString();
 });
 
 gameCanvas.addEventListener('mousemove', (event) => {
