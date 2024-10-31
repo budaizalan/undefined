@@ -1,3 +1,40 @@
-.title{
+.title {
     text-align: center;
+}
+
+body {
+    background: linear-gradient(45deg, #05012b, #200d5e);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white;
+}
+
+.nav-link,
+.container {
+    background-color: #14121c;
+    color: white;
+}
+
+.navbar {
+    border-bottom: solid black 2px;
+    background-color: #14121c;
+    overflow: hidden;
+}
+
+.navbar p {
+    font-size: 20px;
+}
+
+.navbar a {
+    font-size: 20px;
+    margin-right: 30px;
+    background-color: transparent;
+}
+
+.active {
+    color: white !important;
+}
+
+.nav-link:hover {
+    color: #42c3ca !important;
 }
