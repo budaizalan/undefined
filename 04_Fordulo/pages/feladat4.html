@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/feladat4.css">
+    <title>4. feladat</title>
+</head>
+<body>
+    <div class="main">
+        <h1 class="title">4. feladat - Körbekerítős játék</h1>
+        <div class="size-input">
+            <label>Pálya mérete:</label>
+            <input type="text" class="form-control" id="map-size" placeholder="Méret" aria-label="size" aria-describedby="basic-addon1">
+            <button type="button" class="btn btn-success" id="map-generate">Játék indítása</button>
+        </div>
+        <div class="players">
+            <div class="player">
+                <div>
+                    <h2>1. játékos:</h2>
+                    <input type="color" class="form-control form-control-color" id="player1-color" value="#FF0000" title="Choose your color">
+                </div>
+                <p>Összegyűjtött területek: <span id="player1-collected"></span></p>
+
+            </div>
+            <div class="player">
+                <div>
+                    <h2>2. játékos:</h2>
+                    <input type="color" class="form-control form-control-color" id="player2-color" value="#0000ff" title="Choose your color">
+                </div>
+                <p>Összegyűjtött területek: <span id="player2-collected"></span></p>
+            </div>
+        </div>
+        <div id="game-container">
+            <canvas id="game"></canvas>
+        </div>
+    </div>
+    <script type="module" src="../public/feladat4.js"></script>
+</body>
+</html>
