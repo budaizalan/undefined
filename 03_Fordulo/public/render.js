@@ -269,4 +269,3 @@ export function StartGame(level) {
 function resetGame() {
     Game.reset();
 }
-console.log('hexMap:', Game.hexMap);

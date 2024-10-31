@@ -50,6 +50,3 @@ function map3() {
     currentLevel = 3;
     StartGame(currentLevel);
 }
-setTimeout(() => {
-    map1();
-}, 500);
