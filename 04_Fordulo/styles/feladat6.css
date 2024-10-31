@@ -1,0 +1,39 @@
+.cover{
+    position: absolute;
+    width: 500px;    
+    height: 400px;
+    display: none;
+}
+
+table{
+    width: 500px !important;
+    height: 500px !important;
+    background-color: #CC0000;
+    
+}
+
+td{
+    border: 1px solid black;
+    width: 125px;
+    height: 125px;
+}
+
+div{
+    width: 500px;
+    height: 500px;
+    margin: auto;
+    text-align: center;
+}
+
+.victory{
+    background-color: #CC0000;
+    border: 4px solid black;
+    color: #fff;
+    position: absolute;
+    width: 150px;
+    height: 100px;
+    text-align: center;
+    left: calc(50% - 75px);
+    top: calc(50% - 50px);
+    display: none;
+}
