@@ -1,4 +1,4 @@
-body {
+body{
     background: linear-gradient(45deg, #05012b, #200d5e);
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -25,40 +25,51 @@ body {
 }
 
 .size-input label{
-    margin: 0 10px;
+    margin: 0 20px;
 }
 
 .size-input .form-control{
     width: 5vw;
-    margin: 0 10px;
+    min-width: 100px;
 }
 
-.map-description{
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    text-align: center;
+.size-input button{
+    margin-left: 20px;
 }
 
-.form-floating{
-    width: 20vw;
-}
-
-.form-floating .form-control{
-    width: 20vw;
-    min-height: 20vh;
-}
-
-.generate-map{
+.players{
     display: flex;
     justify-content: center;
     margin-top: 20px;
 }
 
-#map{
-    width: 50vw;
-    height: 50vh;
-    margin-top: 20px;
-    display: grid;
+.player{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 20px;
+}
+
+.player div{
+    display: flex;
+    flex-direction: row;
+}
+
+.form-control-color{
+    padding: 1px;
+}
+
+.player div h2{
+    margin-right: 10px;
+}
+
+#game-container{
+    
     background-color: #05012b;
+    padding: 10px;
+}
+
+#game{
+    display: grid;
 }
